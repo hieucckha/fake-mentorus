@@ -4,7 +4,6 @@
     "dbaeumer.vscode-eslint",
     "stylelint.vscode-stylelint",
     "editorconfig.editorconfig",
-    "streetsidesoftware.code-spell-checker",
-    "firsttris.vscode-jest-runner"
+    "streetsidesoftware.code-spell-checker"
   ]
 }
