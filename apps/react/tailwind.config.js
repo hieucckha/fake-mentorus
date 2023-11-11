@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+const { join } = require('path');
+
+const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './src/**/*.{js,jsx,ts,tsx}',
-    './public/index.html',
+    join(__dirname, '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'),
+    ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
     extend: {},

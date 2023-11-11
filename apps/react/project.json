@@ -6,13 +6,16 @@
   "targets": {
     "build": {
       "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/react",
         "baseHref": "/",
         "configFile": "apps/react/vite.config.ts",
-        "frameworkConfigFile": "@nx/react/plugins/vite"
+        "frameworkConfigFile": "@nx/react/plugins/vite",
+        "postcssConfig": "apps/react/postcss.config.js"
       },
       "configurations": {
         "development": {
@@ -36,8 +39,6 @@
       "defaultConfiguration": "development",
       "options": {
         "outputPath": "dist/apps/react",
-        "port": 3000,
-        "host": "0.0.0.0",
         "baseHref": "/",
         "configFile": "apps/react/vite.config.ts",
         "frameworkConfigFile": "@nx/react/plugins/vite",
@@ -55,16 +56,24 @@
     },
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/react/src/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "apps/react/src/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     },
     "stylelint": {
       "executor": "nx-stylelint:lint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/react/**/*.css"]
+        "lintFilePatterns": [
+          "apps/react/**/*.css"
+        ]
       }
     }
   },
