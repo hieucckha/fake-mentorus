@@ -36,6 +36,8 @@
       "defaultConfiguration": "development",
       "options": {
         "outputPath": "dist/apps/react",
+        "port": 3000,
+        "host": "0.0.0.0",
         "baseHref": "/",
         "configFile": "apps/react/vite.config.ts",
         "frameworkConfigFile": "@nx/react/plugins/vite",

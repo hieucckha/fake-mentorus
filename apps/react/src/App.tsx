@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
+import Login from './screens/loginPage';
+
 /**
  * App.
  * @returns App.
  */
-export const App: FC = () => (
-  <h1>Hello World!</h1>
-);
+export const App: FC = () => Login();
