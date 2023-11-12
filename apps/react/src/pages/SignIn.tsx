@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 
 /**
  *
  * @returns LoginPage.
  */
-export default function loginPage() {
+const SignIn: FC = () => {
   const [action, setAction] = useState('login');
   const handleChangeAction = () => {
     setAction(action === 'login' ? 'register' : 'login');
@@ -95,12 +95,16 @@ export default function loginPage() {
           </div>
         </form>
         <p className="mt-10 text-end text-sm text-gray-500">
-          {action === 'login' ? 'Don`t have an account' : 'Already have an account?'}
-          <a onClick={handleChangeAction} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+          {action === 'login' ? 'Don\'t have an account' : 'Already have an account?'}
+          <a
+            onClick={handleChangeAction}
+            className="ml-3 font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
             {action === 'login' ? 'Sign up' : 'Sign in'}
           </a>
         </p>
       </div>
     </div>
   );
-}
+};
+
+export default SignIn;
