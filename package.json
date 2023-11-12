@@ -5,6 +5,9 @@
   "engines": {
     "node": "^20.4.0"
   },
+  "volta": {
+    "node": "20.4.0"
+  },
   "scripts": {
     "react:build": "nx run react:build",
     "react:serve": "nx run react:serve",
