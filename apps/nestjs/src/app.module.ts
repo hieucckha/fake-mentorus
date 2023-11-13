@@ -7,9 +7,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { AppDbContext } from './config/prismas/prisma.service';
 
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { PrismaService } from './prisma/prisma.service';
 
 /**
  * App module.
@@ -25,7 +25,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
   ],
   controllers: [AppController],
   providers: [
-    AppDbContext, {
+    PrismaService, {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },

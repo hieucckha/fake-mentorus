@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { AppDbContext } from '../config/prismas/prisma.service';
+import { User } from '@prisma/client';
+
+import { PrismaService } from '../prisma/prisma.service';
 
 import { CreateUserRequest } from './dto/uses.dto';
-
-import { User } from '@prisma/client';
 
 /**
  * Users service.
@@ -17,7 +17,7 @@ export class UsersService {
    * @param appDbContext The injected AppDbContext instance.
    * @memberof UsersService
    */
-  public constructor(private appDbContext: AppDbContext) { }
+  public constructor(private appDbContext: PrismaService) { }
 
   /**
    * Retrieves a list of all users.

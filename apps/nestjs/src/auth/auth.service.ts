@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
 
-import { AppDbContext } from '../config/prismas/prisma.service';
+import { User } from '@prisma/client';
+
+import { PrismaService } from '../prisma/prisma.service';
 
 import { LoginResponse } from './dto/auth.dto';
-
-import { User } from '@prisma/client';
 
 /**
  * Auth service.
@@ -20,7 +20,7 @@ export class AuthService {
    */
   public constructor(
     private jwtService: JwtService,
-    private appDbContext: AppDbContext,
+    private appDbContext: PrismaService,
   ) { }
 
   /**
@@ -31,9 +31,9 @@ export class AuthService {
    * @throws Error - If the user is not found.
    */
   public async validateUser(username: string, password: string): Promise<User | null> {
-    const user: User = await this.appDbContext.user.findFirst({ where: { email: username } });
+    const user: User | null = await this.appDbContext.user.findFirst({ where: { email: username } });
 
-    if (user === undefined) {
+    if (user === undefined || user === null) {
       throw new Error('User not found');
     }
 
