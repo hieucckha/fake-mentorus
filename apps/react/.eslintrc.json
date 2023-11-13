@@ -12,7 +12,8 @@
     "class-methods-use-this": "off",
     "max-classes-per-file": "off",
     "react/prop-types": "off",
-    "max-len": ["warn", 120],
+    "max-len": ["off", 120],
+    "max-lines-per-function": "off",
     "no-param-reassign": [
       "error",
       {
@@ -27,7 +28,7 @@
         "namedComponents": "arrow-function"
       }
     ],
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "jsdoc/require-param": [
       "error",
       {
