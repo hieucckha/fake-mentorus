@@ -21,7 +21,7 @@ const SignUp: FC = (): JSX.Element =>
 
               {/* Page header */}
               <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-                <h1 className="h1">Welcome back.</h1>
+                <h1 className="h1">Welcome.</h1>
               </div>
 
               {/* Form */}

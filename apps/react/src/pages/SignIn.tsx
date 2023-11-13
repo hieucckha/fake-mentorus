@@ -1,7 +1,10 @@
 /* eslint-disable max-len */
 /* eslint-disable max-lines-per-function */
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import AuthServices from '../services/auth.service';
+import LocalStorageService from '../services/localStorage.service';
 
 /**
  * Sign in page.
@@ -10,22 +13,24 @@ const SignIn: FC = (): JSX.Element => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const regexEmail = new RegExp('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$');
-  const [error, setError] = useState('');
-
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setEmail(event.target.value);
   };
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setPassword(event.target.value);
   };
-  useEffect(() => {
-    if (regexEmail.test(email)) {
-      setError('');
-    } else {
-      setError('Email is not valid');
+
+  // sent to backend to verify
+  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault();
+    try {
+      const { response } = await AuthServices.login(email, password);
+      LocalStorageService.setItem(response.token);
+    } catch (error) {
+      console.error(error);
     }
-  }, [email]);
+
+  };
 
   return (
     <div className='flex flex-col min-h-screen overflow-hidden'>
@@ -74,7 +79,7 @@ const SignIn: FC = (): JSX.Element => {
                   </div>
                   <div className="flex flex-wrap -mx-3 mt-6">
                     <div className="w-full px-3">
-                      <button className="btn text-white bg-blue-600 hover:bg-blue-700 w-full">Sign in</button>
+                      <button className="btn text-white bg-blue-600 hover:bg-blue-700 w-full" onClick={handleSubmit}>Sign in</button>
                     </div>
                   </div>
                 </form>
