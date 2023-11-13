@@ -1,26 +1,29 @@
 import { FC } from 'react';
 
-// import { Link } from 'react-router-dom';
-
 import Header from '../partials/Header';
 import Footer from '../partials/Footer';
+import HeroHome from '../partials/HeroHome';
+import FeaturesBlocks from '../partials/FeaturesBlocks';
+import Newsletter from '../partials/Newsletter';
+import Testimonials from '../partials/Testimonials';
 
 /**
  * Home page.
  */
-const Home: FC = () => (
+const Landing: FC = () => (
   <div className="flex flex-col min-h-screen overflow-hidden">
+
+    {/*  Site header */}
     <Header />
 
     {/*  Page content */}
     <main className="flex-grow">
 
       {/*  Page sections */}
-      {/* <HeroHome />
-      <FeaturesHome />
+      <HeroHome />
       <FeaturesBlocks />
       <Testimonials />
-      <Newsletter /> */}
+      <Newsletter />
 
     </main>
 
@@ -29,4 +32,4 @@ const Home: FC = () => (
   </div>
 );
 
-export default Home;
+export default Landing;
