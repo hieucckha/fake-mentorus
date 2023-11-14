@@ -1,10 +1,11 @@
-import { FC, Fragment } from 'react';
+import { FC, Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 import classNames from '../utils/classNames';
 import localStorageService from '../services/localStorage.service';
+import EditUser from '../modal/EditUser';
 
 const navigation = [{ name: 'Dashboard', href: '/home', current: true }];
 
@@ -12,11 +13,18 @@ const navigation = [{ name: 'Dashboard', href: '/home', current: true }];
  * Navigation bar.
  */
 const NavBarLogin: FC = () => {
+  const [isOpenModalEditUser, setIsOpenModalEditUser] = useState(false);
   const handleSignOut = (): void => {
     const token = localStorageService.getItem('auth');
     if (token !== null) {
       localStorageService.removeItem('auth');
     }
+  };
+  const handleOpenModalEditUser = (): void => {
+    setIsOpenModalEditUser(true);
+  };
+  const handleCloseModalEditUser = (): void => {
+    setIsOpenModalEditUser(false);
   };
 
   return (
@@ -85,7 +93,9 @@ const NavBarLogin: FC = () => {
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <Link to={'#'} className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>Your Profile</Link>
+                          <button onClick={handleOpenModalEditUser} className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}>
+                            Your Profile
+                          </button>
                         )}
                       </Menu.Item>
                       <Menu.Item>
@@ -99,6 +109,9 @@ const NavBarLogin: FC = () => {
                         )}
                       </Menu.Item>
                     </Menu.Items>
+                  </Transition>
+                  <Transition show={isOpenModalEditUser} >
+                    <EditUser handleCloseModalEditUser={handleCloseModalEditUser} />
                   </Transition>
                 </Menu>
               </div>
