@@ -8,13 +8,29 @@ interface EditUserProps {
 }
 
 const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser }): JSX.Element => {
+  const [userId, setUserId] = useState<number>('');
   const [formData, setFormData] = useState({
     name: '',
-    gender: '',
+    sex: true,
     email: '',
   });
   useEffect(() => {
-    const user = userService.getProfile();
+    /**
+     * Get user profile.
+     */
+    async function getProfile() {
+      const user = await userService.getProfile();
+
+      setUserId(user.id);
+
+      setFormData({
+        name: user.name,
+        sex: user.sex,
+        email: user.email,
+      });
+    }
+
+    getProfile();
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -29,6 +45,8 @@ const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser }): JSX.Element 
     e.preventDefault();
 
     // Add your logic to handle form submission (e.g., send data to the server)
+    userService.updateProfile(userId, formData);
+
     // After submitting, you may want to close the modal
     handleCloseModalEditUser();
   };
@@ -36,7 +54,7 @@ const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser }): JSX.Element 
   const handleCloseModal = (): void => {
     setFormData({
       name: '',
-      gender: '',
+      sex: true,
       email: '',
     });
     handleCloseModalEditUser();
@@ -69,7 +87,7 @@ const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser }): JSX.Element 
 
           >
             <form onSubmit={handleSubmit}>
-              <div className="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-8 align-middle max-w-md w-full">
+              <div className="inline-block bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-8 align-middle max-w-md w-full">
                 <Dialog.Title className="text-lg font-medium text-gray-900 p-4">
                   Update User Information
                 </Dialog.Title>
@@ -98,7 +116,7 @@ const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser }): JSX.Element 
                   <select
                     id="gender"
                     name="gender"
-                    value={formData.gender}
+                    value={formData.sex}
                     onChange={handleChange}
                     className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-primary-600 focus:border-primary-600 bg-white"
                   >

@@ -32,9 +32,9 @@ export interface CreateUserRequest {
 export interface UpdateUserRequest {
 
   /**
-   * User name (email).
+   * Name.
    */
-  username: string;
+  name: string;
 
   /**
    * Email.

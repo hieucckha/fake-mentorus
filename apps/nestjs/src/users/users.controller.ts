@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Patch, UseGuards } from '@nestjs/common';
 
 import { User } from '@prisma/client';
 
@@ -46,6 +46,8 @@ export class UsersController {
    */
   @Patch(':id')
   public async update(@Param('id') id: string, @Body() request: UpdateUserRequest): Promise<void> {
-    await this.usersService.update(id, request);
+    const idNumber = parseInt(id, 10);
+
+    await this.usersService.update(idNumber, request);
   }
 }

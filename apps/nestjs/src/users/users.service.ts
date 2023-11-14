@@ -63,7 +63,7 @@ export class UsersService {
       where: { id },
       data: {
         email: request.email,
-        name: request.username,
+        name: request.name,
         sex: request.sex,
       },
     });
