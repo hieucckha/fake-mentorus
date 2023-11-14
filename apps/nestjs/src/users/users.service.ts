@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
+import { User } from '@prisma/client';
+
 import { PrismaService } from '../prisma/prisma.service';
 
-import { CreateUserRequest } from './dto/uses.dto';
-
-import { User } from '@prisma/client';
+import { CreateUserRequest, UpdateUserRequest } from './dto/uses.dto';
 
 /**
  * Users service.
@@ -43,6 +43,28 @@ export class UsersService {
       data: {
         email: request.username,
         password: request.password,
+      },
+    });
+  }
+
+  /**
+   * @param id The user id.
+   * @param request The user data to be used for update.
+   * @throws Error - If a user with the same email already exists.
+   * @throws Error - If a user with the same id not found.
+   * @returns
+   */
+  public async update(id: number, request: UpdateUserRequest): Promise<void> {
+    const isExists = await this.appDbContext.user.findFirst({ where: { id } });
+    if (!isExists) {
+      throw new Error('User not found');
+    }
+    await this.appDbContext.user.update({
+      where: { id },
+      data: {
+        email: request.email,
+        name: request.username,
+        sex: request.sex,
       },
     });
   }
