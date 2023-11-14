@@ -7,7 +7,7 @@ import AuthServices from '../services/auth.service';
 import LocalStorageService from '../services/localStorage.service';
 
 /**
- * Sign in page.
+ * Sign-in page.
  */
 const SignIn: FC = (): JSX.Element => {
 
@@ -24,8 +24,8 @@ const SignIn: FC = (): JSX.Element => {
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     try {
-      const { response } = await AuthServices.login(email, password);
-      LocalStorageService.setItem(response.token);
+      const response = await AuthServices.login(email, password);
+      LocalStorageService.setItem('auth', response.token);
     } catch (error) {
       console.error(error);
     }
@@ -70,7 +70,7 @@ const SignIn: FC = (): JSX.Element => {
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
                       <div className="flex justify-between">
-                        <label className="flex items-center">
+                        <label className=" flex items-center">
                           <input type="checkbox" className="form-checkbox" />
                           <span className="text-gray-600 ml-2">Keep me signed in</span>
                         </label>
