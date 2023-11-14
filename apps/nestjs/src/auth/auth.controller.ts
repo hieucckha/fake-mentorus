@@ -1,6 +1,7 @@
 import { Controller, Post, Req, UseGuards } from '@nestjs/common';
 
-import { LocalGuard } from './guards/local.guard';
+import { AuthGuard } from '@nestjs/passport';
+
 import { AuthService } from './auth.service';
 import { LoginResponse } from './dto/auth.dto';
 
@@ -16,7 +17,7 @@ export class AuthController {
    * @param request Request.
    * @returns
    */
-    @UseGuards(LocalGuard)
+    @UseGuards(AuthGuard('local'))
     @Post('login')
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public login(@Req() request: any): LoginResponse {
