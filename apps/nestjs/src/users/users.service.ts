@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { User } from '@prisma/client';
-
 import { PrismaService } from '../prisma/prisma.service';
 
 import { CreateUserRequest } from './dto/uses.dto';
+
+import { User } from '@prisma/client';
 
 /**
  * Users service.
@@ -36,7 +36,7 @@ export class UsersService {
    */
   public async create(request: CreateUserRequest): Promise<void> {
     const isExists = await this.appDbContext.user.findFirst({ where: { email: request.username } });
-    if (isExists === null) {
+    if (isExists) {
       throw new Error('User already exists');
     }
     await this.appDbContext.user.create({

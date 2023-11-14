@@ -24,11 +24,6 @@ import { PrismaService } from './prisma/prisma.service';
     }),
   ],
   controllers: [AppController],
-  providers: [
-    PrismaService, {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-  ],
+  providers: [PrismaService],
 })
 export class AppModule { }

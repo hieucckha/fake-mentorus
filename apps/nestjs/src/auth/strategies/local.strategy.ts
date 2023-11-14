@@ -12,10 +12,7 @@ import { AuthService } from '../auth.service';
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   public constructor(private authService: AuthService, private moduleRef: ModuleRef) {
-    super({ usernameField: 'email' }, {
-      passReqToCallback: true,
-    });
-
+    super({ usernameField: 'email' });
   }
 
   /**
