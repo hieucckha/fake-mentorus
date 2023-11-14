@@ -1,7 +1,5 @@
-/* eslint-disable max-len */
-/* eslint-disable max-lines-per-function */
 import { FC, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import AuthServices from '../services/auth.service';
 import LocalStorageService from '../services/localStorage.service';
@@ -10,9 +8,10 @@ import LocalStorageService from '../services/localStorage.service';
  * Sign-in page.
  */
 const SignIn: FC = (): JSX.Element => {
-
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setEmail(event.target.value);
   };
@@ -21,15 +20,16 @@ const SignIn: FC = (): JSX.Element => {
   };
 
   // sent to backend to verify
-  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleFormSubmit = async(event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     try {
       const response = await AuthServices.login(email, password);
       LocalStorageService.setItem('auth', response.token);
+
+      navigate('/home');
     } catch (error) {
       console.error(error);
     }
-
   };
 
   return (
@@ -51,7 +51,7 @@ const SignIn: FC = (): JSX.Element => {
               {/* Form */}
 
               <div className="max-w-sm mx-auto">
-                <form>
+                <form onSubmit={handleFormSubmit}>
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="email">Email</label>
@@ -79,7 +79,7 @@ const SignIn: FC = (): JSX.Element => {
                   </div>
                   <div className="flex flex-wrap -mx-3 mt-6">
                     <div className="w-full px-3">
-                      <button className="btn text-white bg-blue-600 hover:bg-blue-700 w-full" onClick={handleSubmit}>Sign in</button>
+                      <button className="btn text-white bg-blue-600 hover:bg-blue-700 w-full">Sign in</button>
                     </div>
                   </div>
                 </form>

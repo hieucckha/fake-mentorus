@@ -10,6 +10,7 @@ import Register from './pages/SignUp';
 import Landing from './pages/Landing';
 
 import localStorageService from './services/localStorage.service';
+import Home from './pages/Home';
 
 /**
  * App.
@@ -53,9 +54,10 @@ export const App: FC = () => {
 
   return (
     <Routes >
-      <Route path="/" element={privateRoute(<Landing />)} />
+      <Route path="/" element={publicRoute(<Landing />)} />
       <Route path="/sign-in" element={publicRoute(<Login />)} />
       <Route path="/sign-up" element={publicRoute(<Register />)} />
+      <Route path='/home' element={privateRoute(<Home />)} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>
