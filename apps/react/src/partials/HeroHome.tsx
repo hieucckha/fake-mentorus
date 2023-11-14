@@ -1,6 +1,7 @@
 import { FC } from 'react';
-
+const bg = '#137333';
 const HeroHome: FC = () => (
+
   <section className="relative">
 
     {/* Illustration behind hero content */}
@@ -9,8 +10,8 @@ const HeroHome: FC = () => (
         <defs>
           <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="illustration-01">
             <stop stopColor="#FFF" offset="0%" />
-            <stop stopColor="#EAEAEA" offset="77.402%" />
-            <stop stopColor="#DFDFDF" offset="100%" />
+            <stop stopColor="#e7f4ea" offset="77.402%" />
+            <stop stopColor="#b6fac6" offset="100%" />
           </linearGradient>
         </defs>
         <g fill="url(#illustration-01)" fillRule="evenodd">
@@ -29,20 +30,20 @@ const HeroHome: FC = () => (
           <h1
             className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4"
             data-aos="zoom-y-out">
-                Make your website
+                Where teaching and learning come
             <br/>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">wonderful</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#09722c] to-[#55c4b1]">together</span>
           </h1>
           <div className="max-w-3xl mx-auto">
             <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">
-                Our landing page template works on all devices, so you only have to set it up once, and get beautiful results forever.
+            Google Classroom helps educators create engaging learning experiences they can personalize, manage, and measure. Classroom is part of Google Workspace for Education, which empowers your institution with simple, safer, collaborative tools.
             </p>
             <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center" data-aos="zoom-y-out" data-aos-delay="300">
               <div>
-                <a className="btn text-white bg-blue-600 hover:bg-blue-700 w-full mb-4 sm:w-auto sm:mb-0" href="#0">Start free trial</a>
+                <a className="btn text-white hover:bg-blue-700 w-full mb-4 sm:w-auto sm:mb-0" href="#0" style={{ backgroundColor: '#137333' }}>Start free trial</a>
               </div>
               <div>
-                <a className="btn text-white bg-gray-900 hover:bg-gray-800 w-full sm:w-auto sm:ml-4" href="#0">Learn more</a>
+                <a className="btn text-white bg-gray-700 hover:bg-gray-800 w-full sm:w-auto sm:ml-4" href="#0">Learn more</a>
               </div>
             </div>
           </div>
@@ -52,8 +53,8 @@ const HeroHome: FC = () => (
         <div>
           <div className="relative flex justify-center mb-8" data-aos="zoom-y-out" data-aos-delay="450">
             <div className="flex flex-col justify-center">
-              <img className="mx-auto" src="/images/hero-image.png" width="768" height="432" alt="Hero" />
-              <svg className="absolute inset-0 max-w-full mx-auto md:max-w-none h-auto" width="768" height="432" viewBox="0 0 768 432" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+              <img className="mx-auto" src="/images/gg_classroom.jpg" width="768" height="432" alt="Hero" />
+              {/* <svg className="absolute inset-0 max-w-full mx-auto md:max-w-none h-auto" width="768" height="432" viewBox="0 0 768 432" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                 <defs>
                   <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="hero-ill-a">
                     <stop stopColor="#FFF" offset="0%" />
@@ -80,7 +81,7 @@ const HeroHome: FC = () => (
                     <use fill="url(#hero-ill-e)" xlinkHref="#hero-ill-d" />
                   </g>
                 </g>
-              </svg>
+              </svg> */}
             </div>
           </div>
         </div>

@@ -22,8 +22,8 @@ const Landing: FC = () => (
       {/*  Page sections */}
       <HeroHome />
       <FeaturesBlocks />
-      <Testimonials />
-      <Newsletter />
+      {/* <Testimonials /> */}
+      {/* <Newsletter /> */}
 
     </main>
 
