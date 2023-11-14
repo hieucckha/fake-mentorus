@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 
-import { User } from '@prisma/client';
-
 import { Public } from '../config/decorators/public';
 
 import { UsersService } from './users.service';
 
 import { CreateUserRequest } from './dto/uses.dto';
+
+import { User } from '@prisma/client';
 
 /**
  * Users controller.

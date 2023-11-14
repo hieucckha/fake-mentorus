@@ -1,4 +1,4 @@
-// localStorageService.js
+
 const localStorageService = {
   setItem(key, value) {
     try {
