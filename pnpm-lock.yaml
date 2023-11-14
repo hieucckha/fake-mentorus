@@ -73,7 +73,7 @@ importers:
         version: 2.6.2
     devDependencies:
       '@headlessui/react':
-        specifier: ^1.7.14
+        specifier: ^1.7.17
         version: 1.7.17(react-dom@18.1.0)(react@18.2.0)
       '@nabla/vite-plugin-eslint':
         specifier: ^1.5.0
@@ -181,8 +181,8 @@ importers:
         specifier: ^10.4.16
         version: 10.4.16(postcss@8.4.31)
       daisyui:
-        specifier: ^4.0.3
-        version: 4.0.3(postcss@8.4.31)
+        specifier: ^4.0.4
+        version: 4.0.4(postcss@8.4.31)
       eslint:
         specifier: ~8.15.0
         version: 8.15.0
@@ -4224,6 +4224,23 @@ packages:
       - verdaccio
     dev: true
 
+  /@nrwl/js@17.0.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.18.8)(nx@16.3.0)(typescript@5.1.6):
+    resolution: {integrity: sha512-jVxCOtjZIrreWGvzT/6jc0JdoSyEKn1XS1NQAb/p9gHXInzOZxT/mu2D2XHo4b/2VsDDnxRRy2T4kI4IuGSrjQ==}
+    dependencies:
+      '@nx/js': 17.0.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.18.8)(nx@16.3.0)(typescript@5.1.6)
+    transitivePeerDependencies:
+      - '@babel/traverse'
+      - '@swc-node/register'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - debug
+      - nx
+      - supports-color
+      - typescript
+      - verdaccio
+    dev: true
+
   /@nrwl/linter@16.3.0(@swc-node/register@1.6.8)(@swc/core@1.3.96)(eslint@8.15.0)(nx@16.3.0)(typescript@5.0.4):
     resolution: {integrity: sha512-n86MG2HaEiIs6ya9plokB3R3HR/7U1U00o6AhaJyAZoDn6zky5P6L7525HWPGbbeho7omjoz52S6ZROBYCHg7g==}
     dependencies:
@@ -4929,7 +4946,7 @@ packages:
       '@babel/preset-env': 7.23.2(@babel/core@7.23.2)
       '@babel/preset-typescript': 7.23.2(@babel/core@7.23.2)
       '@babel/runtime': 7.23.2
-      '@nrwl/js': 17.0.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.18.8)(nx@16.3.0)(typescript@5.0.4)
+      '@nrwl/js': 17.0.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)(@types/node@18.18.8)(nx@16.3.0)(typescript@5.1.6)
       '@nx/devkit': 17.0.3(nx@16.3.0)
       '@nx/workspace': 17.0.3(@swc-node/register@1.6.8)(@swc/core@1.3.96)
       '@phenomnomnominal/tsquery': 5.0.1(typescript@5.1.6)
@@ -8845,8 +8862,8 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
-  /daisyui@4.0.3(postcss@8.4.31):
-    resolution: {integrity: sha512-mG6PsdIA6MEHzdJwBlJxc1rqsIAAlcfhj2O8g0ol1uWg5y6C5zTcqfG8vKBqK4y2YfCxGIVgMsMWRTSm32N1Ow==}
+  /daisyui@4.0.4(postcss@8.4.31):
+    resolution: {integrity: sha512-y7gVzrIs8GjTAMygX9TG7ezqi7N7O8s6MZwDSJX29+nj46+tELTGgFLCUu+7Hzu+H8+6aVT+OLWVxTkyYsukSA==}
     engines: {node: '>=16.9.0'}
     dependencies:
       css-selector-tokenizer: 0.8.0
