@@ -28,7 +28,7 @@ const NavBarLogin: FC = () => {
   };
 
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="border-b-2 bg-white shadow-lg">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -56,8 +56,16 @@ const NavBarLogin: FC = () => {
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map(item => (
-                      <Link className={classNames(item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'rounded-md px-3 py-2 text-sm font-medium')} to={item.href} aria-current={item.current ? 'page' : undefined}>{item.name}</Link>
+                      <Link
+                        key={item.name}
+                        className={classNames(
+                          item.current ? 'bg-gray-900 text-white' :
+                            'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          'rounded-md px-3 py-2 text-sm font-medium',
+                        )}
+                        to={item.href}
+                        style={{ background: '#188038' }}
+                        aria-current={item.current ? 'page' : undefined}>{item.name}</Link>
                     ))}
                   </div>
                 </div>
@@ -65,8 +73,8 @@ const NavBarLogin: FC = () => {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <button
                   type="button"
-                  className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
+                  className="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                  style={{ background: '#188038' }}>
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -75,7 +83,8 @@ const NavBarLogin: FC = () => {
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <Menu.Button className="relative rounded-full  p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                      style={{ background: '#188038' }}>
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <UserIcon className='block h-6 w-6 rounded-full'/>
@@ -126,9 +135,10 @@ const NavBarLogin: FC = () => {
                   as="a"
                   href={item.href}
                   className={classNames(
-              item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+              item.current ? 'text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
               'block rounded-md px-3 py-2 text-base font-medium',
                   )}
+                  style={{ background: '#188038' }}
                   aria-current={item.current ? 'page' : undefined}
                 >
                   {item.name}
