@@ -1,12 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Patch } from '@nestjs/common';
+
+import { User } from '@prisma/client';
 
 import { Public } from '../config/decorators/public';
 
 import { UsersService } from './users.service';
 
-import { CreateUserRequest } from './dto/uses.dto';
-
-import { User } from '@prisma/client';
+import { CreateUserRequest, UpdateUserRequest } from './dto/uses.dto';
 
 /**
  * Users controller.
@@ -32,5 +32,17 @@ export class UsersController {
   @Post()
   public async create(@Body() request: CreateUserRequest): Promise<void> {
     await this.usersService.create(request);
+  }
+
+  /**
+   * Update user.
+   * @param id The user id.
+   * @param request The {@link UpdateUserRequest} request.
+   * @returns
+   * @throws
+   */
+  @Patch(':id')
+  public async update(@Param('id') id: string, @Body() request: UpdateUserRequest): Promise<void> {
+    await this.usersService.update(id, request);
   }
 }

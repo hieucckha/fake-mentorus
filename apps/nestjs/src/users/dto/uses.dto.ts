@@ -25,3 +25,24 @@ export interface CreateUserRequest {
    */
   password: string;
 }
+
+/**
+ *
+ */
+export interface UpdateUserRequest {
+
+  /**
+   * User name (email).
+   */
+  username: string;
+
+  /**
+   * Email.
+   */
+  email: string;
+
+  /**
+   * Sex.
+   */
+  sex: boolean;
+}
