@@ -21,13 +21,21 @@ import { JwtStrategy } from './strategies/jwt.strategy';
  */
 @Module({
   imports: [
-    UsersModule, PassportModule, JwtModule.register({
+    UsersModule,
+    PassportModule,
+    JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
-    }), PrismaModule,
+    }),
+    PrismaModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, PrismaModule],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    PrismaModule,
+  ],
   exports: [AuthService],
 })
 export class AuthModule { }

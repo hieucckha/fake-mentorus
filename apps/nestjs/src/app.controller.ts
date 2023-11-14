@@ -1,20 +1,18 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 /**
  * App controller.
  */
 @Controller()
 export class AppController {
-  public constructor() { }
-
   /**
    *
    * @param req Request.
    * @returns
    */
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('myJwt'))
   @Get('profile')
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public getProfile(@Req() req: any): string {

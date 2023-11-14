@@ -1,12 +1,14 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 
-import { Public } from '../config/decorators/public';
+import { User } from '@prisma/client';
+
+import { AuthGuard } from '@nestjs/passport';
+
+import { Public } from '../decorators/public';
 
 import { UsersService } from './users.service';
 
 import { CreateUserRequest } from './dto/uses.dto';
-
-import { User } from '@prisma/client';
 
 /**
  * Users controller.
@@ -19,6 +21,7 @@ export class UsersController {
    *
    * @returns
    */
+  @UseGuards(AuthGuard('myJwt'))
   @Get()
   public getAllUser(): Promise<User[]> {
     return this.usersService.getAll();
