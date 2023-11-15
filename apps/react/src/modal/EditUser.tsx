@@ -8,7 +8,7 @@ interface EditUserProps {
 }
 
 const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser }): JSX.Element => {
-  const [userId, setUserId] = useState<number>('');
+  const [userId, setUserId] = useState<number>();
   const [formData, setFormData] = useState({
     name: '',
     sex: true,
@@ -45,7 +45,9 @@ const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser }): JSX.Element 
     e.preventDefault();
 
     // Add your logic to handle form submission (e.g., send data to the server)
-    userService.updateProfile(userId, formData);
+    if (userId !== undefined) {
+      userService.updateProfile(userId, formData);
+    }
 
     // After submitting, you may want to close the modal
     handleCloseModalEditUser();
@@ -116,7 +118,7 @@ const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser }): JSX.Element 
                   <select
                     id="gender"
                     name="gender"
-                    value={formData.sex}
+                    value={formData.sex.toString()}
                     onChange={handleChange}
                     className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-primary-600 focus:border-primary-600 bg-white"
                   >
