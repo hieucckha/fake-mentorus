@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import AuthServices from '../services/auth.service';
 import LocalStorageService from '../services/localStorage.service';
+import Header from '../partials/Header';
 
 /**
  * Sign-in page.
@@ -35,11 +36,12 @@ const SignIn: FC = (): JSX.Element => {
   return (
     <div className='flex flex-col min-h-screen overflow-hidden'>
       {/* Site header. */}
+      <Header />
 
       {/* Page content. */}
-      <main className="flex-grow">
+      <main className="grow h-screen">
 
-        <section className="bg-gradient-to-b from-gray-100 to-white">
+        <section className="bg-gradient-to-b from-gray-100 to-white h-full">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="pt-32 pb-12 md:pt-40 md:pb-20">
 

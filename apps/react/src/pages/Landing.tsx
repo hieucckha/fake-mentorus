@@ -4,8 +4,6 @@ import Header from '../partials/Header';
 import Footer from '../partials/Footer';
 import HeroHome from '../partials/HeroHome';
 import FeaturesBlocks from '../partials/FeaturesBlocks';
-import Newsletter from '../partials/Newsletter';
-import Testimonials from '../partials/Testimonials';
 
 /**
  * Home page.
