@@ -49,7 +49,7 @@ const NavBarLogin: FC = () => {
                 <div className="flex flex-shrink-0 items-center">
                   <img
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                    src="/icons/ssandwich.ico"
                     alt="Fake Mentorus"
                   />
                 </div>
@@ -119,6 +119,7 @@ const NavBarLogin: FC = () => {
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>
+
                   <Transition show={isOpenModalEditUser} >
                     <EditUser handleCloseModalEditUser={handleCloseModalEditUser} />
                   </Transition>

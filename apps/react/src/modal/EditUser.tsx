@@ -118,7 +118,7 @@ const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser }): JSX.Element 
                   <select
                     id="gender"
                     name="gender"
-                    value={formData.sex.toString()}
+                    value={formData.sex?.toString()}
                     onChange={handleChange}
                     className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-primary-600 focus:border-primary-600 bg-white"
                   >
