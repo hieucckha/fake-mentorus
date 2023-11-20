@@ -1,5 +1,5 @@
 // AuthService.js
-import axios from '../api/axios';
+import axios from '../api/AxiosClient';
 
 const AuthService = {
   async login(email, password) {

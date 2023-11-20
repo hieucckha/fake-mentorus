@@ -1,4 +1,4 @@
-import axios from '../api/axios';
+import axios from '../api/AxiosClient';
 
 /**
  * User profile data transfer object.
@@ -41,7 +41,6 @@ const userService = {
     email: string;
 }): Promise<UserProfileDto> {
     const response = await axios.patch(`/users/${userId}`, profile);
-    console.log(response.data);
     return response.data;
   },
 };
