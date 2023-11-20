@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import AuthServices from '../services/auth.service';
 import LocalStorageService from '../services/localStorage.service';
-import Header from '../partials/Header';
 
 /**
  * Sign-in page.
@@ -35,8 +34,6 @@ const SignIn: FC = (): JSX.Element => {
 
   return (
     <div className='flex flex-col min-h-screen overflow-hidden'>
-      {/* Site header. */}
-      <Header />
 
       {/* Page content. */}
       <main className="grow h-screen">

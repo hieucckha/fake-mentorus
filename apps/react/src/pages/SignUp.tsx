@@ -4,7 +4,6 @@ import { FC, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import userService from '../services/user.service';
-import Header from '../partials/Header';
 
 /**
  * Sign up page.
@@ -45,8 +44,6 @@ const SignUp: FC = (): JSX.Element => {
 
   return (
     <div className='flex flex-col min-h-screen overflow-hidden'>
-      {/* Site header. */}
-      <Header />
 
       {/* Page content. */}
       <main className="grow h-screen">

@@ -1,14 +1,14 @@
 import { FC } from 'react';
 
-import Header from '../partials/Header';
-import Footer from '../partials/Footer';
-import HeroHome from '../partials/HeroHome';
-import FeaturesBlocks from '../partials/FeaturesBlocks';
+import Header from './Header';
+import Footer from './Footer';
+import HeroHome from './HeroHome';
+import FeaturesBlocks from './FeaturesBlocks';
 
 /**
  * Home page.
  */
-const Landing: FC = () => (
+const index: FC = () => (
   <div className="flex flex-col min-h-screen overflow-hidden">
 
     {/*  Site header */}
@@ -30,4 +30,4 @@ const Landing: FC = () => (
   </div>
 );
 
-export default Landing;
+export default index;
