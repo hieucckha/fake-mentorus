@@ -8,9 +8,13 @@ module.exports = {
   content: [
     join(__dirname, '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'),
     ...createGlobPatternsForDependencies(__dirname),
+    "./node_modules/flowbite/**/*.js"
   ],
   theme: {
     extend: {},
   },
-  plugins: [require('daisyui')],
+  plugins: [
+    require('daisyui'),
+    require('flowbite/plugin')
+  ],
 };
