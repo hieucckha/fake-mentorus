@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC } from 'react';
 const NotFound: FC = (): JSX.Element => (
   <div
     className="w-full h-screen flex flex-col lg:flex-row items-center justify-center
