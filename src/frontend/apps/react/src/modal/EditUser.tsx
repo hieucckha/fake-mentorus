@@ -8,6 +8,7 @@ import userService from '../services/user.service';
 import useAuth from '../hooks/auth';
 import { UserProfileDto } from '../api/store/auth/interface';
 import useAuthQuery from '../api/store/auth/queries';
+import { userUpdateProfileMutation } from '../api/store/auth/mutations';
 
 interface EditUserProps {
   // eslint-disable-next-line jsdoc/require-jsdoc
@@ -17,14 +18,11 @@ interface EditUserProps {
 
 const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser, openModal }): JSX.Element => {
   const [userId, setUserId] = useState<number>();
-  const [formData, setFormData] = useState<{
-    name: string;
-    studentId: string;
-    email: string;
-  }>({
-    name: '',
+  const [formData, setFormData] = useState<UserProfileDto>({
+    fullName: '',
     studentId: '',
     email: '',
+    id: 0,
   });
 
   const { data: user, isLoading } = useAuth();
@@ -37,12 +35,12 @@ const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser, openModal }): J
     /**
      * Get user profile.
      */
-    setUserId(user?.id);
 
     setFormData({
-      name: user?.fullName ?? '',
+      fullName: user?.fullName ?? '',
       studentId: user?.studentId ?? '',
       email: user?.email ?? '',
+      id: user?.id ?? null,
     });
 
   }, [user]);
@@ -58,9 +56,20 @@ const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser, openModal }): J
     });
   };
 
+  const updateProfile = userUpdateProfileMutation();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleCloseModalEditUser();
+    updateProfile.mutate(formData,
+      {
+        onSuccess() {
+          handleCloseModalEditUser();
+        },
+        onError(error) {
+          console.error(error);
+        },
+      });
+
   };
 
   const handleCloseModal = (): void => {

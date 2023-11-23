@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
@@ -11,7 +11,8 @@ import useAuth from '../hooks/auth';
  * Navigation bar.
  */
 const NavBarLogin: FC = () => {
-  const [isOpenModalEditUser, setIsOpenModalEditUser] = useState(true);
+  const [isOpenModalEditUser, setIsOpenModalEditUser] = useState(false);
+  const [profile, setProfile] = useState<{name: string; email: string;}>({ name: '', email: '' });
   const handleSignOut = (): void => {
     const token = localStorageService.getItem('auth');
     if (token !== null) {
@@ -24,6 +25,22 @@ const NavBarLogin: FC = () => {
   const handleCloseModalEditUser = (): void => {
     setIsOpenModalEditUser(false);
   };
+  const { data: user, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    /**
+     * Get user profile.
+     */
+    setProfile({
+      name: user?.fullName ?? '',
+      email: user?.email ?? '',
+    });
+
+  }, [user]);
   return (
 
     <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -52,10 +69,10 @@ const NavBarLogin: FC = () => {
               <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
                 <div className="px-4 py-3" role="none">
                   <p className="text-sm text-gray-900 dark:text-white" role="none">
-                  Neil Sims
+                    {profile.name}
                   </p>
                   <p className="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                  neil.sims@flowbite.com
+                    {profile.email}
                   </p>
                 </div>
                 <ul className="py-1" role="none">

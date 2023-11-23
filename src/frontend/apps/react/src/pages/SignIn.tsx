@@ -26,6 +26,7 @@ const SignIn: FC = (): JSX.Element => {
   const mutation = useSignInMutation();
 
   // sent to backend to verify
+  // eslint-disable-next-line require-await
   const handleFormSubmit = async(event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 

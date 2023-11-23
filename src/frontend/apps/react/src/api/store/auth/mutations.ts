@@ -22,10 +22,11 @@ useMutation({
     },
 });
 
-export const userUpdateProfileMutation = (user: UserProfileDto) => {
+export const userUpdateProfileMutation = () => {
   const queryClient = useQueryClient();
-useMutation({
-    mutationFn: () => userService.updateProfile(user),
+return useMutation({
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    mutationFn: (user: UserProfileDto) => userService.updateProfile(user),
     retry: false,
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['auth'] });
