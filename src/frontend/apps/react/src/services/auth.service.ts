@@ -2,12 +2,12 @@
 import axios from '../api/AxiosClient';
 
 const AuthService = {
-  async login(email, password) {
+  async login(email: string, password: string) {
     const response = await axios.post('/api/auth', { email, password });
     return response.data;
   },
 
-  async signup(email, password) {
+  async signup(email: string, password: string) {
     const response = await axios.post('/sign-up', { email, password });
     return response.data;
   },

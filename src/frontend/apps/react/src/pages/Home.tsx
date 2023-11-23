@@ -11,6 +11,7 @@ const Home: FC = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
+
     // <div className="flex flex-col h-screen">
     <>
       <NavBarLogin/>

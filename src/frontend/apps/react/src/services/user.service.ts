@@ -1,30 +1,5 @@
 import axios from '../api/AxiosClient';
-
-/**
- * User profile data transfer object.
- */
-interface UserProfileDto {
-
-  /**
-   * User name.
-   */
-  name: string;
-
-  /**
-   * User id.
-   */
-  id: number;
-
-  /**
-   * User name.
-   */
-  email: string;
-
-  /**
-   * Sex.
-   */
- sex: boolean;
-}
+import { UserProfileDto } from '../api/store/auth/interface';
 
 const userService = {
   async create(username: string, password: string) {
@@ -32,15 +7,11 @@ const userService = {
     return response.data;
   },
   async getProfile(): Promise<UserProfileDto> {
-    const response = await axios.get('/profile');
+    const response = await axios.get('api/auth');
     return response.data;
   },
-  async updateProfile(userId: number, profile: {
-    name: string;
-    sex: boolean;
-    email: string;
-}): Promise<UserProfileDto> {
-    const response = await axios.patch(`/users/${userId}`, profile);
+  async updateProfile(user: UserProfileDto): Promise<UserProfileDto> {
+    const response = await axios.patch(`/users/${user.id}`, user);
     return response.data;
   },
 };

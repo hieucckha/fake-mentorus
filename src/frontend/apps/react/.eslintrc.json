@@ -2,7 +2,7 @@
   "extends": ["../../.eslintrc.json", "plugin:react/jsx-runtime"],
   "ignorePatterns": ["!**/*"],
   "parserOptions": {
-    "project": ["apps/react/tsconfig.*?.json"]
+    "project": ["apps/react/tsconfig.*?.json", "src/frontend/apps/react/tsconfig.*?.json"]
   },
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
@@ -37,6 +37,12 @@
     ]
   },
   "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "jsdoc/require-jsdoc": "warn"
+      }
+    },
     {
       "files": ["**/*.tsx"],
       "rules": {

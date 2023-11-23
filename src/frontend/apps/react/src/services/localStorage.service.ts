@@ -1,6 +1,6 @@
 
 const localStorageService = {
-  setItem(key, value) {
+  setItem(key: string, value: string) {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
@@ -8,7 +8,7 @@ const localStorageService = {
     }
   },
 
-  getItem(key) {
+  getItem(key: string) {
     try {
       const storedValue = localStorage.getItem(key);
       return storedValue ? JSON.parse(storedValue) : null;
@@ -18,7 +18,7 @@ const localStorageService = {
     }
   },
 
-  removeItem(key) {
+  removeItem(key: string) {
     try {
       localStorage.removeItem(key);
     } catch (error) {

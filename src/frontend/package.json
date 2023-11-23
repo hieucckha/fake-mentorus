@@ -17,6 +17,7 @@
   "private": true,
   "dependencies": {
     "@tanstack/react-query": "^5.8.4",
+    "@tanstack/react-query-devtools": "^5.8.4",
     "aos": "3.0.0-beta.6",
     "axios": "^1.0.0",
     "flowbite": "^2.2.0",

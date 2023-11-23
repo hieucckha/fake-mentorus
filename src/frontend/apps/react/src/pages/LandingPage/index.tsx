@@ -8,26 +8,31 @@ import FeaturesBlocks from './FeaturesBlocks';
 /**
  * Home page.
  */
-const index: FC = () => (
-  <div className="flex flex-col min-h-screen overflow-hidden">
+const index: FC = () => {
+  const a = 1;
 
-    {/*  Site header */}
-    <Header />
+  return (
 
-    {/*  Page content */}
-    <main className="flex-grow">
+    <div className="flex flex-col min-h-screen overflow-hidden">
 
-      {/*  Page sections */}
-      <HeroHome />
-      <FeaturesBlocks />
-      {/* <Testimonials /> */}
-      {/* <Newsletter /> */}
+      {/*  Site header */}
+      <Header />
 
-    </main>
+      {/*  Page content */}
+      <main className="flex-grow">
 
-    {/*  Site footer */}
-    <Footer />
-  </div>
-);
+        {/*  Page sections */}
+        <HeroHome />
+        <FeaturesBlocks />
+        {/* <Testimonials /> */}
+        {/* <Newsletter /> */}
+
+      </main>
+
+      {/*  Site footer */}
+      <Footer />
+    </div>
+  );
+};
 
 export default index;

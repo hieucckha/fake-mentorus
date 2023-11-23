@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
+
 import 'flowbite';
 import './index.scss';
 import router from './router';
@@ -11,7 +12,9 @@ if (rootElement == null) {
 }
 
 ReactDOM.createRoot(rootElement).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
+
+  // <StrictMode>
+  <RouterProvider router={router} />,
+
+  // </StrictMode>,
 );
