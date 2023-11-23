@@ -25,7 +25,7 @@ useMutation({
 export const userUpdateProfileMutation = (user: UserProfileDto) => {
   const queryClient = useQueryClient();
 useMutation({
-    mutationFn: () => (2),
+    mutationFn: () => userService.updateProfile(user),
     retry: false,
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['auth'] });
