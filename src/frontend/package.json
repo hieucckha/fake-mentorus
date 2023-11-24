@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.8.6",
+    "@total-typescript/ts-reset": "^0.5.1",
     "aos": "^2.3.4",
     "axios": "^1.6.2",
     "flowbite": "^2.2.0",

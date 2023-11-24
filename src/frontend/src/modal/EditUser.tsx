@@ -1,134 +1,128 @@
-import React, { FC, useState, useEffect } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { Button, Checkbox, Label, Modal, TextInput } from 'flowbite-react';
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { useState, type FC, useEffect } from "react";
+import { Button, Label, Modal, TextInput } from "flowbite-react";
 
-import { useQueries, useQuery } from '@tanstack/react-query';
-
-import userService from '../services/user.service';
-import useAuth from '../hooks/auth';
-import { UserProfileDto } from '../api/store/auth/interface';
-import useAuthQuery from '../api/store/auth/queries';
-import { userUpdateProfileMutation } from '../api/store/auth/mutations';
+import useAuth from "../hooks/auth";
+import type { UserProfileDto } from "../api/store/auth/interface";
+import { userUpdateProfileMutation } from "../api/store/auth/mutations";
 
 interface EditUserProps {
-  // eslint-disable-next-line jsdoc/require-jsdoc
-  handleCloseModalEditUser: () => void;
-  openModal: boolean;
+	handleCloseModalEditUser: () => void;
+	openModal: boolean;
 }
 
-const EditUser: FC<EditUserProps> = ({ handleCloseModalEditUser, openModal }): JSX.Element => {
-  const [userId, setUserId] = useState<number>();
-  const [formData, setFormData] = useState<UserProfileDto>({
-    fullName: '',
-    studentId: '',
-    email: '',
-    id: 0,
-  });
+const EditUser: FC<EditUserProps> = ({
+	handleCloseModalEditUser,
+	openModal,
+}): JSX.Element => {
+	const [formData, setFormData] = useState<UserProfileDto>({
+		fullName: "",
+		studentId: "",
+		email: "",
+		id: 0,
+	});
 
-  const { data: user, isLoading } = useAuth();
+	const { data: user, isLoading } = useAuth();
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
+	useEffect(() => {
+		if (!user) {
+			return;
+		}
 
-    /**
-     * Get user profile.
-     */
+		/**
+		 * Get user profile.
+		 */
 
-    setFormData({
-      fullName: user?.fullName ?? '',
-      studentId: user?.studentId ?? '',
-      email: user?.email ?? '',
-      id: user?.id ?? null,
-    });
+		setFormData({
+			fullName: user?.fullName ?? "",
+			studentId: user?.studentId ?? "",
+			email: user?.email ?? "",
+			id: user?.id ?? null,
+		});
+	}, [user]);
 
-  }, [user]);
+	if (isLoading) {
+		return <></>;
+	}
 
-  if (isLoading) {
-    return <></>;
-  }
+	const handleChange = (error: React.ChangeEvent<HTMLInputElement>) => {
+		setFormData({
+			...formData,
+			[error.target.id]: error.target.value,
+		});
+	};
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
-  };
+	const updateProfile = userUpdateProfileMutation();
 
-  const updateProfile = userUpdateProfileMutation();
+	const handleSubmit = (error: React.FormEvent) => {
+		error.preventDefault();
+		updateProfile.mutate(formData, {
+			onSuccess() {
+				handleCloseModalEditUser();
+			},
+			onError(error) {
+				console.error(error);
+			},
+		});
+	};
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateProfile.mutate(formData,
-      {
-        onSuccess() {
-          handleCloseModalEditUser();
-        },
-        onError(error) {
-          console.error(error);
-        },
-      });
+	const handleCloseModal = (): void => {
+		handleCloseModalEditUser();
+	};
 
-  };
+	return (
+		<Modal show={openModal} size="md" onClose={handleCloseModal} popup>
+			<Modal.Header />
+			<Modal.Body>
+				<div className="space-y-6">
+					<h3 className="text-xl font-medium text-gray-900 dark:text-white">
+						Edit profile{" "}
+					</h3>
+					<div>
+						<div className="mb-2 block">
+							<Label htmlFor="email" value="Email" />
+						</div>
+						<TextInput
+							id="email"
+							placeholder="Nguyen Van A"
+							value={formData.email}
+							onChange={handleChange}
+							required
+						/>
+					</div>
+					<div>
+						<div className="mb-2 block">
+							<Label htmlFor="name" value="Name" />
+						</div>
+						<TextInput
+							id="name"
+							placeholder="Nguyen Van A"
+							value={formData.name}
+							onChange={handleChange}
+							required
+						/>
+					</div>
+					<div>
+						<div className="mb-2 block">
+							<Label htmlFor="studentId" value="StudentId" />
+						</div>
+						<TextInput
+							id="studentId"
+							placeholder="3043465"
+							value={formData.studentId}
+							onChange={handleChange}
+							required
+						/>
+					</div>
 
-  const handleCloseModal = (): void => {
-    handleCloseModalEditUser();
-  };
-
-  return (
-    <Modal show={openModal} size="md" onClose={handleCloseModal} popup>
-      <Modal.Header />
-      <Modal.Body>
-        <div className="space-y-6">
-          <h3 className="text-xl font-medium text-gray-900 dark:text-white">Edit profile </h3>
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="email" value="Email" />
-            </div>
-            <TextInput
-              id="email"
-              placeholder="Nguyen Van A"
-
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="name" value="Name" />
-            </div>
-            <TextInput
-              id="name"
-              placeholder="Nguyen Van A"
-
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="studentId" value="StudentId" />
-            </div>
-            <TextInput
-              id="studentId"
-              placeholder="3043465"
-
-              value={formData.studentId}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="w-full text-center flex justify-end">
-            <Button onClick={handleSubmit}>Update</Button>
-          </div>
-        </div>
-      </Modal.Body>
-    </Modal>
-  );
+					<div className="w-full text-center flex justify-end">
+						<Button onClick={handleSubmit}>Update</Button>
+					</div>
+				</div>
+			</Modal.Body>
+		</Modal>
+	);
 };
 
 export default EditUser;
