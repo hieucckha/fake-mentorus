@@ -11,7 +11,12 @@ public class UserDto
     public int Id { get; set; }
 
     /// <summary>
-    /// Full user name.
+    /// Full name.
     /// </summary>
     required public string FullName { get; set; }
+
+    /// <summary>
+    /// User role.
+    /// </summary>
+    required public string Role { get; set; }
 }

@@ -1,27 +1,32 @@
 namespace SomeSandwich.FakeMentorus.UseCases.Users.GetUserById;
 
 /// <summary>
-/// User details.
+///     User details.
 /// </summary>
 public class UserDetailsDto
 {
     /// <summary>
-    /// User identifier.
+    ///     User identifier.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// Full user name.
+    ///     Full user name.
     /// </summary>
     required public string FullName { get; set; }
 
     /// <summary>
-    /// User email.
+    ///     User email.
     /// </summary>
     required public string Email { get; set; }
 
     /// <summary>
-    /// Last login date time.
+    ///     Last login date time.
     /// </summary>
     public DateTime LastLogin { get; set; }
+
+    /// <summary>
+    ///     User role.
+    /// </summary>
+    public string Role { get; set; } = string.Empty;
 }

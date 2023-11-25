@@ -8,12 +8,12 @@ using SomeSandwich.FakeMentorus.Web.Infrastructure.Web;
 namespace SomeSandwich.FakeMentorus.Web.Infrastructure.DependencyInjection;
 
 /// <summary>
-/// System specific dependencies.
+///     System specific dependencies.
 /// </summary>
 internal static class SystemModule
 {
     /// <summary>
-    /// Register dependencies.
+    ///     Register dependencies.
     /// </summary>
     /// <param name="services">Services.</param>
     public static void Register(IServiceCollection services)
@@ -22,5 +22,6 @@ internal static class SystemModule
         services.AddScoped<IAuthenticationTokenService, SystemJwtTokenService>();
         services.AddScoped<IAppDbContext>(s => s.GetRequiredService<AppDbContext>());
         services.AddScoped<ILoggedUserAccessor, LoggedUserAccessor>();
+        services.AddScoped<IDbInitializer, DbInitializer>();
     }
 }
