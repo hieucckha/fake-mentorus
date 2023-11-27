@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Saritasa.Tools.Domain.Exceptions;
 using SomeSandwich.FakeMentorus.Domain.Users;
 
 namespace SomeSandwich.FakeMentorus.UseCases.Users.CreateUser;
@@ -18,7 +19,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
     /// </summary>
     /// <param name="logger">Logger instance.</param>
     /// <param name="userManager"></param>
-    public CreateUserCommandHandler(ILogger<CreateUserCommandHandler> logger, UserManager<User> userManager)
+    public CreateUserCommandHandler(ILogger<CreateUserCommandHandler> logger,
+        UserManager<User> userManager)
     {
         this.logger = logger;
         this.userManager = userManager;
@@ -27,6 +29,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
     /// <inheritdoc />
     public async Task Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
+        logger.LogInformation($"Creating user with email: {command.Email}.");
+
         var user = new User
         {
             Email = command.Email,
@@ -40,6 +44,24 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
         if (result.Succeeded)
         {
             logger.LogInformation($"User id: {user.Id}.");
+        }
+        else
+        {
+            logger.LogError(
+                $"User creation failed: {result.Errors.FirstOrDefault()?.Description}.");
+            throw new DomainException(
+                $"User creation failed: {result.Errors.FirstOrDefault()?.Description}.");
+        }
+
+        if (!string.IsNullOrEmpty(command.StudentId))
+        {
+            await userManager.AddToRoleAsync(user, "Student");
+            logger.LogInformation($"User with id {user.Id} was created with role 'Student'.");
+        }
+        else
+        {
+            await userManager.AddToRoleAsync(user, "Teacher");
+            logger.LogInformation($"User with id {user.Id} was created with role 'Teacher'.");
         }
     }
 }

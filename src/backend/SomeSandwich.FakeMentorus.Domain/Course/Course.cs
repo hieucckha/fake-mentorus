@@ -26,6 +26,11 @@ public class Course
     /// </summary>
     public string? Description { get; set; }
 
+    /// <summary>
+    ///    Invite code for the class.
+    /// </summary>
+    public string? InviteCode { get; set; }
+
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>

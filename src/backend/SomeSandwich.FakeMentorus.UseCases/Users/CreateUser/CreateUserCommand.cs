@@ -26,4 +26,9 @@ public class CreateUserCommand : IRequest
     /// Password.
     /// </summary>
     required public string Password { get; set; }
+
+    /// <summary>
+    /// Student id.
+    /// </summary>
+    public string? StudentId { get; set; }
 }

@@ -52,7 +52,9 @@ public class Startup
 
         // Health check.
         var databaseConnectionString = configuration.GetConnectionString("AppDatabase")
-            ?? throw new ArgumentNullException("ConnectionStrings:AppDatabase", "Database connection string is not initialized");
+                                       ?? throw new ArgumentNullException(
+                                           "ConnectionStrings:AppDatabase",
+                                           "Database connection string is not initialized");
         services.AddHealthChecks()
             .AddNpgSql(databaseConnectionString);
 
@@ -75,17 +77,19 @@ public class Startup
         services.Configure<IdentityOptions>(new IdentityOptionsSetup().Setup);
 
         // JWT.
-        var jwtSecretKey = configuration["Jwt:SecretKey"] ?? throw new ArgumentNullException("Jwt:SecretKey");
-        var jwtIssuer = configuration["Jwt:Issuer"] ?? throw new ArgumentNullException("Jwt:Issuer");
+        var jwtSecretKey = configuration["Jwt:SecretKey"] ??
+                           throw new ArgumentNullException("Jwt:SecretKey");
+        var jwtIssuer = configuration["Jwt:Issuer"] ??
+                        throw new ArgumentNullException("Jwt:Issuer");
         services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(new JwtBearerOptionsSetup(
-            jwtSecretKey,
-            jwtIssuer).Setup
-        );
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(new JwtBearerOptionsSetup(
+                jwtSecretKey,
+                jwtIssuer).Setup
+            );
 
         // Database.
         services.AddDbContext<AppDbContext>(
@@ -100,6 +104,9 @@ public class Startup
 
         // HTTP client.
         services.AddHttpClient();
+
+        // Caching.
+        services.AddMemoryCache();
 
         // Other dependencies.
         AutoMapperModule.Register(services);
