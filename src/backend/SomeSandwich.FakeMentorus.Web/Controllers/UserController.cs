@@ -31,7 +31,6 @@ public class UserController : ControllerBase
     /// <param name="command">Create user command.</param>
     /// <param name="cancellationToken">Cancellation token to cancel the request.</param>
     [HttpPost]
-    [Authorize]
     public async Task Create(CreateUserCommand command, CancellationToken cancellationToken)
     {
         await mediator.Send(command, cancellationToken);
@@ -43,6 +42,7 @@ public class UserController : ControllerBase
     /// <param name="command"></param>
     /// <param name="cancellationToken"></param>
     [HttpPut]
+    [Authorize]
     public async Task Update(UpdateUserCommand command, CancellationToken cancellationToken)
     {
         await mediator.Send(command, cancellationToken);

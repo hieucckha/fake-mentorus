@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 using SomeSandwich.FakeMentorus.Infrastructure.DataAccess;
+using SomeSandwich.FakeMentorus.UseCases.Common.Service;
 using SomeSandwich.FakeMentorus.UseCases.Users.AuthenticateUser;
 using SomeSandwich.FakeMentorus.Web.Infrastructure.Jwt;
 using SomeSandwich.FakeMentorus.Web.Infrastructure.Web;
@@ -23,5 +24,6 @@ internal static class SystemModule
         services.AddScoped<IAppDbContext>(s => s.GetRequiredService<AppDbContext>());
         services.AddScoped<ILoggedUserAccessor, LoggedUserAccessor>();
         services.AddScoped<IDbInitializer, DbInitializer>();
+        services.AddScoped<IAccessService, AccessService>();
     }
 }
