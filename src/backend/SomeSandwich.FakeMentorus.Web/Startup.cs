@@ -113,6 +113,7 @@ public class Startup
         ApplicationModule.Register(services, configuration);
         MediatRModule.Register(services);
         SystemModule.Register(services);
+        MailModule.Register(services, configuration);
     }
 
     /// <summary>

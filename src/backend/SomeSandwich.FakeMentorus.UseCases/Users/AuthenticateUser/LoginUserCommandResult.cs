@@ -1,4 +1,4 @@
-namespace SomeSandwich.FakeMentorus.UseCases.Users.AuthenticateUser.LoginUser;
+namespace SomeSandwich.FakeMentorus.UseCases.Users.AuthenticateUser;
 
 /// <summary>
 /// Represents user login attempt to system.
