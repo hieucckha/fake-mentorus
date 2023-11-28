@@ -5,7 +5,7 @@ import userService from '../../../services/user.service';
 import localStorageService from '../../../services/localStorage.service';
 import AuthServices from '../../../services/auth.service';
 
-import { SigninData, UserProfileDto } from './interface';
+import type { SigninData, UserProfileDto } from './interface';
 
 /**
  * @file API - Store - `auth` - Mutations.

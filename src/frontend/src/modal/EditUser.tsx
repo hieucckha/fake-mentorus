@@ -98,7 +98,7 @@ const EditUser: FC<EditUserProps> = ({
 						<TextInput
 							id="name"
 							placeholder="Nguyen Van A"
-							value={formData.name}
+							value={formData.fullName}
 							onChange={handleChange}
 							required
 						/>
