@@ -39,3 +39,11 @@ export interface UserProfileDto {
    */
   studentId: string;
 }
+
+export interface signUpDto {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  studentId: string;
+}

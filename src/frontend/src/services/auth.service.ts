@@ -7,8 +7,8 @@ const AuthService = {
     return response.data;
   },
 
-  async signup(email: string, password: string) {
-    const response = await axios.post('/sign-up', { email, password });
+  async signup(email: string, password: string, firstName: string, lastName: string, studentId: string) {
+    const response = await axios.post('/api/user', { email, password, firstName, lastName, studentId });
     return response.data;
   },
 };
