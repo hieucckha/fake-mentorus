@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useSignInMutation } from "../api/store/auth/mutations";
 import type { SigninData } from "../api/store/auth/interface";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { FacebookProvider, LoginButton } from "react-facebook";
 
 /**
  * Sign-in page.
@@ -48,6 +50,15 @@ const SignIn: FC = (): JSX.Element => {
 		});
 	};
 
+	const handleSuccess = (response: { status: any }) => {
+		console.log("This is facebook response");
+		console.log(response);
+	};
+
+	const handleError = (error: any) => {
+		console.log(error);
+	};
+
 	return (
 		<div className="flex flex-col min-h-screen overflow-hidden">
 			{/* Page content. */}
@@ -63,6 +74,21 @@ const SignIn: FC = (): JSX.Element => {
 							{/* Form */}
 
 							<div className="max-w-sm mx-auto">
+								<GoogleOAuthProvider clientId="856018113300-i5i4padrol9e1nocd5ibvm2k1uuh70rm.apps.googleusercontent.com">
+									<GoogleLogin
+										onSuccess={(res) => console.log(res)}
+										onError={() => console.log("error")}
+									/>
+								</GoogleOAuthProvider>
+								<FacebookProvider appId="326344773641983">
+									<LoginButton
+										scope="email"
+										onError={handleError}
+										onSuccess={handleSuccess}
+									>
+										Login via Facebook
+									</LoginButton>
+								</FacebookProvider>
 								<form onSubmit={handleFormSubmit}>
 									<div className="flex flex-wrap -mx-3 mb-4">
 										<div className="w-full px-3">

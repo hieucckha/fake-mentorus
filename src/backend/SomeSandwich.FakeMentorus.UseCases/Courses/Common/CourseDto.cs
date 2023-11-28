@@ -1,6 +1,4 @@
-using SomeSandwich.FakeMentorus.Domain.Users;
-
-namespace SomeSandwich.FakeMentorus.UseCases.Course.Common;
+namespace SomeSandwich.FakeMentorus.UseCases.Courses.Common;
 
 /// <summary>
 ///     Course DTO.
@@ -33,12 +31,12 @@ public class CourseDto
     public DateTime UpdatedAt { get; set; }
 
     /// <summary>
-    ///     Course students.
+    ///    Number of students in the course.
     /// </summary>
-    public IList<User> Students { get; set; } = null!;
+    public int NumberOfStudents { get; set; }
 
     /// <summary>
-    ///     Course teachers.
+    ///   Number of teachers in the course.
     /// </summary>
-    public IList<User> Teachers { get; set; } = null!;
+    public int NumberOfTeachers { get; set; }
 }

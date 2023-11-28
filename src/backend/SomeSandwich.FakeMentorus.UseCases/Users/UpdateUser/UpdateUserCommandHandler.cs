@@ -9,7 +9,7 @@ namespace SomeSandwich.FakeMentorus.UseCases.Users.UpdateUser;
 /// <summary>
 ///     Command to update user.
 /// </summary>
-public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
+internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
 {
     private readonly ILoggedUserAccessor loggedUserAccessor;
     private readonly ILogger<UpdateUserCommandHandler> logger;

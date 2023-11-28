@@ -1,3 +1,6 @@
+using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
+using SomeSandwich.FakeMentorus.Infrastructure.Implements;
+
 namespace SomeSandwich.FakeMentorus.Web.Infrastructure.DependencyInjection;
 
 /// <summary>
@@ -10,10 +13,8 @@ internal static class ApplicationModule
     /// </summary>
     /// <param name="services">Services.</param>
     /// <param name="configuration">Configuration.</param>
-#pragma warning disable CA1801 // Review unused parameters
     public static void Register(IServiceCollection services, IConfiguration configuration)
-#pragma warning restore CA1801 // Review unused parameters
     {
-        // TODO: Add dependencies.
+        services.AddSingleton<IFacebookClient, FacebookClient>();
     }
 }

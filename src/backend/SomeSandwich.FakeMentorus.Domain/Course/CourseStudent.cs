@@ -43,10 +43,10 @@ public class CourseStudent
     /// <summary>
     ///     Course.
     /// </summary>
-    public Course Course { get; set; } = null!;
+    public virtual Course Course { get; set; } = null!;
 
     /// <summary>
     ///     Student.
     /// </summary>
-    public User Student { get; set; } = null!;
+    public virtual User Student { get; set; } = null!;
 }

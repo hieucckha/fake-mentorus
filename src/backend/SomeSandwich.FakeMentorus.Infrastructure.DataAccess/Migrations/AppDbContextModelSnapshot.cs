@@ -171,6 +171,10 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
+                    b.Property<string>("InviteCode")
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .IsUnicode(false)
@@ -181,7 +185,7 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Course");
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("SomeSandwich.FakeMentorus.Domain.Course.CourseStudent", b =>
@@ -210,7 +214,7 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("CourseStudent");
+                    b.ToTable("CourseStudents");
                 });
 
             modelBuilder.Entity("SomeSandwich.FakeMentorus.Domain.Course.CourseTeacher", b =>
@@ -239,7 +243,7 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("CourseTeacher");
+                    b.ToTable("CourseTeachers");
                 });
 
             modelBuilder.Entity("SomeSandwich.FakeMentorus.Domain.Grade.Grade", b =>
@@ -271,7 +275,7 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Grade");
+                    b.ToTable("Grades");
                 });
 
             modelBuilder.Entity("SomeSandwich.FakeMentorus.Domain.Grade.GradeComposition", b =>
@@ -310,7 +314,7 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("GradeComposition");
+                    b.ToTable("GradeCompositions");
                 });
 
             modelBuilder.Entity("SomeSandwich.FakeMentorus.Domain.Request.CommentRequest", b =>
@@ -347,7 +351,7 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CommentRequest");
+                    b.ToTable("CommentRequests");
                 });
 
             modelBuilder.Entity("SomeSandwich.FakeMentorus.Domain.Request.Request", b =>
@@ -381,7 +385,7 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Request");
+                    b.ToTable("Requests");
                 });
 
             modelBuilder.Entity("SomeSandwich.FakeMentorus.Domain.Users.AppIdentityRole", b =>

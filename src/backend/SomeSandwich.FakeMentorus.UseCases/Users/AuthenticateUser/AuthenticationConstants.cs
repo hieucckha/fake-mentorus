@@ -28,5 +28,5 @@ public static class AuthenticationConstants
     /// <summary>
     /// Access token expiration time.
     /// </summary>
-    public static readonly TimeSpan AccessTokenExpirationTime = TimeSpan.FromHours(3);
+    public static readonly TimeSpan AccessTokenExpirationTime = TimeSpan.FromDays(3);
 }
