@@ -5,7 +5,7 @@ import userService from '../../../services/user.service';
 import localStorageService from '../../../services/localStorage.service';
 import AuthServices from '../../../services/auth.service';
 
-import type { SigninData, UserProfileDto } from './interface';
+import type { SigninData, UserProfileDto, signUpDto } from './interface';
 
 /**
  * @file API - Store - `auth` - Mutations.
@@ -32,4 +32,15 @@ return useMutation({
       queryClient.invalidateQueries({ queryKey: ['auth'] });
     },
 });
-};
+}
+
+export const userSignUpMutation = () => 
+useMutation({
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  mutationFn: (user: signUpDto) => AuthServices.signup(user.email, user.password, user.firstName, user.lastName, user.studentId),
+  retry: false,
+  onSuccess(data) {
+    localStorageService.setItem('auth', data.token);
+  },
+  });
+
