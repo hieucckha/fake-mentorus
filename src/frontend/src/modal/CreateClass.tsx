@@ -1,5 +1,6 @@
 import { useState, type FC } from "react";
 import { Button, Label, Modal, TextInput,Textarea } from "flowbite-react";
+import { useCreateClassMutation } from "../api/store/class/mutation";
 interface CreateClassProps {
     handleCloseModalCreateClass: () => void;
     openModal: boolean;
@@ -19,14 +20,30 @@ const CreateClass: FC<CreateClassProps> = ({
             ...formData,
             [error.target.id]: error.target.value,
         }); };
-    
+    const mutation = useCreateClassMutation();
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const handleSubmit = (error: React.FormEvent) => {
-        error.preventDefault();
-        console.log(formData);
+    const handleSubmit = async (
+        event: React.FormEvent<HTMLFormElement>
+      // eslint-disable-next-line @typescript-eslint/require-await
+      ): Promise<void> => {
+		    event.preventDefault();
+        mutation.mutate(formData,
+        {
+            onSuccess() { 
+             
+                handleCloseModalCreateClass();
+            },
+            onError(error) {
+                console.log(error);
+            },
+        });
+
+        
     }
 
       return (
+        <>
+          
       <Modal show={openModal} size="md" popup onClose={handleCloseModalCreateClass} >
         <Modal.Header />
         <Modal.Body>
@@ -51,7 +68,9 @@ const CreateClass: FC<CreateClassProps> = ({
            
           </div>
         </Modal.Body>
-      </Modal>)
+      </Modal>
+        </>
+      )
       };
 
 export default CreateClass;

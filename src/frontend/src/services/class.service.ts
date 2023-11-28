@@ -4,7 +4,7 @@ import type { ClassDto } from '../api/store/class/interface';
 
 const classService = {
     async createClass(classData: ClassDto) {
-        const response = await axios.post('/class', classData);
+        const response = await axios.post('/api/course', classData);
         return response.data;
     },
     // async getDetailClass(): Promise<ClassDto> {
