@@ -4,46 +4,64 @@
  * @property {String} email - User email.
  * @property {String} password - User password.
  */
-export interface SigninData {
+export interface SignInData {
+	/**
+	 * User email.
+	 */
+	email: string;
 
-  /**
-   * User email.
-   */
-    email: string;
+	/**
+	 * User password.
+	 */
+	password: string;
+}
 
-    /**
-     * User password.
-     */
-    password: string;
+/**
+ * Sign in with Google
+ */
+export interface SignInGoogleData {
+	/**
+	 * Credential for Google sign in.
+	 */
+	credential: string;
+}
+
+/**
+ * Sign in with Facebook
+ */
+export interface SignInFacebookData {
+	/**
+	 * Access token for Facebook sign in.
+	 */
+	accessToken: string;
 }
 
 export interface UserProfileDto {
+	/**
+	 * User name.
+	 */
+	fullName: string;
 
-  /**
-   * User name.
-   */
-  fullName: string;
+	/**
+	 * User id.
+	 */
+	id: number;
 
-  /**
-   * User id.
-   */
-  id: number;
+	/**
+	 * User name.
+	 */
+	email: string;
 
-  /**
-   * User name.
-   */
-  email: string;
-
-  /**
-   * Sex.
-   */
-  studentId: string;
+	/**
+	 * Sex.
+	 */
+	studentId: string;
 }
 
 export interface signUpDto {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  studentId: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	password: string;
+	studentId: string;
 }
