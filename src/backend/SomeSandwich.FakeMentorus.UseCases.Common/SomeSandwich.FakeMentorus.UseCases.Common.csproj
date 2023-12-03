@@ -16,6 +16,7 @@
       <PackageReference Include="Google.Apis.Auth" Version="1.64.0" />
       <PackageReference Include="MediatR" Version="12.2.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" />
+      <PackageReference Include="Saritasa.Tools.EntityFrameworkCore" Version="7.0.1" />
       <PackageReference Include="shortid" Version="4.0.0" />
     </ItemGroup>
 
