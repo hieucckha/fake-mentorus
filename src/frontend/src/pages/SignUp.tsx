@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useState, type FC, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Select } from "flowbite-react";
+import { Select, Toast } from "flowbite-react";
 
 import { userSignUpMutation } from "../api/store/auth/mutations";
 import type { signUpDto } from "../api/store/auth/interface";
-import { Toast } from "flowbite-react";
+import Header from "./LandingPage/Header";
 
 /**
  * Sign up page.
@@ -77,6 +77,8 @@ const SignUp: FC = (): JSX.Element => {
 	return (
 		<div className="flex flex-col min-h-screen overflow-hidden">
 			{/* Page content. */}
+			<Header />
+
 			<main className="grow h-screen">
 				<section className="bg-gradient-to-b from-gray-100 to-white h-full">
 					<div className="max-w-6xl mx-auto px-4 sm:px-6">
