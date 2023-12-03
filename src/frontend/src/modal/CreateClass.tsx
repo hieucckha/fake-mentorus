@@ -1,58 +1,78 @@
 import { useState, type FC } from "react";
-import { Button, Label, Modal, TextInput,Textarea } from "flowbite-react";
+import { Button, Label, Modal, TextInput, Textarea } from "flowbite-react";
 interface CreateClassProps {
-    handleCloseModalCreateClass: () => void;
-    openModal: boolean;
+	handleCloseModalCreateClass: () => void;
+	openModal: boolean;
 }
 
 const CreateClass: FC<CreateClassProps> = ({
-    handleCloseModalCreateClass,
-    openModal,
+	handleCloseModalCreateClass,
+	openModal,
 }): JSX.Element => {
-    const [formData, setFormData] = useState({
-        name: "",
-        description: "",
-    });
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const handleChange = (error: React.ChangeEvent<HTMLInputElement |HTMLTextAreaElement>) => 
-        { setFormData({
-            ...formData,
-            [error.target.id]: error.target.value,
-        }); };
-    
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const handleSubmit = (error: React.FormEvent) => {
-        error.preventDefault();
-        console.log(formData);
-    }
+	const [formData, setFormData] = useState({
+		name: "",
+		description: "",
+	});
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	const handleChange = (
+		error: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		setFormData({
+			...formData,
+			[error.target.id]: error.target.value,
+		});
+	};
 
-      return (
-      <Modal show={openModal} size="md" popup onClose={handleCloseModalCreateClass} >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="space-y-6">
-            <h3 className="text-xl font-medium text-gray-900 dark:text-white">Create class</h3>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="name" value="Class name" />
-              </div>
-              <TextInput id="name" onChange={handleChange} value={formData.name} placeholder="Web advance" required />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="description" value="Description" />
-              </div>
-              <Textarea id="description" onChange={handleChange} value={formData.description}  placeholder="Anything..."  />
-            </div>
-            
-            <div className="w-full flex justify-end">
-              <Button onClick={handleSubmit}>Create</Button>
-            </div>
-           
-          </div>
-        </Modal.Body>
-      </Modal>)
-      };
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	const handleSubmit = (error: React.FormEvent) => {
+		error.preventDefault();
+		console.log(formData);
+	};
+
+	return (
+		<Modal
+			show={openModal}
+			size="md"
+			popup
+			onClose={handleCloseModalCreateClass}
+		>
+			<Modal.Header />
+			<Modal.Body>
+				<div className="space-y-6">
+					<h3 className="text-xl font-medium text-gray-900 dark:text-white">
+						Create class
+					</h3>
+					<div>
+						<div className="mb-2 block">
+							<Label htmlFor="name" value="Class name" />
+						</div>
+						<TextInput
+							id="name"
+							onChange={handleChange}
+							value={formData.name}
+							placeholder="Web advance"
+							required
+						/>
+					</div>
+					<div>
+						<div className="mb-2 block">
+							<Label htmlFor="description" value="Description" />
+						</div>
+						<Textarea
+							id="description"
+							onChange={handleChange}
+							value={formData.description}
+							placeholder="Anything..."
+						/>
+					</div>
+
+					<div className="w-full flex justify-end">
+						<Button onClick={handleSubmit}>Create</Button>
+					</div>
+				</div>
+			</Modal.Body>
+		</Modal>
+	);
+};
 
 export default CreateClass;
-

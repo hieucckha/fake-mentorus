@@ -30,13 +30,13 @@ const NavBarLogin: FC = () => {
 	const handleCloseModalEditUser = (): void => {
 		setIsOpenModalEditUser(false);
 	};
-	
+
 	const handleCloseModalCreateClass = (): void => {
 		setIsOpenModalCreateClass(false);
 	};
 	const handleOpenModalCreateClass = (): void => {
 		setIsOpenModalCreateClass(true);
-	}
+	};
 	const { data: user } = useAuth();
 
 	useEffect(() => {
@@ -91,17 +91,23 @@ const NavBarLogin: FC = () => {
 						</Link>
 					</div>
 					<div className="flex items-center">
-							<button
-								type="button"
-								className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
-								aria-expanded="false"
-								data-dropdown-toggle="dropdown-user"
-								onClick={handleOpenModalCreateClass}
+						<button
+							type="button"
+							className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+							aria-expanded="false"
+							onClick={handleOpenModalCreateClass}
+						>
+							<span className="sr-only">Create class</span>
+							<svg
+								focusable="false"
+								width={24}
+								height={24}
+								viewBox="0 0 24 24"
+								className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"
 							>
-								<span className="sr-only">Create class</span>
-								<svg focusable="false" width={24} height={24} viewBox="0 0 24 24" className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"><path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" /></svg>
-
-							</button>
+								<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
+							</svg>
+						</button>
 						<div className="flex items-center ms-3">
 							<div>
 								<button
@@ -109,7 +115,6 @@ const NavBarLogin: FC = () => {
 									className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
 									aria-expanded="false"
 									data-dropdown-toggle="dropdown-user"
-
 								>
 									<span className="sr-only">Open user menu</span>
 									<img
@@ -171,15 +176,18 @@ const NavBarLogin: FC = () => {
 								</ul>
 							</div>
 						</div>
-					{isOpenModalEditUser && (
-						<EditUser
-							openModal={isOpenModalEditUser}
-							handleCloseModalEditUser={handleCloseModalEditUser}
-						/>
-					)}
-					{isOpenModalCreateClass && (
-					<CreateClass openModal={isOpenModalCreateClass}
-					 handleCloseModalCreateClass={handleCloseModalCreateClass} />)}
+						{isOpenModalEditUser && (
+							<EditUser
+								openModal={isOpenModalEditUser}
+								handleCloseModalEditUser={handleCloseModalEditUser}
+							/>
+						)}
+						{isOpenModalCreateClass && (
+							<CreateClass
+								openModal={isOpenModalCreateClass}
+								handleCloseModalCreateClass={handleCloseModalCreateClass}
+							/>
+						)}
 					</div>
 				</div>
 			</div>

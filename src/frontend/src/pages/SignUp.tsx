@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useState, type FC, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {Select} from "flowbite-react";
+import { Select } from "flowbite-react";
 
 import { userSignUpMutation } from "../api/store/auth/mutations";
 import type { signUpDto } from "../api/store/auth/interface";
@@ -23,21 +23,22 @@ const SignUp: FC = (): JSX.Element => {
 	const [errMatch, setErrMatch] = useState(false);
 	const [isStudent, setIsStudent] = useState(false);
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
 		const { id, value } = e.target;
 		setForm((prevState) => ({
 			...prevState,
 			[id]: value,
 		}));
-	}
+	};
 	useEffect(() => {
 		if (form.password !== form.confirmPassword) {
 			setErrMatch(true);
 		} else {
 			setErrMatch(false);
 		}
-	}
-	, [form.password, form.confirmPassword]);
+	}, [form.password, form.confirmPassword]);
 
 	const mutation = userSignUpMutation();
 
@@ -73,7 +74,6 @@ const SignUp: FC = (): JSX.Element => {
 		});
 	};
 
-
 	return (
 		<div className="flex flex-col min-h-screen overflow-hidden">
 			{/* Page content. */}
@@ -88,7 +88,7 @@ const SignUp: FC = (): JSX.Element => {
 
 							{/* Form */}
 							<div className="max-w-sm mx-auto">
-								<form onSubmit={handleFormSubmit} >
+								<form onSubmit={handleFormSubmit}>
 									<div className="flex flex-wrap -mx-3 mb-4">
 										<div className="w-1/2 px-3">
 											<label
@@ -183,13 +183,15 @@ const SignUp: FC = (): JSX.Element => {
 									</div>
 									{errMatch && (
 										<div className="flex flex-wrap -mx-3 mb-4">
-										<div className="w-full px-3">
-											<div className="flex justify-between">
-												<p className="text-red-600">Password does not match</p>
+											<div className="w-full px-3">
+												<div className="flex justify-between">
+													<p className="text-red-600">
+														Password does not match
+													</p>
+												</div>
 											</div>
 										</div>
-									</div>)
-										}
+									)}
 									<div className="flex flex-wrap -mx-3 mb-4">
 										<div className="w-full px-3">
 											<div className="flex justify-between">
@@ -200,35 +202,43 @@ const SignUp: FC = (): JSX.Element => {
 													Role
 												</label>
 											</div>
-											<Select  defaultValue="Teacher" onChange={()=>{setIsStudent(!isStudent)}} id="role" className=" w-full text-gray-800" required>
-											<option>Teacher</option>
-											<option>Student</option>
-											</Select>					
+											<Select
+												defaultValue="Teacher"
+												onChange={() => {
+													setIsStudent(!isStudent);
+												}}
+												id="role"
+												className=" w-full text-gray-800"
+												required
+											>
+												<option>Teacher</option>
+												<option>Student</option>
+											</Select>
 										</div>
 									</div>
 									{isStudent && (
 										<div className="flex flex-wrap -mx-3 mb-4">
-										<div className="w-full px-3">
-											<div className="flex justify-between">
-												<label
-													className="block text-gray-800 text-sm font-medium mb-1"
-													htmlFor="studentId"
-												>
-													Student Id
-												</label>
+											<div className="w-full px-3">
+												<div className="flex justify-between">
+													<label
+														className="block text-gray-800 text-sm font-medium mb-1"
+														htmlFor="studentId"
+													>
+														Student Id
+													</label>
+												</div>
+												<input
+													id="studentId"
+													type="text"
+													className="form-input w-full text-gray-800"
+													placeholder="Enter your studentId"
+													required
+													onChange={handleChange}
+												/>
 											</div>
-											<input
-												id="studentId"
-												type="text"
-												className="form-input w-full text-gray-800"
-												placeholder="Enter your studentId"
-												required
-												onChange={handleChange}
-											/>
 										</div>
-									</div>)
-										}
-									
+									)}
+
 									<div className="flex flex-wrap -mx-3 mb-3 mt-6">
 										<div className="w-full px-3">
 											<button className="btn text-white bg-gray-900 hover:bg-gray-700 w-full">
