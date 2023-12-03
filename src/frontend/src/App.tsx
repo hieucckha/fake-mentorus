@@ -4,6 +4,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { FacebookProvider } from "react-facebook";
 
 const queryClient = new QueryClient();
 
@@ -22,9 +24,13 @@ export const App: FC = () => {
 	});
 
 	return (
-		<QueryClientProvider client={queryClient}>
-			<Outlet />
-			<ReactQueryDevtools initialIsOpen={false} />
-		</QueryClientProvider>
+		<GoogleOAuthProvider clientId="856018113300-i5i4padrol9e1nocd5ibvm2k1uuh70rm.apps.googleusercontent.com">
+			<FacebookProvider appId="326344773641983">
+				<QueryClientProvider client={queryClient}>
+					<Outlet />
+					<ReactQueryDevtools initialIsOpen={false} />
+				</QueryClientProvider>
+			</FacebookProvider>
+		</GoogleOAuthProvider>
 	);
 };
