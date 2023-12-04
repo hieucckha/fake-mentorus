@@ -8,6 +8,8 @@ import SignUp from "../pages/SignUp";
 import UnauthorizeLayout from "../layout/UnauthorizeLayout";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
+import ResetPassword from "../pages/ResetPassword";
+import ConfirmResetPassword from "../pages/ConfirmResetPassword";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -29,6 +31,10 @@ const BrowserRouter = createBrowserRouter([
 						path: "/sign-up",
 						element: <SignUp />,
 					},
+					{
+						path:"/reset-password",
+						element: <ResetPassword />,
+					}
 				],
 			},
 			{

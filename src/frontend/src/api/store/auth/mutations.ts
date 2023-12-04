@@ -10,6 +10,7 @@ import type {
 	SignInFacebookData,
 	SignInGoogleData,
 	UserProfileDto,
+	resetPasswordDto,
 	signUpDto,
 } from "./interface";
 
@@ -70,4 +71,10 @@ export const userSignUpMutation = () =>
 		onSuccess(data) {
 			localStorageService.setItem("auth", data.token);
 		},
+	});
+export const useResetPasswordMutation = () =>
+	useMutation({
+		// eslint-disable-next-line @typescript-eslint/no-shadow, @typescript-eslint/no-unsafe-return
+		mutationFn: (data: resetPasswordDto) => AuthServices.resetPassword(data.email),
+		retry: false,
 	});
