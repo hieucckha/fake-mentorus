@@ -9,7 +9,7 @@ import UnauthorizeLayout from "../layout/UnauthorizeLayout";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import ResetPassword from "../pages/ResetPassword";
-import ConfirmResetPassword from "../pages/ConfirmResetPassword";
+import ConfirmEmail from "../pages/ConfirmEmail";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -38,7 +38,11 @@ const BrowserRouter = createBrowserRouter([
 					{
 						path: "/reset-password/confirm",
 						element: <ConfirmResetPassword />
-					}
+					},
+          {
+						path: "/activate-account/confirm",
+						element: <ConfirmEmail />,
+					},
 				],
 			},
 			{
