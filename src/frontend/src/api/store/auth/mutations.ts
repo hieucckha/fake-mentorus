@@ -12,6 +12,7 @@ import type {
 	UserProfileDto,
 	resetPasswordDto,
 	signUpDto,
+	resetPasswordConfirmDto,
 } from "./interface";
 
 export const useSignInMutation = () =>
@@ -78,3 +79,12 @@ export const useResetPasswordMutation = () =>
 		mutationFn: (data: resetPasswordDto) => AuthServices.resetPassword(data.email),
 		retry: false,
 	});
+
+export const userConfirmResetPasswordMutation = () =>
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	useMutation({
+		mutationFn: (data: resetPasswordConfirmDto) =>
+			AuthServices.confirmResetPassword(data.email, data.code, data.password, data.confirmPassword),
+		retry: false,
+	});
+

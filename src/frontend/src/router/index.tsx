@@ -32,8 +32,12 @@ const BrowserRouter = createBrowserRouter([
 						element: <SignUp />,
 					},
 					{
-						path:"/reset-password",
+						path: "/reset-password",
 						element: <ResetPassword />,
+					},
+					{
+						path: "/reset-password/confirm",
+						element: <ConfirmResetPassword />
 					}
 				],
 			},
