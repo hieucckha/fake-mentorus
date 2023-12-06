@@ -1,3 +1,4 @@
+using System.Web;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Saritasa.Tools.Domain.Exceptions;
@@ -37,8 +38,9 @@ public class RegisterActivateUserCommandHandler : IRequestHandler<RegisterActiva
         if (user.EmailConfirmed == false)
         {
             var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
             await emailSender.SendEmailAsync(
-                $"Please confirm your account by <a href='http://localhost:5173//activate-account/confirm?email={user.Email}&code={code}'>clicking here</a>.",
+                $"<div>Please confirm your account by <a href='http://localhost:5173/activate-account/confirm?email={HttpUtility.UrlEncode(user.Email)}&code={HttpUtility.UrlEncode(code)}'>clicking here</a>.</div>",
                 "Activate your account",
                 new List<string> { user.Email! }, cancellationToken);
         }

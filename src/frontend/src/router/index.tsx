@@ -8,6 +8,7 @@ import SignUp from "../pages/SignUp";
 import UnauthorizeLayout from "../layout/UnauthorizeLayout";
 import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
+import ConfirmEmail from "../pages/ConfirmEmail";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -28,6 +29,10 @@ const BrowserRouter = createBrowserRouter([
 					{
 						path: "/sign-up",
 						element: <SignUp />,
+					},
+					{
+						path: "/activate-account/confirm",
+						element: <ConfirmEmail />,
 					},
 				],
 			},

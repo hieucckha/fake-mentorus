@@ -1,3 +1,4 @@
+using System.Web;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Saritasa.Tools.Domain.Exceptions;
@@ -36,7 +37,7 @@ public class GenerateTokenResetPasswordUserCommandHandler : IRequestHandler<Gene
 
         var code = await userManager.GeneratePasswordResetTokenAsync(user);
         await emailSender.SendEmailAsync(
-            $"Please reset your password by <a href='http://localhost:5173//reset-password/confirm?email={user.Email}&code={code}'>clicking here</a>.",
+            $"<div>Please reset your password by <a href='http://localhost:5173/reset-password/confirm?email={HttpUtility.UrlEncode(user.Email)}&code={HttpUtility.UrlEncode(code)}'>clicking here</a>.</div>",
             "Reset your password",
             new List<string> { user.Email! }, cancellationToken);
     }

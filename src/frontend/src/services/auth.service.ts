@@ -33,6 +33,14 @@ const AuthService = {
 		const response = await axios.post("/api/auth/facebook", { accessToken });
 		return response.data;
 	},
+
+	async confirmEmail(email: string, code: string) {
+		const response = await axios.post(`/api/auth/activate/confirm`, {
+			email,
+			code,
+		});
+		return response;
+	},
 };
 
 export default AuthService;
