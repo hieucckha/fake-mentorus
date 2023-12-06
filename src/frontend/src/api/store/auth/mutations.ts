@@ -10,7 +10,9 @@ import type {
 	SignInFacebookData,
 	SignInGoogleData,
 	UserProfileDto,
+	resetPasswordDto,
 	signUpDto,
+	resetPasswordConfirmDto,
 } from "./interface";
 
 export const useSignInMutation = () =>
@@ -71,3 +73,18 @@ export const userSignUpMutation = () =>
 			localStorageService.setItem("auth", data.token);
 		},
 	});
+export const useResetPasswordMutation = () =>
+	useMutation({
+		// eslint-disable-next-line @typescript-eslint/no-shadow, @typescript-eslint/no-unsafe-return
+		mutationFn: (data: resetPasswordDto) => AuthServices.resetPassword(data.email),
+		retry: false,
+	});
+
+export const userConfirmResetPasswordMutation = () =>
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	useMutation({
+		mutationFn: (data: resetPasswordConfirmDto) =>
+			AuthServices.confirmResetPassword(data.email, data.code, data.password, data.confirmPassword),
+		retry: false,
+	});
+

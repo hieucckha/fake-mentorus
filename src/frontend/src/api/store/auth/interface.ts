@@ -65,3 +65,13 @@ export interface signUpDto {
 	password: string;
 	studentId: string;
 }
+export interface resetPasswordDto {
+	email: string;
+}
+
+export interface resetPasswordConfirmDto {
+	email: string;
+	code: string;
+	password: string;
+	confirmPassword: string;
+}

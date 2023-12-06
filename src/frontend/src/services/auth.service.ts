@@ -33,7 +33,14 @@ const AuthService = {
 		const response = await axios.post("/api/auth/facebook", { accessToken });
 		return response.data;
 	},
-
+	async resetPassword(email: string) {
+		const response = await axios.post("/api/auth/reset-password", { email });
+		return response.data;
+	},
+	async confirmResetPassword(email: string, code: string, password: string, confirmPassword: string) {
+		const response = await axios.post("/api/auth/reset-password/confirm", { email, code, password, confirmPassword});
+		return response.data;
+	},
 	async confirmEmail(email: string, code: string) {
 		const response = await axios.post(`/api/auth/activate/confirm`, {
 			email,
