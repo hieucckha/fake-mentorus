@@ -1,6 +1,6 @@
-import axios from '../api/AxiosClient';
+import axios from "../api/AxiosClient";
 
-import type { ClassDto } from '../api/store/class/interface';
+import type { ClassDto } from "../api/store/class/interface";
 
 const classService = {
     async createClass(classData: ClassDto) {

@@ -2,13 +2,13 @@ import { useState, type FC } from "react";
 import { Button, Label, Modal, TextInput,Textarea } from "flowbite-react";
 import { useCreateClassMutation } from "../api/store/class/mutation";
 interface CreateClassProps {
-    handleCloseModalCreateClass: () => void;
-    openModal: boolean;
+	handleCloseModalCreateClass: () => void;
+	openModal: boolean;
 }
 
 const CreateClass: FC<CreateClassProps> = ({
-    handleCloseModalCreateClass,
-    openModal,
+	handleCloseModalCreateClass,
+	openModal,
 }): JSX.Element => {
     const [formData, setFormData] = useState({
         name: "",
@@ -74,4 +74,3 @@ const CreateClass: FC<CreateClassProps> = ({
       };
 
 export default CreateClass;
-

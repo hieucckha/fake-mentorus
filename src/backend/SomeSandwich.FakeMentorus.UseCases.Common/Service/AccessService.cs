@@ -6,7 +6,7 @@ using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 namespace SomeSandwich.FakeMentorus.UseCases.Common.Service;
 
 /// <summary>
-///   Access service.
+/// Access service.
 /// </summary>
 public class AccessService : IAccessService
 {
@@ -15,7 +15,7 @@ public class AccessService : IAccessService
     private readonly UserManager<User> userManager;
 
     /// <summary>
-    ///   Constructor.
+    /// Constructor.
     /// </summary>
     /// <param name="dbContext"></param>
     /// <param name="loggedUserAccessor"></param>
@@ -29,7 +29,7 @@ public class AccessService : IAccessService
     }
 
     /// <summary>
-    ///  Constructor.
+    /// Constructor.
     /// </summary>
     /// <param name="courseId"></param>
     /// <param name="cancellationToken"></param>
