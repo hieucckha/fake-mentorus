@@ -1,21 +1,24 @@
-import { FC, useEffect, useState } from "react";
+import { useState, type FC, useEffect} from "react";
 import { useSearchParams } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import Header from "./LandingPage/Header";
 
 const ConfirmEmail: FC = () => {
-	const [searchParams, setSearchParams] = useSearchParams();
+	const [searchParams] = useSearchParams();
 
 	const email = searchParams.get("email");
 	const confirmToken = searchParams.get("code");
 
 	const [isConfirmed, setIsConfirmed] = useState(false);
 
-	const fetch = () => {
-		AuthService.confirmEmail(email!, confirmToken!).then((res) => {
+	const fetch = (): void => {
+		 AuthService.confirmEmail(email!, confirmToken!)
+		.then((res) => {
 			if (res.status == 200) {
 				setIsConfirmed(true);
 			}
+		}).catch((err) => {
+			console.error(err);
 		});
 	};
 

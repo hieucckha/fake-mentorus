@@ -49,13 +49,22 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Load secret
+        id: op-load-secret
+        uses: 1password/load-secrets-action@v1
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          SERVER_HOST: op://mentorus/backend-general/server/dev-server-host
+          SERVER_USERNAME: op://mentorus/backend-general/server/dev-server-username
+          SERVER_SSHKEY: "op://mentorus/rsa-development-server/private key"
+
       - name: Copy file via ssh
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSHKEY }}
-          source: "./src/frontend/build/*"
+          host: ${{ env.SERVER_HOST }}
+          username: ${{ env.SERVER_USERNAME }}
+          key: ${{ env.SERVER_SSHKEY }}
+          source: "./src/frontend/dist/*"
           target: "/var/www/midterm.somesandwich.rocks/html"
           rm: true
 
@@ -63,10 +72,10 @@ jobs:
         uses: appleboy/ssh-action@v1.0.0
         with:
           script_stop: true
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSHKEY }}
+          host: ${{ env.SERVER_HOST }}
+          username: ${{ env.SERVER_USERNAME }}
+          key: ${{ env.SERVER_SSHKEY }}
           script: |
             # Move all file to root folder
-            mv /var/www/midterm.somesandwich.rocks/html/src/build/* /var/www/midterm.somesandwich.rocks/html
+            mv /var/www/midterm.somesandwich.rocks/html/src/frontend/dist/* /var/www/midterm.somesandwich.rocks/html
             rm -rf /var/www/midterm.somesandwich.rocks/html/src

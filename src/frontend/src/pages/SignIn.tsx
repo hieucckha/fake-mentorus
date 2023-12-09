@@ -12,7 +12,8 @@ import type {
 	SignInFacebookData,
 	SignInGoogleData,
 } from "../api/store/auth/interface";
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, type CredentialResponse} from "@react-oauth/google";
+// import { GoogleLogin } from "@react-oauth/google";
 import { useLogin } from "react-facebook";
 import Header from "./LandingPage/Header";
 

@@ -10,6 +10,7 @@ import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
 import ResetPassword from "../pages/ResetPassword";
 import ConfirmEmail from "../pages/ConfirmEmail";
+import ConfirmResetPassword from "../pages/ConfirmResetPassword";
 
 const BrowserRouter = createBrowserRouter([
 	{
