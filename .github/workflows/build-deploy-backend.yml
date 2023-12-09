@@ -30,7 +30,7 @@ jobs:
           export-env: false
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          PAT_GITHUB_TOKEN: op://mentorus/github-pat-publish-package/token
+          PAT_GITHUB_TOKEN: op://AWP/github-pat-publish-package/token
 
       - name: Install 1Password CLI
         uses: 1password/install-cli-action@v1
