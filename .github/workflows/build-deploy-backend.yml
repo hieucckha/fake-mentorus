@@ -41,6 +41,13 @@ jobs:
           rm ./SomeSandwich.FakeMentorus.Web/appsettings.json
           APP_ENV=dev op inject -i ./SomeSandwich.FakeMentorus.Web/appsettings.json.template -o ./SomeSandwich.FakeMentorus.Web/appsettings.json
 
+      - name: Login to github package
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ steps.op-load-secret.outputs.PAT_GITHUB_TOKEN }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -57,8 +64,8 @@ jobs:
       - name: Build and push to github package
         uses: docker/build-push-action@v4
         with:
-          context: ./src/backend/SomeSandwich.FakeMentorus.Web
-          file: ./src/backend/SomeSandwich.FakeMentorus.Web/Dockerfile
+          context: ./src/backend
+          file: ./src/backend/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
