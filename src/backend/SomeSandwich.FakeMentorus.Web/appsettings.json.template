@@ -9,25 +9,25 @@
     }
   },
   "ConnectionStrings": {
-    "AppDatabase": "Server={{$.databaseHost}};Database={{$.database}};Uid={{$.databaseUser}};Pwd={{$.databasePassword}};"
+    "AppDatabase": "op://AWP/credentials/connection-strings/app-database"
   },
   "Authentication": {
     "Google": {
-      "ClientId": "{{$.googleClientId}}"
+      "ClientId": "op://AWP/credentials/authentication/google-client-id"
     }
   },
   "Application": {
   },
   "Jwt": {
-    "SecretKey": "{{$.jwtSecretKey}}",
-    "Issuer": "{{$.jwtIssuer}}"
+    "SecretKey": "op://AWP/credentials/jwt/secret-key",
+    "Issuer": "op://AWP/credentials/jwt/issuer"
   },
   "Mail": {
-    "Host": "{{$.smtpHost}}",
-    "Password": "{{$.smtpPassword}}",
-    "Username": "{{$.smtpUser}}",
-    "Port": "{{$.smtpPort}}",
-    "UseSsl": "{{$.smtpSsl}}",
-    "FromAddress": "{{$.smtpFrom}}"
+    "Host": "op://AWP/credentials/mail/host",
+    "Password": "op://AWP/credentials/mail/password",
+    "Username": "op://AWP/credentials/mail/username",
+    "Port": "op://AWP/credentials/mail/port",
+    "UseSsl": "op://AWP/credentials/mail/use-ssl",
+    "FromAddress": "op://AWP/credentials/mail/from-address"
   }
 }
