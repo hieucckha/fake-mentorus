@@ -25,10 +25,11 @@ internal class LoggingOptionsSetup
     /// <param name="options">Logging builder.</param>
     public void Setup(ILoggingBuilder options)
     {
-        if (!environment.IsProduction())
-        {
+        // if (!environment.IsProduction())
+        // {
             options.AddDebug();
-        }
+
+        // }
         options.AddConfiguration(configuration);
     }
 }

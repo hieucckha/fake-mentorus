@@ -113,8 +113,8 @@ internal sealed class ApiExceptionMiddleware
                 {
                     problem.Title = exception.Message;
                 }
-                if (!environment.IsProduction())
-                {
+                // if (!environment.IsProduction())
+                // {
                     // Since System.Text.Json cannot serialize exception we do that partially for debug.
                     problem.Extensions["debug_exception"] =
                         new Dictionary<string, string>
@@ -123,7 +123,8 @@ internal sealed class ApiExceptionMiddleware
                             ["Message"] = exception.Message,
                             ["StackTrace"] = exception.StackTrace ?? string.Empty
                         };
-                }
+
+                // }
                 statusCode = GetStatusCodeByExceptionType(exception.GetType());
                 logger.LogError(exception, exception.Message);
                 break;
