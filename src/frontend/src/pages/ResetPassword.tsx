@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { useState, type FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { resetPasswordDto } from "../api/store/auth/interface";
 import { useResetPasswordMutation } from "../api/store/auth/mutations";
-import Header from "./LandingPage/Header";
 
 const ResetPassword: FC = (): JSX.Element => {
+	const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const handleEmailChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -22,7 +23,7 @@ const ResetPassword: FC = (): JSX.Element => {
         };
         resetMutation.mutate(data, {
             onSuccess() {
-                navigator("/home");
+                navigate("/home");
             },
             onError(error) {
                 console.error(error);

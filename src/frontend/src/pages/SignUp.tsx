@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useState, type FC, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -25,7 +27,7 @@ const SignUp: FC = (): JSX.Element => {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => {
+	):void => {
 		const { id, value } = e.target;
 		setForm((prevState) => ({
 			...prevState,
@@ -78,10 +80,10 @@ const SignUp: FC = (): JSX.Element => {
 				})
 				Toast({
 					title: "Fail",
-					description: error.response.data.title,
-					type: "error",
-					duration: 5000,
-					isClosable: true,
+					// description: error.message,
+					// type: "error",
+					duration: 500,
+					// isClosable: true,
 				});
 			},
 		});

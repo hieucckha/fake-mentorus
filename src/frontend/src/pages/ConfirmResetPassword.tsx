@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import type { resetPasswordConfirmDto } from "../api/store/auth/interface";
 import { userConfirmResetPasswordMutation } from "../api/store/auth/mutations";
 import { Toast } from "flowbite-react";
-import Header from "./LandingPage/Header";
 
 const ConfirmResetPassword: FC = (): JSX.Element => {
   const navigate = useNavigate();
@@ -60,15 +59,14 @@ const ConfirmResetPassword: FC = (): JSX.Element => {
       },
       onError(error) {
         console.log("[*] Code: ", token)
-        console.error("[*] Error: ", error.response.data.title)
+        // console.error("[*] Error: ", error?.response.data.title)
         console.error(error);
         Toast({
           title: "Fail",
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          description: error.response.data.title,
-          type: "error",
-          duration: 5000,
-          isClosable: true,
+          // description: error.response.data.title,
+          // type: "error",
+          duration: 500,
+          // isClosable: true,
         })
       },
     });
