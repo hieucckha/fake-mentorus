@@ -1,4 +1,6 @@
+import { Card } from "flowbite-react";
 import type { FC } from "react";
+import CardClass from "../component/CardClass";
 const Dashboard: FC = (): JSX.Element => (
 	<div className="  sm:ml-64">
 		<div className=" content-center dark:border-gray-700 mt-14">
@@ -45,6 +47,7 @@ const Dashboard: FC = (): JSX.Element => (
 						</a>
 					</div>
 				</div>
+			<CardClass />
 			</section>
 		</div>
 	</div>
