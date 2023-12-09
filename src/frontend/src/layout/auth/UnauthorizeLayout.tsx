@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 
-import LocalStorageService from "../services/localStorage.service";
+import LocalStorageService from "../../services/localStorage.service";
 
 /**
  * Unauthorize layout.

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Outlet, Navigate } from "react-router-dom";
 
-import LocalStorageService from "../services/localStorage.service";
+import LocalStorageService from "../../services/localStorage.service";
 import type { FC } from "react";
 
 /**
