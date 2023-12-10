@@ -48,6 +48,6 @@ export interface ClassDetail {
 	teachers: Teacher[];
 	student: Student[];
 	gradeCompositions: gradeCompositions[];
-
+	requests: requests[];
 
 }

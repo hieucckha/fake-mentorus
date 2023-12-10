@@ -66,7 +66,7 @@ const SignUp: FC = (): JSX.Element => {
 					text: 'Signup successfully, Have a nice day !!!',
 					icon: 'success',
 					confirmButtonText: 'Ok'
-				}).then((result) => {
+				}).then(() => {
 
 					navigate("/sign-in");
 				})

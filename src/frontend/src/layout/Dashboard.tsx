@@ -1,4 +1,4 @@
-import { useEffect, type FC, useState } from "react";
+import { useEffect, type FC } from "react";
 import CardClass from "../component/card/CardClass";
 import classQuery from "../api/store/class/queries";
 import useAuth from "../hooks/auth";

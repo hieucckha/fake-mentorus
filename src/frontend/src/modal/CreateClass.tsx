@@ -23,8 +23,8 @@ const CreateClass: FC<CreateClassProps> = ({
         }); };
     const mutation = useCreateClassMutation();
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const handleSubmit = async (
-        event: React.FormEvent<HTMLFormElement>
+    const handleSubmit:React.MouseEventHandler<HTMLButtonElement> = async (
+        event
       // eslint-disable-next-line @typescript-eslint/require-await
       ): Promise<void> => {
 		    event.preventDefault();
