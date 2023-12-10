@@ -30,6 +30,11 @@ public class CourseDetailDto
     public string? InviteCode { get; set; }
 
     /// <summary>
+    ///   Invite link for the course.
+    /// </summary>
+    public string? InviteLink { get; set; }
+
+    /// <summary>
     ///     Course start date.
     /// </summary>
     public DateTime CreatedAt { get; set; }
@@ -43,6 +48,11 @@ public class CourseDetailDto
     ///    Number of students in the course.
     /// </summary>
     public int NumberOfStudents { get; set; }
+
+    /// <summary>
+    ///  Number of teachers in the course.
+    /// </summary>
+    public int NumberOfTeachers { get; set; }
 
     /// <summary>
     ///   List of student in the course.

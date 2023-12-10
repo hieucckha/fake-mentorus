@@ -3,7 +3,7 @@ namespace SomeSandwich.FakeMentorus.UseCases.Courses.CreateInvitationLinkByEmail
 /// <summary>
 /// Create invitation link by email command result.
 /// </summary>
-public class CreateInviteLinkResult
+public class CreateInviteLinkByEmailRes
 {
     /// <summary>
     /// Invitation token.

@@ -22,7 +22,17 @@ public class CourseMappingProfile : Profile
                 des.NumberOfStudents = src.Students.Count;
                 des.NumberOfTeachers = src.Teachers.Count;
             });
-        CreateMap<Course, CourseDetailDto>();
+        CreateMap<Course, CourseDetailDto>().AfterMap((src, des) =>
+        {
+            des.NumberOfStudents = src.Students.Count;
+            des.NumberOfTeachers = src.Teachers.Count;
+            des.Students = src.Students.Select(
+                x => new UserDto { Id = x.StudentId, FullName = x.Student.FullName, Role = null, }
+            ).ToList();
+            des.Teachers = src.Teachers.Select(
+                x => new UserDto { Id = x.TeacherId, FullName = x.Teacher.FullName, Role = null, }
+            ).ToList();
+        });
 
         CreateMap<CourseStudent, UserDto>().AfterMap((src, des) =>
         {

@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Saritasa.Tools.Domain.Exceptions;
 using Saritasa.Tools.EntityFrameworkCore;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 using SomeSandwich.FakeMentorus.UseCases.Common.Service;
@@ -44,7 +45,7 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
         {
             logger.LogWarning("User don't have access to course with id {CourseId}",
                 request.CourseId);
-            throw new UnauthorizedAccessException("You don't have access to this course.");
+            throw new ForbiddenException("You don't have access to this course.");
         }
 
         var course =

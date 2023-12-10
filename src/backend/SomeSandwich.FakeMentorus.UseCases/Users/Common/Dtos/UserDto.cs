@@ -18,5 +18,5 @@ public class UserDto
     /// <summary>
     /// User role.
     /// </summary>
-    required public string Role { get; set; }
+    public string? Role { get; set; }
 }

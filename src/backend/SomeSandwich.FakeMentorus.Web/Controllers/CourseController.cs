@@ -1,15 +1,15 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SomeSandwich.FakeMentorus.UseCases.Courses.AssignByCode;
-using SomeSandwich.FakeMentorus.UseCases.Courses.AssignByToken;
+using SomeSandwich.FakeMentorus.UseCases.Courses.AssignByEmail;
 using SomeSandwich.FakeMentorus.UseCases.Courses.Common;
 using SomeSandwich.FakeMentorus.UseCases.Courses.CreateCourse;
 using SomeSandwich.FakeMentorus.UseCases.Courses.CreateInvitationLinkByEmail;
 using SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseById;
 using SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseByUserId;
 using SomeSandwich.FakeMentorus.UseCases.Courses.UpdateCourse;
+using SomeSandwich.FakeMentorus.Web.Requests;
 
 namespace SomeSandwich.FakeMentorus.Web.Controllers;
 
@@ -73,32 +73,13 @@ public class CourseController
     [Authorize]
     public async Task<CourseDetailDto> GetCourseById(
         [FromRoute] int courseId,
-        CancellationToken
-            cancellationToken)
+        CancellationToken cancellationToken)
     {
         var result =
             await mediator.Send(new GetCourseByIdQuery() { CourseId = courseId },
                 cancellationToken);
 
         return result;
-    }
-
-    /// <summary>
-    /// Invite user to course by email.
-    /// </summary>
-    /// <param name="courseId"></param>
-    /// <param name="request"></param>
-    /// <param name="cancellationToken"></param>
-    [HttpPost("{courseId:int}/invite")]
-    [Authorize]
-    public async Task<CreateInviteLinkResult> CreateInviteLinkByEmail(
-        [FromRoute] int courseId,
-        [FromBody] CreateLinkRequest request,
-        CancellationToken cancellationToken)
-    {
-        var command =
-            new CreateInvitationLinkByEmailCommand() { CourseId = courseId, Email = request.Email };
-        return await mediator.Send(command, cancellationToken);
     }
 
     /// <summary>
@@ -121,36 +102,53 @@ public class CourseController
     }
 
     /// <summary>
-    /// Join course by invite code.
+    /// Create invitation link per user and send to email.
     /// </summary>
     /// <param name="courseId"></param>
-    /// <param name="inviteCode"></param>F
+    /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    [HttpPost("{courseId:int}/join-course/{inviteCode}")]
+    [HttpPost("{courseId:int}/invite-email")]
     [Authorize]
-    public async Task JoinCourseByCode(
+    public async Task CreateInviteLinkByEmail(
         [FromRoute] int courseId,
-        [FromRoute] string inviteCode,
+        [FromBody] InviteByEmailRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new AssignByCodeCommand() { CourseId = courseId, InviteCode = inviteCode };
-
+        var command = new CreateInvitationLinkByEmailCommand() { CourseId = courseId, Email = request.Email };
         await mediator.Send(command, cancellationToken);
     }
 
     /// <summary>
-    /// Join course by token.
+    /// Join course by invitation link in email.
     /// </summary>
-    /// <param name="token"></param>
+    /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
-    [HttpPost("join-course")]
+    [HttpPost("invite-email/confirm")]
     [Authorize]
-    public async Task JoinCourseByToken(
-        [FromQuery] string token,
+    public async Task JoinCourseByEmail(
+        [FromBody] JoinCourseByEmailRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new AssignByTokenCommand() { Token = token };
+        var command = new AssignByEmailCommand() { Token = request.Token };
+        await mediator.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// Join course by invite code (for anonymous users).
+    /// </summary>
+    /// <param name="courseId"></param>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost("{courseId:int}/join")]
+    [Authorize]
+    public async Task JoinCourseByCode(
+        [FromRoute] int courseId,
+        [FromBody] JoinCourseByCodeRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new AssignByCodeCommand() { CourseId = courseId, InviteCode = request.InviteCode };
+
         await mediator.Send(command, cancellationToken);
     }
 }

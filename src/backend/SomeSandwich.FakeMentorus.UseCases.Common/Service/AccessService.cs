@@ -41,14 +41,12 @@ public class AccessService : IAccessService
         var userRole = (await userManager.GetRolesAsync(user))
             .FirstOrDefault();
 
-        return userRole != null
-               &&
-               (userRole != "Student" ||
-                dbContext.CourseStudents.Any(c =>
-                    c.StudentId == loggedUserId && c.CourseId == courseId))
-               &&
-               (userRole != "Teacher" ||
-                dbContext.CourseTeachers.Any(c =>
-                    c.TeacherId == loggedUserId && c.CourseId == courseId));
+        return userRole switch
+        {
+            "Admin" => true,
+            "Student" => dbContext.CourseStudents.Any(c => c.StudentId == loggedUserId && c.CourseId == courseId),
+            "Teacher" => dbContext.CourseTeachers.Any(c => c.TeacherId == loggedUserId && c.CourseId == courseId),
+            _ => false
+        };
     }
 }

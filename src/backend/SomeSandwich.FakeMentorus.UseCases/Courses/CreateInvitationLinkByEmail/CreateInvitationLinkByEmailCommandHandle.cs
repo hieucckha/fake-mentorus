@@ -1,40 +1,84 @@
+using System.Web;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Saritasa.Tools.Domain.Exceptions;
+using Saritasa.Tools.EntityFrameworkCore;
 using shortid.Configuration;
+using SomeSandwich.FakeMentorus.Domain.Users;
+using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 
 namespace SomeSandwich.FakeMentorus.UseCases.Courses.CreateInvitationLinkByEmail;
 
 /// <summary>
-///   Handler for <see cref="CreateInvitationLinkByEmailCommand" />.
+/// Handler for <see cref="CreateInvitationLinkByEmailCommand" />.
 /// </summary>
 internal class CreateInvitationLinkByEmailCommandHandle :
-    IRequestHandler<CreateInvitationLinkByEmailCommand, CreateInviteLinkResult>
+    IRequestHandler<CreateInvitationLinkByEmailCommand>
 {
-    private readonly IMemoryCache memoryCache;
+    private readonly IMemoryCache cache;
     private readonly ILogger<CreateInvitationLinkByEmailCommandHandle> logger;
+    private readonly IEmailSender emailSender;
+    private readonly IAppDbContext dbContext;
+    private readonly UserManager<User> userManager;
 
     /// <summary>
-    ///  Constructor.
+    /// Constructor.
     /// </summary>
-    /// <param name="memoryCache"></param>
-    /// <param name="logger"></param>
-    public CreateInvitationLinkByEmailCommandHandle(IMemoryCache memoryCache,
-        ILogger<CreateInvitationLinkByEmailCommandHandle> logger)
+    /// <param name="cache">Cache instance.</param>
+    /// <param name="logger">Logger instance.</param>
+    /// <param name="emailSender">Email sender service instance.</param>
+    /// <param name="dbContext">Database context instance.</param>
+    /// <param name="userManager"></param>
+    public CreateInvitationLinkByEmailCommandHandle(IMemoryCache cache,
+        ILogger<CreateInvitationLinkByEmailCommandHandle> logger, IEmailSender emailSender, IAppDbContext dbContext,
+        UserManager<User> userManager)
     {
-        this.memoryCache = memoryCache;
+        this.cache = cache;
         this.logger = logger;
+        this.emailSender = emailSender;
+        this.dbContext = dbContext;
+        this.userManager = userManager;
     }
 
     /// <inheritdoc />
-    public async Task<CreateInviteLinkResult> Handle(CreateInvitationLinkByEmailCommand request,
+    public async Task Handle(CreateInvitationLinkByEmailCommand request,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation(
-            "Creating invitation link for course with id {CourseId} and email {Email}.",
-            request.CourseId, request.Email);
+        var user = await dbContext.Users
+            .GetAsync(x => x.Email == request.Email, cancellationToken);
+        if (user is null)
+        {
+            throw new NotFoundException("Email not found");
+        }
 
-        // TODO: this is backend link, we need frontend link
+        var role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
+
+
+        var course = await dbContext.Courses
+            .Include(e => e.Students)
+            .Include(e => e.Teachers)
+            .GetAsync(x => x.Id == request.CourseId, cancellationToken);
+        if (course == null)
+        {
+            logger.LogWarning("Course {CourseID} not found", request.CourseId);
+            throw new NotFoundException("Course not found");
+        }
+
+        if (role is not null)
+        {
+            throw role switch
+            {
+                "Student" when course.Students.Any(s => s.StudentId == user.Id) => new DomainException(
+                    "User is already student in this course"),
+                "Teacher" when course.Teachers.Any(x => x.TeacherId == user.Id) => new DomainException(
+                    "User is already teacher in this course"),
+                _ => new DomainException("User is not student or teacher")
+            };
+        }
+
 
         var cacheKey = shortid.ShortId
             .Generate(new GenerationOptions(true, false, 10));
@@ -42,9 +86,16 @@ internal class CreateInvitationLinkByEmailCommandHandle :
         var cacheEntryOptions = new MemoryCacheEntryOptions()
             .SetSlidingExpiration(TimeSpan.FromMinutes(15));
 
-        memoryCache.Set(cacheKey, cacheValue, cacheEntryOptions);
-        logger.LogInformation("Invitation link created with {Token}.", cacheKey);
+        cache.Set(cacheKey, cacheValue, cacheEntryOptions);
+        logger.LogInformation("Invitation link created with {Token}", cacheKey);
 
-        return new CreateInviteLinkResult() { Token = cacheKey };
+        // Todo: Need url from frontend
+        var url = "";
+        // var inviteLink = $"http://localhost:5173/api/course/invite-email/confirm?token={cacheKey}";
+
+        await emailSender.SendEmailAsync(
+            $"<div>Please <a href='{url}?token={HttpUtility.UrlEncode(cacheKey)}'>clicking here</a> to this course.</div>",
+            $"You has a invite to {course.Name}",
+            new List<string> { request.Email! }, cancellationToken);
     }
 }
