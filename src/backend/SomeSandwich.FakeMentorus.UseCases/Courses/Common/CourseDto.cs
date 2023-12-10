@@ -39,4 +39,6 @@ public class CourseDto
     ///   Number of teachers in the course.
     /// </summary>
     public int NumberOfTeachers { get; set; }
+
+
 }

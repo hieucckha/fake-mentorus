@@ -5,7 +5,7 @@ namespace SomeSandwich.FakeMentorus.UseCases.Courses.CreateInvitationLinkByEmail
 /// <summary>
 ///    Create invitation link by email command.
 /// </summary>
-public class CreateInvitationLinkByEmailCommand : IRequest<CreateInviteLinkResult>
+public class CreateInvitationLinkByEmailCommand : IRequest
 {
     /// <summary>
     /// Course id to create invitation link.

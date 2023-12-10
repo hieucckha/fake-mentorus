@@ -1,9 +1,9 @@
-namespace SomeSandwich.FakeMentorus.UseCases.Courses.CreateInvitationLinkByEmail;
+namespace SomeSandwich.FakeMentorus.Web.Requests;
 
 /// <summary>
 /// Create invitation link by email command.
 /// </summary>
-public class CreateLinkRequest
+public class InviteByEmailRequest
 {
     /// <summary>
     /// Email of user to invite.
