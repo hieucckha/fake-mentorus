@@ -11,7 +11,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
   const gradeStructureUrl = `/class/${id}/grade-structure`;
 
   return (
-    <div className="sm:ml-64">
+    <div className="sm:ml-64 w-full h-full">
       <div className="content-center dark:border-gray-700 mt-14">
         <section className="bg-white dark:bg-gray-900 h-screen content-center p-5">
           <div className="border-b border-gray-200 dark:border-gray-700">

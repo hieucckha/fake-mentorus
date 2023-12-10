@@ -11,7 +11,7 @@ import localStorageService from "../services/localStorage.service";
 
 const instance = axios.create({
 	baseURL: "http://localhost:5000",
-	timeout: 10000,
+	timeout: 30000,
 	headers: {
 		"Content-Type": "application/json",
 	},
@@ -34,8 +34,6 @@ instance.interceptors.response.use(
 	(response: AxiosResponse) => response,
 	async (error) => {
 		const originalResponse = error.response;
-		console.log(error);
-		console.log(originalResponse);
 		
 		if (error.response.status === 401 && !originalResponse._retry) {
 			originalResponse._retry = true;
