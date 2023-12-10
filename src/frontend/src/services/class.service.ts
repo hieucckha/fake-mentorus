@@ -9,6 +9,7 @@ const classService = {
     },
     async getAllClass(userId:Number): Promise<Array<ClassQuery>> {
         // const response = await axios.get('/api/course', {params: {userId}});
+        console.log(userId);
         const response = { data: [
             
             {
@@ -36,7 +37,7 @@ const classService = {
         return response.data;
     },
     async getClassDetail(classId:String): Promise<ClassDetail> {
-        
+        console.log(classId);
         const response = { data: {
             id: 1,
             name: "Lớp 9",

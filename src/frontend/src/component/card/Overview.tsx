@@ -8,7 +8,7 @@ const Overview: FC = () => {
     
    const { id } = useParams();
 
-    const {data, isLoading,error} = classDetailQuery(id as string );
+    const {data, isLoading} = classDetailQuery(id as string );
     if (!data) return null;
     const copylink = () => {
         navigator.clipboard.writeText(data?.inviteLink);
