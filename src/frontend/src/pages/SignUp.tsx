@@ -8,7 +8,7 @@ import { Select, Toast } from "flowbite-react";
 import { userSignUpMutation } from "../api/store/auth/mutations";
 import type { signUpDto } from "../api/store/auth/interface";
 import Header from "./LandingPage/Header";
-
+import Swal from 'sweetalert2';
 /**
  * Sign up page.
  */
@@ -61,10 +61,23 @@ const SignUp: FC = (): JSX.Element => {
 		};
 		mutation.mutate(data, {
 			onSuccess() {
-				navigate("/home");
+				Swal.fire({
+					title: 'Success',
+					text: 'Signup successfully, Have a nice day !!!',
+					icon: 'success',
+					confirmButtonText: 'Ok'
+				}).then((result) => {
+
+					navigate("/sign-in");
+				})
 			},
-			onError(error) {
+			onError(error: any) {
 				console.error(error);
+				Swal.fire({
+					title: 'Fail',
+					text: error.response.data.title,
+					icon: 'error',
+				})
 				Toast({
 					title: "Fail",
 					// description: error.message,

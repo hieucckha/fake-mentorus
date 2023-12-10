@@ -11,7 +11,7 @@ import localStorageService from "../services/localStorage.service";
 
 const instance = axios.create({
 	baseURL: "http://localhost:5000",
-	timeout: 1000,
+	timeout: 30000,
 	headers: {
 		"Content-Type": "application/json",
 	},
@@ -34,30 +34,29 @@ instance.interceptors.response.use(
 	(response: AxiosResponse) => response,
 	async (error) => {
 		const originalResponse = error.response;
-		if (originalResponse.url !== "/api/auth" && error.response) {
-			if (error.response.status === 401 && !originalResponse._retry) {
-				originalResponse._retry = true;
+		
+		if (error.response.status === 401 && !originalResponse._retry) {
+			originalResponse._retry = true;
 
-				try {
-					const oldToken = localStorageService.getItem("auth");
+			try {
+				const oldToken = localStorageService.getItem("auth");
 
-					const data = { token: oldToken };
+				const data = { token: oldToken };
 
-					const rs = await instance.put("/api/auth", data);
+				const rs = await instance.put("/api/auth", data);
 
-					const { token } = rs.data;
+				const { token } = rs.data;
 
-					// eslint-disable-next-line max-depth
-					if (rs.status === 401) {
-						localStorage.removeItem("auth");
-						window.location.href = "/login";
-					}
-
-					localStorage.setItem("auth", token);
-					return await instance(originalResponse.config);
-				} catch (_error) {
-					return Promise.reject(_error);
+				// eslint-disable-next-line max-depth
+				if (rs.status === 401) {
+					localStorage.removeItem("auth");
+					window.location.href = "/login";
 				}
+
+				localStorage.setItem("auth", token);
+				return await instance(originalResponse.config);
+			} catch (_error) {
+				return Promise.reject(_error);
 			}
 		}
 

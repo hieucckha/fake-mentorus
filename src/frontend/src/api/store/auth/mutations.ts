@@ -70,7 +70,7 @@ export const userSignUpMutation = () =>
 			),
 		retry: false,
 		onSuccess(data) {
-			localStorageService.setItem("auth", data.token);
+			// localStorageService.setItem("auth", data.token);
 		},
 	});
 export const useResetPasswordMutation = () =>

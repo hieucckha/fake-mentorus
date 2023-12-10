@@ -2,11 +2,11 @@ import { createBrowserRouter } from "react-router-dom";
 
 import { App } from "../App";
 import LandingPage from "../pages/LandingPage/index";
-import AuthLayout from "../layout/AuthLayout";
+import AuthLayout from "../layout/auth/AuthLayout";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
-import UnauthorizeLayout from "../layout/UnauthorizeLayout";
-import Home from "../pages/Home";
+import UnauthorizeLayout from "../layout/auth/UnauthorizeLayout";
+import AppLayout from "../layout/AppLayout";
 import NotFound from "../pages/NotFound";
 import ResetPassword from "../pages/ResetPassword";
 import ConfirmEmail from "../pages/ConfirmEmail";
@@ -18,8 +18,13 @@ const BrowserRouter = createBrowserRouter([
 		errorElement: <NotFound />,
 		children: [
 			{
-				path: "/",
-				element: <LandingPage />,
+				element: <UnauthorizeLayout />,
+				children: [
+					{
+						path: "/",
+						element: <LandingPage />,
+					},
+				],
 			},
 			{
 				element: <UnauthorizeLayout />,
@@ -51,8 +56,29 @@ const BrowserRouter = createBrowserRouter([
 				children: [
 					{
 						path: "/home",
-						element: <Home />,
+						element: <AppLayout />,
 					},
+					{
+						path:"/class/:id/",
+						children: [
+							{
+								index: true,
+								element: <AppLayout />,
+							},
+							{
+								path:"overview",
+								element: <AppLayout />,
+							},
+							{
+								path:"work-class",
+								element: <AppLayout />,
+							},
+							{
+								path:"grade-structure",
+								element: <AppLayout />,
+							}
+						],
+					}
 				],
 			},
 		],

@@ -123,7 +123,6 @@ const NavBarLogin: FC = () => {
 										alt="user photo"
 									/>
 								</button>
-							</div>
 							<div
 								className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
 								id="dropdown-user"
@@ -175,6 +174,8 @@ const NavBarLogin: FC = () => {
 									</li>
 								</ul>
 							</div>
+							</div>
+
 						</div>
 						{isOpenModalEditUser && (
 							<EditUser
