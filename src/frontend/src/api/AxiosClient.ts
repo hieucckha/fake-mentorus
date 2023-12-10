@@ -10,7 +10,7 @@ import axios, {
 import localStorageService from "../services/localStorage.service";
 
 const instance = axios.create({
-	baseURL: import.meta.env.VITE_API_URL,
+	baseURL: import.meta.env['VITE_API_URL'],
 	timeout: 30000,
 	headers: {
 		"Content-Type": "application/json",
