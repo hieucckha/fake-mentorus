@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, Link, useParams } from 'react-router-dom';
+import { useLocation, Link, useParams, Outlet } from 'react-router-dom';
 import Overview from '../component/card/Overview';
 
 const ClassLayout: React.FC = (): JSX.Element => {
@@ -85,21 +85,9 @@ const ClassLayout: React.FC = (): JSX.Element => {
               </li>
             </ul>
           </div>
-          {location.pathname === overviewUrl && (
-                <Overview />
-            )}
-            {location.pathname === classworkUrl && (
-                <div className="flex flex-wrap gap-16">
-                    Test2</div>
-                )
-
-            }
-            {
-                location.pathname === gradeStructureUrl && (
-                    <div className="flex flex-wrap gap-16">
-                        Test3</div>
-                )
-            }
+         <div className="h-full w-full flex justify-center bg-slate-50 pt-6">
+          <Outlet/>
+         </div>
         </section>
       </div>
     </div>
