@@ -1,6 +1,7 @@
 using System.Web;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Saritasa.Tools.Domain.Exceptions;
 using SomeSandwich.FakeMentorus.Domain.Users;
@@ -16,6 +17,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
     private readonly ILogger<CreateUserCommandHandler> logger;
     private readonly UserManager<User> userManager;
     private readonly IEmailSender emailSender;
+    private readonly IAppSettings appSettings;
 
     /// <summary>
     /// Constructor.
@@ -23,14 +25,16 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
     /// <param name="logger">Logger instance.</param>
     /// <param name="userManager"></param>
     /// <param name="emailSender"></param>
+    /// <param name="appSettings"></param>
     public CreateUserCommandHandler(
         ILogger<CreateUserCommandHandler> logger,
         UserManager<User> userManager,
-        IEmailSender emailSender)
+        IEmailSender emailSender, IAppSettings appSettings)
     {
         this.logger = logger;
         this.userManager = userManager;
         this.emailSender = emailSender;
+        this.appSettings = appSettings;
     }
 
     /// <inheritdoc />
@@ -71,8 +75,16 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
         }
 
         var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        var urlOfSendMail = QueryHelpers.AddQueryString($"{appSettings.FrontendUrl}/activate-account/confirm",
+            new Dictionary<string, string>()
+            {
+                { "email", user.Email! },
+                { "code", code }
+            });
+
         await emailSender.SendEmailAsync(
-            $"<div>Please confirm your account by <a href='http://localhost:5173/activate-account/confirm?email={HttpUtility.UrlEncode(user.Email)}&code={HttpUtility.UrlEncode(code)}'>clicking here</a>.</div>",
+            $"<div>Please confirm your account by <a href='{urlOfSendMail}'>clicking here</a>.</div>",
             "Activate your account",
             new List<string> { user.Email! }, cancellationToken);
     }

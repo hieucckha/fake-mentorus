@@ -1,8 +1,10 @@
-﻿namespace SomeSandwich.FakeMentorus.Web.Infrastructure.Settings;
+﻿using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 
-/// <summary>
-/// Global application settings.
-/// </summary>
-public class AppSettings
+namespace SomeSandwich.FakeMentorus.Web.Infrastructure.Settings;
+
+/// <inheritdoc />
+public class AppSettings : IAppSettings
 {
+    /// <inheritdoc />
+    public string FrontendUrl { get; set; } = "https://midterm.somesandwich.rocks";
 }

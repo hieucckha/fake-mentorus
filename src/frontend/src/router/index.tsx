@@ -11,6 +11,8 @@ import NotFound from "../pages/NotFound";
 import ResetPassword from "../pages/ResetPassword";
 import ConfirmEmail from "../pages/ConfirmEmail";
 import ConfirmResetPassword from "../pages/ConfirmResetPassword";
+import GradeStructure from "../pages/GradeStructure";
+import Overview from "../component/card/Overview";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -59,7 +61,8 @@ const BrowserRouter = createBrowserRouter([
 						element: <AppLayout />,
 					},
 					{
-						path:"/class/:id/",
+						path:"/class/:id/*",
+						element: <AppLayout />,
 						children: [
 							{
 								index: true,
@@ -67,7 +70,7 @@ const BrowserRouter = createBrowserRouter([
 							},
 							{
 								path:"overview",
-								element: <AppLayout />,
+								element: <Overview />,
 							},
 							{
 								path:"work-class",
@@ -75,9 +78,9 @@ const BrowserRouter = createBrowserRouter([
 							},
 							{
 								path:"grade-structure",
-								element: <AppLayout />,
+								element: <GradeStructure />,
 							}
-						],
+						]
 					}
 				],
 			},

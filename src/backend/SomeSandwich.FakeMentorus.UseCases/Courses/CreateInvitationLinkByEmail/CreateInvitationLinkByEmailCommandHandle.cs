@@ -1,6 +1,6 @@
-using System.Web;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -19,6 +19,7 @@ internal class CreateInvitationLinkByEmailCommandHandle :
     IRequestHandler<CreateInvitationLinkByEmailCommand>
 {
     private readonly IMemoryCache cache;
+    private readonly IAppSettings appSettings;
     private readonly ILogger<CreateInvitationLinkByEmailCommandHandle> logger;
     private readonly IEmailSender emailSender;
     private readonly IAppDbContext dbContext;
@@ -32,15 +33,21 @@ internal class CreateInvitationLinkByEmailCommandHandle :
     /// <param name="emailSender">Email sender service instance.</param>
     /// <param name="dbContext">Database context instance.</param>
     /// <param name="userManager"></param>
-    public CreateInvitationLinkByEmailCommandHandle(IMemoryCache cache,
-        ILogger<CreateInvitationLinkByEmailCommandHandle> logger, IEmailSender emailSender, IAppDbContext dbContext,
-        UserManager<User> userManager)
+    /// <param name="appSettings"></param>
+    public CreateInvitationLinkByEmailCommandHandle(
+        IMemoryCache cache,
+        ILogger<CreateInvitationLinkByEmailCommandHandle> logger,
+        IEmailSender emailSender,
+        IAppDbContext dbContext,
+        UserManager<User> userManager,
+        IAppSettings appSettings)
     {
         this.cache = cache;
         this.logger = logger;
         this.emailSender = emailSender;
         this.dbContext = dbContext;
         this.userManager = userManager;
+        this.appSettings = appSettings;
     }
 
     /// <inheritdoc />
@@ -55,7 +62,6 @@ internal class CreateInvitationLinkByEmailCommandHandle :
         }
 
         var role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
-
 
         var course = await dbContext.Courses
             .Include(e => e.Students)
@@ -79,7 +85,6 @@ internal class CreateInvitationLinkByEmailCommandHandle :
             };
         }
 
-
         var cacheKey = shortid.ShortId
             .Generate(new GenerationOptions(true, false, 10));
         var cacheValue = new CacheInviteValue(request.CourseId, request.Email);
@@ -90,11 +95,15 @@ internal class CreateInvitationLinkByEmailCommandHandle :
         logger.LogInformation("Invitation link created with {Token}", cacheKey);
 
         // Todo: Need url from frontend
-        var url = "";
-        // var inviteLink = $"http://localhost:5173/api/course/invite-email/confirm?token={cacheKey}";
+
+        var urlOfSendMail = QueryHelpers.AddQueryString($"{appSettings.FrontendUrl}/course/invite-email/confirm",
+            new Dictionary<string, string>()
+            {
+                { "token", cacheKey },
+            });
 
         await emailSender.SendEmailAsync(
-            $"<div>Please <a href='{url}?token={HttpUtility.UrlEncode(cacheKey)}'>clicking here</a> to this course.</div>",
+            $"<div>Please <a href='{urlOfSendMail}'>clicking here</a> to this course.</div>",
             $"You has a invite to {course.Name}",
             new List<string> { request.Email! }, cancellationToken);
     }

@@ -5,7 +5,7 @@ import moment from "moment";
 
 
 const Overview: FC = () => {
-    
+
    const { id } = useParams();
 
     const {data, isLoading} = classDetailQuery(id as string );
@@ -21,7 +21,7 @@ const Overview: FC = () => {
          <div className="h-full w-full flex justify-center bg-slate-50 pt-6">
         <div className="max-w-max">
             <img className="rounded-t-lg mb-5" src="https://gstatic.com/classroom/themes/img_reachout.jpg" alt="Header" />
-            <div className="flex flex-row">   
+            <div className="flex flex-row">
                 <a className="flex h-40 gap-3  p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700  flex-shrink-0">
                     <div className="flex flex-col">
                         <div className="flex flex-row justify-between">
@@ -44,8 +44,8 @@ const Overview: FC = () => {
                             </a>
                             <p className="mb-3 font-normal text-gray-500 dark:text-gray-400">{data?.description}</p>
                         </div>
-                       
-                        {data?.requests.map((request) => (
+
+                        { data.requests && data.requests.map((request) => (
                             <div className="p-4 w-full ml-6 bg-white border mb-3 border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                 <a href="#" className="flex  items-center   flex-row  ">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"></path></svg>
@@ -57,7 +57,7 @@ const Overview: FC = () => {
                                 </div>
                                 </a>
 
-                                
+
                             </div>
                         ))}
                     </div>

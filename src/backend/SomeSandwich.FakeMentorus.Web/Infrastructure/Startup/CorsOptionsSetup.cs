@@ -26,21 +26,22 @@ internal class CorsOptionsSetup
     /// <summary>
     /// Setup CORS method.
     /// </summary>
-    /// <param name="options">CORS options.</param>
+    /// <param name="options">CORS options.</param>s
     public void Setup(CorsOptions options)
     {
         options.AddPolicy(CorsPolicyName,
             builder =>
             {
-                if (isDevelopment)
-                {
-                    builder.AllowAnyOrigin();
-                }
-                else
-                {
-                    builder.WithOrigins(frontendOrigins.ToArray())
-                        .AllowCredentials();
-                }
+                // if (isDevelopment)
+                // {
+                builder.AllowAnyOrigin();
+                // }
+                // else
+                // {
+                //    builder.WithOrigins(frontendOrigins.ToArray())
+                //        .AllowCredentials();
+                // }
+
                 builder
                     .AllowAnyHeader()
                     .AllowAnyMethod()

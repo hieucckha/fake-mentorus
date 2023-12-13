@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, Link, useParams } from 'react-router-dom';
+import { useLocation, Link, useParams, Outlet } from 'react-router-dom';
 import Overview from '../component/card/Overview';
 
 const ClassLayout: React.FC = (): JSX.Element => {
@@ -13,7 +13,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
   return (
     <div className="sm:ml-64 w-full h-full">
       <div className="content-center dark:border-gray-700 mt-14">
-        <section className="bg-white dark:bg-gray-900 h-screen content-center p-5">
+        <section className="bg-white dark:bg-gray-900 h-screen content-center">
           <div className="border-b border-gray-200 dark:border-gray-700">
             <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
               <li className="me-2">
@@ -85,21 +85,9 @@ const ClassLayout: React.FC = (): JSX.Element => {
               </li>
             </ul>
           </div>
-          {location.pathname === overviewUrl && (
-                <Overview />
-            )}
-            {location.pathname === classworkUrl && (
-                <div className="flex flex-wrap gap-16">
-                    Test2</div>
-                )
-
-            }
-            {
-                location.pathname === gradeStructureUrl && (
-                    <div className="flex flex-wrap gap-16">
-                        Test3</div>
-                )
-            }
+         <div className="h-full w-full flex justify-center bg-slate-50 pt-6">
+          <Outlet/>
+         </div>
         </section>
       </div>
     </div>
