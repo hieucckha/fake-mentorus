@@ -56,6 +56,7 @@ export interface UserProfileDto {
 	 * Sex.
 	 */
 	studentId: string;
+	role: string;
 }
 
 export interface signUpDto {
