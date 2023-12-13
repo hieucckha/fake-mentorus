@@ -13,6 +13,8 @@ import ConfirmEmail from "../pages/ConfirmEmail";
 import ConfirmResetPassword from "../pages/ConfirmResetPassword";
 import GradeStructure from "../pages/GradeStructure";
 import Overview from "../component/card/Overview";
+import Dashboard from "../layout/Dashboard";
+import ClassLayout from "../layout/ClassLayout";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -45,9 +47,9 @@ const BrowserRouter = createBrowserRouter([
 					},
 					{
 						path: "/reset-password/confirm",
-						element: <ConfirmResetPassword />
+						element: <ConfirmResetPassword />,
 					},
-          {
+					{
 						path: "/activate-account/confirm",
 						element: <ConfirmEmail />,
 					},
@@ -57,31 +59,36 @@ const BrowserRouter = createBrowserRouter([
 				element: <AuthLayout />,
 				children: [
 					{
-						path: "/home",
-						element: <AppLayout />,
-					},
-					{
-						path:"/class/:id/*",
 						element: <AppLayout />,
 						children: [
 							{
-								index: true,
-								element: <AppLayout />,
+								path: "/home",
+								element: <Dashboard />,
 							},
 							{
-								path:"overview",
-								element: <Overview />,
+								path: "/class/:id/*",
+								element: <ClassLayout />,
+								children: [
+									{
+										index: true,
+										element: <AppLayout />,
+									},
+									{
+										path: "overview",
+										element: <Overview />,
+									},
+									{
+										path: "work-class",
+										element: <AppLayout />,
+									},
+									{
+										path: "grade-structure",
+										element: <GradeStructure />,
+									},
+								],
 							},
-							{
-								path:"work-class",
-								element: <AppLayout />,
-							},
-							{
-								path:"grade-structure",
-								element: <GradeStructure />,
-							}
-						]
-					}
+						],
+					},
 				],
 			},
 		],
