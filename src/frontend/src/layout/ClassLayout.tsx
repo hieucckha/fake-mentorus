@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLocation, Link, useParams, Outlet } from 'react-router-dom';
-import Overview from '../component/card/Overview';
 
 const ClassLayout: React.FC = (): JSX.Element => {
   const location = useLocation();
