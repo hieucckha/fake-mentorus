@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SomeSandwich.FakeMentorus.Domain.Users;
+using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 using SomeSandwich.FakeMentorus.Infrastructure.DataAccess;
 using SomeSandwich.FakeMentorus.Web.Infrastructure.DependencyInjection;
 using SomeSandwich.FakeMentorus.Web.Infrastructure.Middlewares;
@@ -100,7 +101,13 @@ public class Startup
         services.AddLogging(new LoggingOptionsSetup(configuration, environment).Setup);
 
         // Application settings.
-        services.Configure<AppSettings>(configuration.GetSection("Application"));
+        //services.Configure<AppSettings>(options => configuration.GetSection("Application").Bind(options));
+        services.AddSingleton<IAppSettings, AppSettings>(_ =>
+        {
+            var appSettings = new AppSettings();
+            configuration.GetSection("Application").Bind(appSettings);
+            return appSettings;
+        });
 
         // HTTP client.
         services.AddHttpClient();
