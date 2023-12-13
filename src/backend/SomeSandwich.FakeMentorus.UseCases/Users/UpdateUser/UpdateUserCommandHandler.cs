@@ -7,7 +7,7 @@ using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 namespace SomeSandwich.FakeMentorus.UseCases.Users.UpdateUser;
 
 /// <summary>
-///     Command to update user.
+/// Command to update user.
 /// </summary>
 internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
 {
@@ -16,7 +16,7 @@ internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
     private readonly UserManager<User> userManager;
 
     /// <summary>
-    ///     Constructor.
+    /// Constructor.
     /// </summary>
     /// <param name="logger"></param>
     /// <param name="userManager"></param>

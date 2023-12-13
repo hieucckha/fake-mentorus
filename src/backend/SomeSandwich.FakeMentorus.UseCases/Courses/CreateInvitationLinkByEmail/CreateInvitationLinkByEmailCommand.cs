@@ -3,7 +3,7 @@ using MediatR;
 namespace SomeSandwich.FakeMentorus.UseCases.Courses.CreateInvitationLinkByEmail;
 
 /// <summary>
-///    Create invitation link by email command.
+///Create invitation link by email command.
 /// </summary>
 public class CreateInvitationLinkByEmailCommand : IRequest
 {

@@ -6,7 +6,7 @@ namespace SomeSandwich.FakeMentorus.UseCases.Common.Service;
 public interface IAccessService
 {
     /// <summary>
-    ///    Checks if user has access to course.
+    ///Checks if user has access to course.
     /// </summary>
     /// <param name="courseId"></param>
     /// <param name="cancellationToken"></param>

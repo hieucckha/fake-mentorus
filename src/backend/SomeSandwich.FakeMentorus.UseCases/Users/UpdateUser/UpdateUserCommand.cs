@@ -5,7 +5,7 @@ using SomeSandwich.FakeMentorus.Domain.Users;
 namespace SomeSandwich.FakeMentorus.UseCases.Users.UpdateUser;
 
 /// <summary>
-///     Command to update user.
+/// Command to update user.
 /// </summary>
 public class UpdateUserCommand : IRequest
 {
@@ -19,7 +19,7 @@ public class UpdateUserCommand : IRequest
     public string? LastName { get; set; }
 
     /// <summary>
-    ///     Avatar file.
+    /// Avatar file.
     /// </summary>
     public IFormFile? AvatarFile { get; set; }
 

@@ -178,6 +178,9 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsActivated")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .IsUnicode(false)
@@ -265,8 +268,8 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
                     b.Property<int>("GradeCompositionId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("GradeValue")
-                        .HasColumnType("integer");
+                    b.Property<float>("GradeValue")
+                        .HasColumnType("real");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
@@ -304,8 +307,10 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
                     b.Property<int>("GradeScale")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
 
@@ -377,6 +382,9 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
                         .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");

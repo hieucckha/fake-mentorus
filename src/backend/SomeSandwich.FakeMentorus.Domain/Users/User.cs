@@ -7,64 +7,64 @@ using SomeSandwich.FakeMentorus.Domain.Request;
 namespace SomeSandwich.FakeMentorus.Domain.Users;
 
 /// <summary>
-///     Custom application user entity.
+/// Custom application user entity.
 /// </summary>
 public class User : IdentityUser<int>
 {
     /// <summary>
-    ///     First name.
+    /// First name.
     /// </summary>
     [MaxLength(255)]
     [Required]
     required public string FirstName { get; set; }
 
     /// <summary>
-    ///     Last name.
+    /// Last name.
     /// </summary>
     [MaxLength(255)]
     [Required]
     required public string LastName { get; set; }
 
     /// <summary>
-    ///     Full name, concat of first name and last name.
+    /// Full name, concat of first name and last name.
     /// </summary>
     public string FullName => StringUtils.JoinIgnoreEmpty(" ", FirstName, LastName);
 
     /// <summary>
-    ///     The date when user last logged in.
+    /// The date when user last logged in.
     /// </summary>
     public DateTime? LastLogin { get; set; }
 
     /// <summary>
-    ///     Last token reset date. Before the date all generate login tokens are considered
-    ///     not valid. Must be in UTC format.
+    /// Last token reset date. Before the date all generate login tokens are considered
+    /// not valid. Must be in UTC format.
     /// </summary>
     public DateTime LastTokenResetAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
-    ///     Indicates when the user was created.
+    /// Indicates when the user was created.
     /// </summary>
     public DateTime CreatedAt { get; set; }
 
     /// <summary>
-    ///     Avatar Path.
+    /// Avatar Path.
     /// </summary>
     public string? AvatarPath { get; set; }
 
     /// <summary>
-    ///     School Identity.
+    /// School Identity.
     /// </summary>
     public string? SchoolId { get; set; }
 
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>
-    ///     Indicates when the user was updated.
+    /// Indicates when the user was updated.
     /// </summary>
     public DateTime UpdatedAt { get; set; }
 
     /// <summary>
-    ///     Indicates when the user was removed.
+    /// Indicates when the user was removed.
     /// </summary>
     public DateTime? RemovedAt { get; set; }
 
@@ -79,22 +79,22 @@ public class User : IdentityUser<int>
     public virtual ICollection<CourseTeacher> ClassesTeacher { get; set; } = null!;
 
     /// <summary>
-    ///     List of requests.
+    /// List of requests.
     /// </summary>
     public virtual ICollection<Request.Request> Requests { get; set; } = null!;
 
     /// <summary>
-    ///     List of comment requests.
+    /// List of comment requests.
     /// </summary>
     public virtual ICollection<CommentRequest> CommentRequests { get; set; } = null!;
 
     /// <summary>
-    ///     List of grades.
+    /// List of grades.
     /// </summary>
     public virtual ICollection<Grade.Grade> Grades { get; set; } = null!;
 
     /// <summary>
-    ///    List of courses.
+    ///List of courses.
     /// </summary>
     public virtual ICollection<Course.Course> Courses { get; set; } = null!;
 }

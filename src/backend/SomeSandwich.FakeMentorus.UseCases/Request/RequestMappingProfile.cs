@@ -13,6 +13,7 @@ public class RequestMappingProfile : Profile
     /// </summary>
     public RequestMappingProfile()
     {
-        CreateMap<Domain.Request.Request, RequestDto>();
+        CreateMap<Domain.Request.Request, RequestDto>()
+            .AfterMap((src, des) => { des.StudentName = src.Student.FirstName + " " + src.Student.LastName; });
     }
 }

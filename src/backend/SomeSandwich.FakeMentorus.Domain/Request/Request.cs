@@ -5,53 +5,58 @@ using SomeSandwich.FakeMentorus.Domain.Users;
 namespace SomeSandwich.FakeMentorus.Domain.Request;
 
 /// <summary>
-///     Request entity.
+/// Request entity.
 /// </summary>
 public class Request
 {
     /// <summary>
-    ///     Request id.
+    /// Request id.
     /// </summary>
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     /// <summary>
-    ///     Course id.
+    /// Course id.
     /// </summary>
     public int CourseId { get; set; }
 
     /// <summary>
-    ///     Student id.
+    /// Student id.
     /// </summary>
     public int StudentId { get; set; }
 
     /// <summary>
-    ///     Request detail.
+    /// Request detail.
     /// </summary>
     public string Reason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Request status.
+    /// </summary>
+    public RequestStatus Status { get; set; } = RequestStatus.Pending;
 
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>
-    ///     Created at.
+    /// Created at.
     /// </summary>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
-    ///     Updated at.
+    /// Updated at.
     /// </summary>
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>
-    ///     Grade value.
+    /// Grade value.
     /// </summary>
     public virtual Course.Course Course { get; set; }
 
     /// <summary>
-    ///     Student.
+    /// Student.
     /// </summary>
     public virtual User Student { get; set; }
 }
