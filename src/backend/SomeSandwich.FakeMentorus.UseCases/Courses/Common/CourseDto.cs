@@ -1,32 +1,37 @@
 namespace SomeSandwich.FakeMentorus.UseCases.Courses.Common;
 
 /// <summary>
-///     Course DTO.
+/// Course DTO.
 /// </summary>
 public class CourseDto
 {
     /// <summary>
-    ///     Course ID.
+    /// Course ID.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    ///     Course name.
+    /// Course name.
     /// </summary>
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Course description.
+    /// Course description.
     /// </summary>
     public string? Description { get; set; }
 
     /// <summary>
-    ///     Course start date.
+    /// Is the class activated.
+    /// </summary>
+    public bool IsActivated { get; set; } = false;
+
+    /// <summary>
+    /// Course start date.
     /// </summary>
     public DateTime CreatedAt { get; set; }
 
     /// <summary>
-    ///     Course end date.
+    /// Course end date.
     /// </summary>
     public DateTime UpdatedAt { get; set; }
 
@@ -41,7 +46,7 @@ public class CourseDto
     public string? CreatorName { get; set; } = string.Empty;
 
     /// <summary>
-    ///    Number of students in the course.
+    /// Number of students in the course.
     /// </summary>
     public int NumberOfStudents { get; set; }
 

@@ -3,7 +3,7 @@ using MediatR;
 namespace SomeSandwich.FakeMentorus.UseCases.Courses.UpdateCourse;
 
 /// <summary>
-///    Update course command.
+///Update course command.
 /// </summary>
 public class UpdateCourseCommand : IRequest
 {

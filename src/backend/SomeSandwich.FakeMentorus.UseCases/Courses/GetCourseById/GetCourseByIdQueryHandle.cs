@@ -10,7 +10,7 @@ using SomeSandwich.FakeMentorus.UseCases.Common.Service;
 namespace SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseById;
 
 /// <summary>
-///    Handler for <see cref="GetCourseByIdQuery" />.
+///Handler for <see cref="GetCourseByIdQuery" />.
 /// </summary>
 public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, CourseDetailDto>
 {
@@ -20,7 +20,7 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
     private readonly ILogger<GetCourseByIdQueryHandle> logger;
 
     /// <summary>
-    ///    Constructor.
+    ///Constructor.
     /// </summary>
     /// <param name="mapper"></param>
     /// <param name="dbContext"></param>

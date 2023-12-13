@@ -8,7 +8,7 @@ using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 namespace SomeSandwich.FakeMentorus.UseCases.Users.GetUserById;
 
 /// <summary>
-///     Handler for <see cref="GetUserByIdQuery" />.
+/// Handler for <see cref="GetUserByIdQuery" />.
 /// </summary>
 internal class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDetailsDto>
 {
@@ -18,7 +18,7 @@ internal class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserD
     private readonly UserManager<User> userManager;
 
     /// <summary>
-    ///     Constructor.
+    /// Constructor.
     /// </summary>
     /// <param name="dbContext">Database context.</param>
     /// <param name="mapper">Automapper instance.</param>

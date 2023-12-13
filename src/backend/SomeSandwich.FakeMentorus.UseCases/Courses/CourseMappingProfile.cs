@@ -7,12 +7,12 @@ using SomeSandwich.FakeMentorus.UseCases.Users.Common.Dtos;
 namespace SomeSandwich.FakeMentorus.UseCases.Courses;
 
 /// <summary>
-///     Course mapping profile.
+/// Course mapping profile.
 /// </summary>
 public class CourseMappingProfile : Profile
 {
     /// <summary>
-    ///    Constructor.
+    ///Constructor.
     /// </summary>
     public CourseMappingProfile()
     {
