@@ -6,6 +6,7 @@ import localStorageService from "../services/localStorage.service";
 import EditUser from "../modal/EditUser";
 import useAuth from "../hooks/auth";
 import CreateClass from "../modal/CreateClass";
+import JoinClass from "../modal/JoinClass";
 
 /**
  * Navigation bar.
@@ -13,7 +14,7 @@ import CreateClass from "../modal/CreateClass";
 const NavBarLogin: FC = () => {
 	const [isOpenModalEditUser, setIsOpenModalEditUser] = useState(false);
 	const [isOpenModalCreateClass, setIsOpenModalCreateClass] = useState(false);
-
+	const [isOpenModalJoinClass, setIsOpenModalJoinClass] = useState(false);
 	const [profile, setProfile] = useState<{ name: string; email: string }>({
 		name: "",
 		email: "",
@@ -36,6 +37,12 @@ const NavBarLogin: FC = () => {
 	};
 	const handleOpenModalCreateClass = (): void => {
 		setIsOpenModalCreateClass(true);
+	};
+	const handleCloseModalJoinClass = (): void => {
+		setIsOpenModalJoinClass(false);
+	};
+	const handleOpenModalJoinClass = (): void => {
+		setIsOpenModalJoinClass(true);
 	};
 	const { data: user } = useAuth();
 
@@ -91,7 +98,8 @@ const NavBarLogin: FC = () => {
 						</Link>
 					</div>
 					<div className="flex items-center">
-						<button
+						{user?.role === "Teacher" ? (
+							<button
 							type="button"
 							className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
 							aria-expanded="false"
@@ -108,6 +116,26 @@ const NavBarLogin: FC = () => {
 								<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
 							</svg>
 						</button>
+						) : (
+							<button
+							type="button"
+							className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+							aria-expanded="false"
+							onClick={handleOpenModalJoinClass}
+						>
+							<span className="sr-only">Join class</span>
+							<svg
+								focusable="false"
+								width={24}
+								height={24}
+								viewBox="0 0 24 24"
+								className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"
+							>
+								<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
+							</svg>
+						</button>)
+							
+						}
 						<div className="flex items-center ms-3">
 							<div>
 								<button
@@ -187,6 +215,12 @@ const NavBarLogin: FC = () => {
 							<CreateClass
 								openModal={isOpenModalCreateClass}
 								handleCloseModalCreateClass={handleCloseModalCreateClass}
+							/>
+						)}
+						{isOpenModalJoinClass && (
+							<JoinClass
+								openModal={isOpenModalJoinClass}
+								handleCloseModalJoinClass={handleCloseModalJoinClass}
 							/>
 						)}
 					</div>

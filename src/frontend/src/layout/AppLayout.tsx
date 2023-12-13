@@ -2,9 +2,7 @@ import type { FC } from "react";
 
 import NavBarLogin from "../partials/NavBarLogin";
 import Sidebar from "../partials/Sidebar";
-import Dashboard from "./Dashboard";
 import { Outlet, useLocation } from "react-router-dom";
-import ClassLayout from "./ClassLayout";
 
 /**
  * Home page.

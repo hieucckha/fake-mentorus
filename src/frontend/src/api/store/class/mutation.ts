@@ -13,3 +13,13 @@ export const useCreateClassMutation = () => {
         },
     });
 }
+export const useJoinClassMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (classData:{code:string}) => classService.joinClassByCode(classData),
+        retry: false,
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['class'] });
+        },
+    });
+}

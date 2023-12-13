@@ -21,6 +21,7 @@ const EditUser: FC<EditUserProps> = ({
 		studentId: "",
 		email: "",
 		id: 0,
+		rold: "",
 	});
 
 	const { data: user, isLoading } = useAuth();
