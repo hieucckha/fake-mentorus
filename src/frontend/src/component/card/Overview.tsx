@@ -48,7 +48,7 @@ const Overview: FC = () => {
                         { data.requests && data.requests.map((request) => (
                             <div className="p-4 w-full ml-6 bg-white border mb-3 border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                 <a href="#" className="flex  items-center   flex-row  ">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"></path></svg>
                                 <div className="flex flex-col justify-between p-4 leading-normal">
                                     <h5 className="mb-2  font-bold tracking-tight text-gray-900 dark:text-white">{request.studentName} has request: {request.reason} </h5>
                                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">

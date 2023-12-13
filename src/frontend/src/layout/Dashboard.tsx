@@ -7,7 +7,8 @@ import { ClassQuery } from "../api/store/class/interface";
 const Dashboard: FC = (): JSX.Element => {
 	
 	const { data: user } = useAuth();
-	const {data,isLoading}  = classQuery(user?.id ?? 0);
+	
+		const {data,isLoading}  = classQuery(user?.id );
 	
 	
 	useEffect(() => {
