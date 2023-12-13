@@ -8,7 +8,6 @@ using SomeSandwich.FakeMentorus.UseCases.Courses.Common;
 using SomeSandwich.FakeMentorus.UseCases.Courses.CreateCourse;
 using SomeSandwich.FakeMentorus.UseCases.Courses.CreateInvitationLinkByEmail;
 using SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseById;
-using SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseByUserId;
 using SomeSandwich.FakeMentorus.UseCases.Courses.SearchCourse;
 using SomeSandwich.FakeMentorus.UseCases.Courses.UpdateCourse;
 using SomeSandwich.FakeMentorus.Web.Requests;
@@ -158,14 +157,13 @@ public class CourseController
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpPost("{courseId:int}/join")]
+    [HttpPost("join")]
     [Authorize]
     public async Task JoinCourseByCode(
-        [FromRoute] int courseId,
         [FromBody] JoinCourseByCodeRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new AssignByCodeCommand() { CourseId = courseId, InviteCode = request.InviteCode };
+        var command = new AssignByCodeCommand() { InviteCode = request.InviteCode };
 
         await mediator.Send(command, cancellationToken);
     }
