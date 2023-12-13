@@ -17,6 +17,7 @@
     }
   },
   "Application": {
+    "FrontendUrl": "op://AWP/credentials/application/frontend-url"
   },
   "Jwt": {
     "SecretKey": "op://AWP/credentials/jwt/secret-key",
