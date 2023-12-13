@@ -8,33 +8,34 @@ const classService = {
         return response.data;
     },
     async getAllClass(userId:Number): Promise<Array<ClassQuery>> {
-        // const response = await axios.get('/api/course', {params: {userId}});
-        console.log(userId);
-        const response = { data: [
+        const response = await axios.get('/api/course/query', {params: {userId: userId}});
+        console.log(response.data);
+        // console.log(userId);
+        // const response = { data: [
             
-            {
-                id: 1,
-                name: "Lớp 9",
-                description: "Lớp 9",
-            },
-            {
-                id: 2,
-                name: "Lớp 10",
-                description: "Lớp 10",
-            },
-            {
-                id: 3,
-                name: "Lớp 11",
-                description: "Lớp 11",
-            },
-            {
-                id: 4,
-                name: "Lớp 12",
-                description: "Lớp 12",
-            },
+        //     {
+        //         id: 1,
+        //         name: "Lớp 9",
+        //         description: "Lớp 9",
+        //     },
+        //     {
+        //         id: 2,
+        //         name: "Lớp 10",
+        //         description: "Lớp 10",
+        //     },
+        //     {
+        //         id: 3,
+        //         name: "Lớp 11",
+        //         description: "Lớp 11",
+        //     },
+        //     {
+        //         id: 4,
+        //         name: "Lớp 12",
+        //         description: "Lớp 12",
+        //     },
             
-        ] };
-        return response.data;
+        // ] };
+        return response.data.items;
     },
     async getClassDetail(classId:String): Promise<ClassDetail> {
         console.log(classId);

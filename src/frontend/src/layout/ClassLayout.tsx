@@ -11,13 +11,14 @@ const ClassLayout: React.FC = (): JSX.Element => {
   const gradeStructureUrl = `/class/${id}/grade-structure`;
 
   return (
-    <div className="sm:ml-64 w-full h-full">
+    <div className="w-full h-full">
       <div className="content-center dark:border-gray-700 mt-14">
         <section className="bg-white dark:bg-gray-900 h-screen content-center">
           <div className="border-b border-gray-200 dark:border-gray-700">
             <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
               <li className="me-2">
                 <Link
+                  defaultChecked
                   to={overviewUrl}
                   className={`inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
                     location.pathname === overviewUrl ? 'text-blue-600 dark:text-blue-500' : ''
