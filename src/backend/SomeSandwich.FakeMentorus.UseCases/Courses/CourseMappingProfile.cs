@@ -32,6 +32,7 @@ public class CourseMappingProfile : Profile
             des.Teachers = src.Teachers.Select(
                 x => new UserDto { Id = x.TeacherId, FullName = x.Teacher.FullName, Role = null, }
             ).ToList();
+            des.CreatorFullName = src.Creator.FullName;
         });
 
         CreateMap<CourseStudent, UserDto>().AfterMap((src, des) =>

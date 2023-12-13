@@ -92,4 +92,9 @@ public class User : IdentityUser<int>
     ///     List of grades.
     /// </summary>
     public virtual ICollection<Grade.Grade> Grades { get; set; } = null!;
+
+    /// <summary>
+    ///    List of courses.
+    /// </summary>
+    public virtual ICollection<Course.Course> Courses { get; set; } = null!;
 }

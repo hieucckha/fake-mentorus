@@ -9,7 +9,7 @@ namespace SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseByUserId;
 public class GetCourseByUserIdQuery : IRequest<IEnumerable<CourseDto>>
 {
     /// <summary>
-    ///     Gets or sets user id.
+    /// User id.
     /// </summary>
     public int UserId { get; set; }
 }

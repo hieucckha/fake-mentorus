@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SomeSandwich.FakeMentorus.Domain.Grade;
+using SomeSandwich.FakeMentorus.Domain.Users;
 
 namespace SomeSandwich.FakeMentorus.Domain.Course;
 
@@ -31,6 +32,11 @@ public class Course
     /// </summary>
     public string? InviteCode { get; set; }
 
+    /// <summary>
+    ///   Creator id of the class.
+    /// </summary>
+    public int? CreatorId { get; set; }
+
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>
@@ -44,6 +50,11 @@ public class Course
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     // ---------------------------------------------------------------------------------------------
+
+    /// <summary>
+    ///    Creator of the class.
+    /// </summary>
+    public User Creator { get; set; } = null!;
 
     /// <summary>
     ///     List students of the class.

@@ -50,6 +50,7 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
 
         var course =
             await dbContext.Courses
+                .Include(c=>c.Creator)
                 .Include(c => c.GradeCompositions)
                 .Include(c => c.Requests)
                 .Include(c => c.Students).ThenInclude(cs => cs.Student)
@@ -58,6 +59,9 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
 
         logger.LogInformation("Course with id {CourseId} was found", request.CourseId);
         var result = mapper.Map<CourseDetailDto>(course);
+
+        // TODO: Need url from frontend
+        result.InviteLink = $"https://localhost:5001/invite/{result.InviteCode}";
 
         return result;
     }

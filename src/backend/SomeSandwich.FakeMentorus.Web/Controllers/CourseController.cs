@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Saritasa.Tools.Common.Pagination;
 using SomeSandwich.FakeMentorus.UseCases.Courses.AssignByCode;
 using SomeSandwich.FakeMentorus.UseCases.Courses.AssignByEmail;
 using SomeSandwich.FakeMentorus.UseCases.Courses.Common;
@@ -8,6 +9,7 @@ using SomeSandwich.FakeMentorus.UseCases.Courses.CreateCourse;
 using SomeSandwich.FakeMentorus.UseCases.Courses.CreateInvitationLinkByEmail;
 using SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseById;
 using SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseByUserId;
+using SomeSandwich.FakeMentorus.UseCases.Courses.SearchCourse;
 using SomeSandwich.FakeMentorus.UseCases.Courses.UpdateCourse;
 using SomeSandwich.FakeMentorus.Web.Requests;
 
@@ -36,6 +38,7 @@ public class CourseController
     /// Create new course.
     /// </summary>
     /// <param name="command">Create course command.</param>
+    /// <param name="cancellationToken"></param>
     [HttpPost("")]
     [Authorize]
     public async Task<int> Create(CreateCourseCommand command, CancellationToken cancellationToken)
@@ -43,24 +46,39 @@ public class CourseController
         return await mediator.Send(command, cancellationToken);
     }
 
+    // /// <summary>
+    // /// Search courses by user id.
+    // /// </summary>
+    // /// <param name="userId"></param>
+    // /// <param name="cancellationToken"></param>
+    // /// <returns></returns>
+    // [HttpGet("")]
+    // [Authorize]
+    // public async Task<IEnumerable<CourseDto>> GetCoursesByUserId(
+    //     [FromQuery] int userId,
+    //     CancellationToken cancellationToken)
+    // {
+    //     var result =
+    //         await mediator.Send(new GetCourseByUserIdQuery() { UserId = userId },
+    //             cancellationToken);
+    //
+    //     return result;
+    // }
+
     /// <summary>
-    /// List courses query by user id.
+    /// Search courses.
     /// </summary>
-    /// <param name="userId"></param>
+    /// <param name="query"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpGet("")]
+    [HttpGet("query")]
     [Authorize]
-    public async Task<IEnumerable<CourseDto>> GetCoursesByUserId(
-        [FromQuery] int userId,
-        CancellationToken
-            cancellationToken)
+    public async Task<PagedListMetadataDto<CourseDto>> SearchCourses(
+        [FromQuery] SearchCoursesQuery query,
+        CancellationToken cancellationToken)
     {
-        var result =
-            await mediator.Send(new GetCourseByUserIdQuery() { UserId = userId },
-                cancellationToken);
-
-        return result;
+        var result = await mediator.Send(query, cancellationToken);
+        return result.ToMetadataObject();
     }
 
     /// <summary>

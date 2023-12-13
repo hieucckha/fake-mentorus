@@ -25,6 +25,16 @@ public class CourseDetailDto
     public string Description { get; set; } = string.Empty;
 
     /// <summary>
+    ///   Creator id of the class.
+    /// </summary>
+    public int? CreatorId { get; set; }
+
+    /// <summary>
+    ///   Creator of the course.
+    /// </summary>
+    public String CreatorFullName { get; set; } = string.Empty;
+
+    /// <summary>
     ///    Invite code for the course.
     /// </summary>
     public string? InviteCode { get; set; }
