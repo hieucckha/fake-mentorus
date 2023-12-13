@@ -44,6 +44,7 @@ internal class CreateGradeCompositionCommandHandle : IRequestHandler<CreateGrade
             gradeComposition.Order = 1;
         }
 
+
         await dbContext.GradeCompositions.AddAsync(gradeComposition, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
