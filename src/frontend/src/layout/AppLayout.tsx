@@ -3,7 +3,7 @@ import type { FC } from "react";
 import NavBarLogin from "../partials/NavBarLogin";
 import Sidebar from "../partials/Sidebar";
 import Dashboard from "./Dashboard";
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import ClassLayout from "./ClassLayout";
 
 /**
@@ -16,10 +16,14 @@ const AppLayout: FC = () => {
 		// <div className="flex flex-col h-screen">
 		<>
 			<NavBarLogin />
-			<Sidebar />
-			{ 
-				location.pathname == "/home" ? (<Dashboard />):(<ClassLayout />)
-			}
+			<div className="w-full h-full flex">
+				<div className="flex-none w-64 h-full ...">
+					<Sidebar />
+				</div>
+				<div className="grow h-full ...">
+					<Outlet/>
+				</div>
+			</div>
 			
 		</>
 	);

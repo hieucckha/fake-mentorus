@@ -7,7 +7,8 @@ import { ClassQuery } from "../api/store/class/interface";
 const Dashboard: FC = (): JSX.Element => {
 	
 	const { data: user } = useAuth();
-	const {data,isLoading}  = classQuery(user?.id ?? 0);
+	
+		const {data,isLoading}  = classQuery(user?.id );
 	
 	
 	useEffect(() => {
@@ -19,7 +20,7 @@ const Dashboard: FC = (): JSX.Element => {
 
 	
 	return (
-	<div className="  sm:ml-64">
+	<div className="">
 		<div className=" content-center dark:border-gray-700 mt-14">
 			<section className="bg-white dark:bg-gray-900 h-screen content-center p-5">
 				
