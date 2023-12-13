@@ -61,7 +61,7 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
         var result = mapper.Map<CourseDetailDto>(course);
 
         // TODO: Need url from frontend
-        result.InviteLink = $"https://localhost:5001/invite/{result.InviteCode}";
+        result.InviteLink = $"https://localhost:5001/invite/{course.ClassCode}";
 
         return result;
     }

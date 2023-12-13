@@ -33,6 +33,11 @@ public class Course
     public string? InviteCode { get; set; }
 
     /// <summary>
+    /// Class code for the class.
+    /// </summary>
+    public string ClassCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// Creator id of the class.
     /// </summary>
     public int? CreatorId { get; set; }
@@ -40,7 +45,7 @@ public class Course
     /// <summary>
     /// Is the class activated.
     /// </summary>
-    public bool IsActivated { get; set; } = false;
+    public bool IsActivated { get; set; } = true;
 
     // ---------------------------------------------------------------------------------------------
 

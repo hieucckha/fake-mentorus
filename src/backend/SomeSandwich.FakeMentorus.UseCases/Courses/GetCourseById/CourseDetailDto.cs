@@ -41,7 +41,7 @@ public class CourseDetailDto
     public String CreatorFullName { get; set; } = string.Empty;
 
     /// <summary>
-    ///Invite code for the course.
+    /// Invite code for the course.
     /// </summary>
     public string? InviteCode { get; set; }
 

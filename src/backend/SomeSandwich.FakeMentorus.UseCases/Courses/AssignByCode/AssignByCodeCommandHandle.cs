@@ -49,29 +49,34 @@ internal class AssignByCodeCommandHandle : IRequestHandler<AssignByCodeCommand>
         var course = await dbContext.Courses
             .Include(c => c.Students)
             .Include(c => c.Teachers)
-            .GetAsync(c => c.Id == request.CourseId, cancellationToken);
+            .GetAsync(c => c.InviteCode == request.InviteCode, cancellationToken);
+
+        if (course == null)
+        {
+            throw new NotFoundException("Invalid invite code.");
+        }
 
         logger.LogInformation("Assigning user with id {CurrentUserId} to course with id {RequestCourseId}",
-            currentUserId, request.CourseId);
+            currentUserId, course.Id);
 
-        if (course is null)
-        {
-            logger.LogWarning("Course with id {CourseId} not found", request.CourseId);
-            throw new NotFoundException($"Course with id {request.CourseId} not found.");
-        }
+        // if (course is null)
+        // {
+        //     logger.LogWarning("Course with id {CourseId} not found", course!.Id);
+        //     throw new NotFoundException($"Course with id {course.Id} not found.");
+        // }
 
-        if (course.InviteCode != request.InviteCode)
-        {
-            logger.LogWarning("Course with id {CourseId} has a different invite code", request.CourseId);
-            throw new DomainException("The invite code is not valid.");
-        }
+        // if (course.InviteCode != request.InviteCode)
+        // {
+        //     logger.LogWarning("Course with id {CourseId} has a different invite code", request.CourseId);
+        //     throw new DomainException("The invite code is not valid.");
+        // }
 
         switch (userRole)
         {
             case "Student" when course.Students.Any(s => s.StudentId == currentUserId):
                 logger.LogWarning(
                     "Student with id {StudentId} already assigned to course with id {CourseId}",
-                    currentUserId, request.CourseId);
+                    currentUserId, course.Id);
                 throw new DomainException("You are already assigned to this course.");
             case "Student":
                 dbContext.CourseStudents.Add(new CourseStudent { CourseId = course.Id, StudentId = currentUserId });
@@ -79,7 +84,7 @@ internal class AssignByCodeCommandHandle : IRequestHandler<AssignByCodeCommand>
             case "Teacher" when course.Teachers.Any(t => t.TeacherId == currentUserId):
                 logger.LogWarning(
                     "Teacher with id {TeacherId} already assigned to course with id {CourseId}",
-                    currentUserId, request.CourseId);
+                    currentUserId, course.Id);
                 throw new DomainException("You are already assigned to this course.");
             case "Teacher":
                 dbContext.CourseTeachers.Add(new CourseTeacher { CourseId = course.Id, TeacherId = currentUserId });
@@ -88,6 +93,6 @@ internal class AssignByCodeCommandHandle : IRequestHandler<AssignByCodeCommand>
 
         await dbContext.SaveChangesAsync(cancellationToken);
         logger.LogInformation("Assigned user with id {CurrentUserId} to course with id {RequestCourseId} success",
-            currentUserId, request.CourseId);
+            currentUserId, course.Id);
     }
 }

@@ -8,11 +8,6 @@ namespace SomeSandwich.FakeMentorus.UseCases.Courses.AssignByCode;
 public class AssignByCodeCommand : IRequest
 {
     /// <summary>
-    /// The id of the user.
-    /// </summary>
-    required public int CourseId { get; set; }
-
-    /// <summary>
     /// The invite code of the course.
     /// </summary>
     required public string InviteCode { get; set; }

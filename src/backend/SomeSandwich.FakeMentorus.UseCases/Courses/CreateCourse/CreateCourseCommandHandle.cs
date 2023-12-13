@@ -62,7 +62,8 @@ internal partial class CreateCourseCommandHandle : IRequestHandler<CreateCourseC
                 Description = request
                     .Description,
                 InviteCode = GenerateInviteCode("AAAA-xxxx-####"),
-                CreatorId = userId
+                CreatorId = userId,
+                ClassCode = GenerateInviteCode("Axxxxxxxxxx##")
             };
 
             var result = await dbContext.Courses.AddAsync(course, cancellationToken);
