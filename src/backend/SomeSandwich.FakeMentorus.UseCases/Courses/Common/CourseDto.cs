@@ -31,6 +31,16 @@ public class CourseDto
     public DateTime UpdatedAt { get; set; }
 
     /// <summary>
+    /// Create by user id.
+    /// </summary>
+    public int? CreatorId { get; set; }
+
+    /// <summary>
+    /// Create by user name.
+    /// </summary>
+    public string? CreatorName { get; set; } = string.Empty;
+
+    /// <summary>
     ///    Number of students in the course.
     /// </summary>
     public int NumberOfStudents { get; set; }
