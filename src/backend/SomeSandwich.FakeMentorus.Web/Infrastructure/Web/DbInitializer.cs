@@ -6,7 +6,7 @@ using SomeSandwich.FakeMentorus.Infrastructure.DataAccess;
 namespace SomeSandwich.FakeMentorus.Web.Infrastructure.Web;
 
 /// <summary>
-///     Database initializer.
+/// Database initializer.
 /// </summary>
 public class DbInitializer : IDbInitializer
 
@@ -15,7 +15,7 @@ public class DbInitializer : IDbInitializer
     private readonly RoleManager<AppIdentityRole> roleManager;
 
     /// <summary>
-    ///     Database initializer.
+    /// Database initializer.
     /// </summary>
     /// <param name="appDbContext"></param>
     /// <param name="roleManager"></param>
@@ -26,7 +26,7 @@ public class DbInitializer : IDbInitializer
     }
 
     /// <summary>
-    ///     Seed the database.
+    /// Seed the database.
     /// </summary>
     /// <param name="cancellationToken"></param>
     public async Task SeedAsync(CancellationToken cancellationToken = default)

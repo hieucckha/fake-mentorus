@@ -52,9 +52,9 @@ internal class SearchCoursesQueryHandle : IRequestHandler<SearchCoursesQuery, Pa
                 .FirstOrDefault();
             query = role switch
             {
-                "Student" => query.Where(q => q.Students.Any(s => s.Id == request.UserId)),
-                "Teacher" => query.Where(q => q.Teachers.Any(t => t.Id == request.UserId)),
-                _ => query.Where(q=>q.Students.Any(s=>s.Id == request.UserId))
+                "Student" => query.Where(q => q.Students.Any(s => s.StudentId == request.UserId)),
+                "Teacher" => query.Where(q => q.Teachers.Any(t => t.TeacherId == request.UserId)),
+                _ => query.Where(q=>q.Students.Any(s=>s.StudentId == request.UserId))
             };
         }
 

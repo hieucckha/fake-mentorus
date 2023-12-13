@@ -5,58 +5,58 @@ using SomeSandwich.FakeMentorus.Domain.Users;
 namespace SomeSandwich.FakeMentorus.Domain.Request;
 
 /// <summary>
-///     CommentRequest entity.
+/// CommentRequest entity.
 /// </summary>
 public class CommentRequest
 {
     /// <summary>
-    ///     CommentRequest id.
+    /// CommentRequest id.
     /// </summary>
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     /// <summary>
-    ///     Request id.
+    /// Request id.
     /// </summary>
     public int RequestId { get; set; }
 
     /// <summary>
-    ///     User id.
+    /// User id.
     /// </summary>
     public int UserId { get; set; }
 
     /// <summary>
-    ///     Comment details.
+    /// Comment details.
     /// </summary>
     public string Comment { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Is teacher.
+    /// Is teacher.
     /// </summary>
     public bool IsTeacher { get; set; } = false;
 
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>
-    ///     Created at.
+    /// Created at.
     /// </summary>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
-    ///     Updated at.
+    /// Updated at.
     /// </summary>
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>
-    ///     Grade.
+    /// Grade.
     /// </summary>
     public virtual User User { get; set; } = null!;
 
     /// <summary>
-    ///     Request.
+    /// Request.
     /// </summary>
     public virtual Request Request { get; set; } = null!;
 }

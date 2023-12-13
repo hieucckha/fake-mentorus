@@ -1,22 +1,22 @@
 namespace SomeSandwich.FakeMentorus.Domain.Request;
 
 /// <summary>
-///     Request status.
+/// Request status.
 /// </summary>
 public enum RequestStatus
 {
     /// <summary>
-    ///     Pending request.
+    /// Pending request.
     /// </summary>
     Pending = 0,
 
     /// <summary>
-    ///     Approved request.
+    /// Approved request.
     /// </summary>
     Approved = 1,
 
     /// <summary>
-    ///     Rejected request.
+    /// Rejected request.
     /// </summary>
     Rejected = 2
 }

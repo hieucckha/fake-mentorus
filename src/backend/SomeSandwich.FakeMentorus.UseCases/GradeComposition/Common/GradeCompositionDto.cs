@@ -1,6 +1,6 @@
 using SomeSandwich.FakeMentorus.Domain.Grade;
 
-namespace SomeSandwich.FakeMentorus.UseCases.Grade.Common;
+namespace SomeSandwich.FakeMentorus.UseCases.GradeComposition.Common;
 
 /// <summary>
 /// GradeComposition DTO.
@@ -26,8 +26,8 @@ public class GradeCompositionDto
     public int Order { get; set; }
 
     /// <inheritdoc cref="GradeComposition.CreatedAt"/>
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     /// <inheritdoc cref="GradeComposition.UpdatedAt"/>
-    public DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 }

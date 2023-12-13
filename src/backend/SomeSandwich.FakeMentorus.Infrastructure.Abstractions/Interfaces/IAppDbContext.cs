@@ -7,47 +7,47 @@ using SomeSandwich.FakeMentorus.Domain.Users;
 namespace SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 
 /// <summary>
-///     Application abstraction for unit of work.
+/// Application abstraction for unit of work.
 /// </summary>
 public interface IAppDbContext : IDbContextWithSets, IDisposable
 {
     /// <summary>
-    ///     Users.
+    /// Users.
     /// </summary>
     DbSet<User> Users { get; }
 
     /// <summary>
-    ///     Courses.
+    /// Courses.
     /// </summary>
     DbSet<Course> Courses { get; }
 
     /// <summary>
-    ///     Course students.
+    /// Course students.
     /// </summary>
     DbSet<CourseStudent> CourseStudents { get; }
 
     /// <summary>
-    ///     Course teachers.
+    /// Course teachers.
     /// </summary>
     DbSet<CourseTeacher> CourseTeachers { get; }
 
     /// <summary>
-    ///     Grade compositions.
+    /// Grade compositions.
     /// </summary>
     DbSet<GradeComposition> GradeCompositions { get; }
 
     /// <summary>
-    ///     Grades.
+    /// Grades.
     /// </summary>
     DbSet<Grade> Grades { get; }
 
     /// <summary>
-    ///     Requests.
+    /// Requests.
     /// </summary>
     DbSet<Request> Requests { get; }
 
     /// <summary>
-    ///     Comment requests.
+    /// Comment requests.
     /// </summary>
     DbSet<CommentRequest> CommentRequests { get; }
 }
