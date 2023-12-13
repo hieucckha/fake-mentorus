@@ -61,7 +61,8 @@ const BrowserRouter = createBrowserRouter([
 						element: <AppLayout />,
 					},
 					{
-						path:"/class/:id/",
+						path:"/class/:id/*",
+						element: <AppLayout />,
 						children: [
 							{
 								index: true,
