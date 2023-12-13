@@ -1,6 +1,7 @@
 using System.Web;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Saritasa.Tools.Domain.Exceptions;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
@@ -14,16 +15,19 @@ public class GenerateTokenResetPasswordUserCommandHandler : IRequestHandler<Gene
 {
     private readonly UserManager<User> userManager;
     private readonly IEmailSender emailSender;
+    private readonly IAppSettings appSettings;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="userManager">User manager.</param>
     /// <param name="emailSender">Email sender service.</param>
-    public GenerateTokenResetPasswordUserCommandHandler(UserManager<User> userManager, IEmailSender emailSender)
+    /// <param name="appSettings"></param>
+    public GenerateTokenResetPasswordUserCommandHandler(UserManager<User> userManager, IEmailSender emailSender, IAppSettings appSettings)
     {
         this.userManager = userManager;
         this.emailSender = emailSender;
+        this.appSettings = appSettings;
     }
 
     /// <inheritdoc />
@@ -36,8 +40,16 @@ public class GenerateTokenResetPasswordUserCommandHandler : IRequestHandler<Gene
         }
 
         var code = await userManager.GeneratePasswordResetTokenAsync(user);
+
+        var urlOfSendMail = QueryHelpers.AddQueryString($"{appSettings.FrontendUrl}/reset-password/confirm",
+            new Dictionary<string, string>()
+            {
+                { "email", user.Email! },
+                { "code", code }
+            });
+
         await emailSender.SendEmailAsync(
-            $"<div>Please reset your password by <a href='http://localhost:5173/reset-password/confirm?email={HttpUtility.UrlEncode(user.Email)}&code={HttpUtility.UrlEncode(code)}'>clicking here</a>.</div>",
+            $"<div>Please reset your password by <a href='{urlOfSendMail}'>clicking here</a>.</div>",
             "Reset your password",
             new List<string> { user.Email! }, cancellationToken);
     }
