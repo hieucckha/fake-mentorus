@@ -206,3 +206,21 @@ const classService = {
 
 };
 export default classService;
+function generateArray(count:number) {
+    const result = [];
+
+    for (let i = 1; i <= count; i++) {
+        result.push({
+            id: i,
+            name: "Điểm miệng",
+            courseId: 1,
+            description: "Điểm miệng",
+            gradeScale: (i % 4 === 0) ? 40 : (i % 3 === 0) ? 30 : (i % 2 === 0) ? 20 : 10,
+            order: (i % 4 === 0) ? 4 : (i % 3 === 0) ? 3 : (i % 2 === 0) ? 2 : 1,
+            createdAt: "2021-10-11T09:23:56.000Z",
+            updatedAt: "2021-10-11T09:23:56.000Z",
+        });
+    }
+
+    return result;
+}
