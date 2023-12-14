@@ -15,6 +15,7 @@ import GradeStructure from "../pages/GradeStructure";
 import Overview from "../component/card/Overview";
 import Dashboard from "../layout/Dashboard";
 import ClassLayout from "../layout/ClassLayout";
+import ClassroomMember from "../pages/ClassroomMember";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -79,7 +80,7 @@ const BrowserRouter = createBrowserRouter([
 									},
 									{
 										path: "work-class",
-										element: <AppLayout />,
+										element: <ClassroomMember />,
 									},
 									{
 										path: "grade-structure",

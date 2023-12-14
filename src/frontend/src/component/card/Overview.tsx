@@ -2,26 +2,30 @@ import { FC } from "react";
 import { classDetailQuery } from "../../api/store/class/queries";
 import {  useParams } from "react-router-dom";
 import moment from "moment";
+import { App } from "antd";
+import useClassDetail from "../../hooks/useClassDetail";
 
 
 const Overview: FC = () => {
+      const { message,  } = App.useApp();
+    const {data, isLoading } = useClassDetail();
 
-   const { id } = useParams();
-
-    const {data, isLoading} = classDetailQuery(id as string );
     if (!data) return null;
     const copylink = () => {
         navigator.clipboard.writeText(data?.inviteLink);
+        message.success('Copied link to clipboard');
     }
     const copyCode = () => {
         navigator.clipboard.writeText(data?.inviteCode);
+        message.success('Copied code to clipboard');
+
     }
     return(
         isLoading ? <div>Loading...</div> :
-         <div className="h-full w-full flex justify-center bg-slate-50 pt-6">
-        <div className="max-w-max">
-            <img className="rounded-t-lg mb-5" src="https://gstatic.com/classroom/themes/img_reachout.jpg" alt="Header" />
-            <div className="flex flex-row">
+         <div className="h-screen w-full flex justify-center bg-slate-50 pt-6">
+        <div className="w-4/5">
+            <img className="rounded-t-lg mb-5 w-full" src="https://gstatic.com/classroom/themes/img_reachout.jpg" alt="Header" />
+            <div className="flex flex-col md:flex-row gap-y-4 md:gap-x-4 w-full">
                 <a className="flex h-40 gap-3  p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700  flex-shrink-0">
                     <div className="flex flex-col">
                         <div className="flex flex-row justify-between">
@@ -38,7 +42,7 @@ const Overview: FC = () => {
                 </a>
                 <div className="flex w-full flex-row justify-between">
                     <div className="flex-row w-full ">
-                        <div className="p-6 w-full ml-6 bg-white border mb-3 border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                        <div className="p-6 w-full bg-white border mb-3 border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                             <a href="#">
                                 <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">{data?.name}</h5>
                             </a>
