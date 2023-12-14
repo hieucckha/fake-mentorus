@@ -1,6 +1,6 @@
 import axios from "../api/AxiosClient";
 
-import type { ClassDetail, ClassDto,ClassQuery } from "../api/store/class/interface";
+import type { ClassDetail, ClassDto,ClassQuery, gradeCompositions, newGradeCompositions } from "../api/store/class/interface";
 
 const classService = {
     async createClass(classData: ClassDto) {
@@ -201,6 +201,21 @@ const classService = {
     },
     async joinClassByCode(classData:{code:string}) {
         const response = await axios.post('/api/course/join', {inviteCode: classData.code});
+        return response.data;
+    },
+    async updateOrderGradeComposit(gradeCompositions:gradeCompositions[]) {
+        console.log("Call api update order grade")
+        const response = await axios.post('/api/grade-composition/sort', {gradeCompositions: gradeCompositions});
+        return response.data;
+    },
+    async addNewGradeComposit(composition:newGradeCompositions) {
+        console.log("addNewGradeComposit")
+        const response = await axios.post('/api/grade-composition', {
+            gradeValue: composition.gradeScale,
+            name: composition.name,
+            courseId: composition.courseId,
+            description: composition.description
+        });
         return response.data;
     },
 

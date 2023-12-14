@@ -26,7 +26,7 @@ import { CSS } from "@dnd-kit/utilities";
 import type { ColumnsType } from "antd/es/table";
 import { useParams } from "react-router-dom";
 import { classDetailQuery } from "../api/store/class/queries";
-import { gradeCompositions } from "../api/store/class/interface";
+import { gradeCompositions, newGradeCompositions } from "../api/store/class/interface";
 // interface Item extends gradeCompositions{
 // 	id: number;
 // 	name: string;
@@ -134,6 +134,8 @@ const RowDragable = (props: RowProps) => {
 };
 import { App } from "antd";
 import useClassDetail from "../hooks/useClassDetail";
+import { useUpdateOrderGradeComposit } from "../api/store/gradeComposits/mutation";
+import { useJoinClassMutation } from "../api/store/class/mutation";
 const addKeyWithId= (array:any)=>{
 	let arrClone = array.map((item:any)=>({...item,key:item.id}))
 	return arrClone;
@@ -141,7 +143,8 @@ const addKeyWithId= (array:any)=>{
 const GradeStructure: React.FC = () => {
 	const { message,  } = App.useApp();
     const {data, isLoading } = useClassDetail();
-
+	const mutation = useUpdateOrderGradeComposit();
+	const mutationAddGradeColumn = useAddNewGradeComposit();
 	// const {data, isLoading,error,isError} = classDetailQuery(id as string );
 	// if (isLoading) return <>Loading</>;
 	// if (isError) return <>{error}</>;
@@ -169,6 +172,14 @@ const GradeStructure: React.FC = () => {
 		})
 		console.log("Call api reindex")
 		console.log(array)
+		mutation.mutate(array,
+		{
+			onSuccess() { 
+			},
+			onError(error) {
+				console.log(error);
+			},
+		});
 		// setGradeCompositions(array)
 	}
 	useEffect(()=>{
@@ -207,18 +218,23 @@ const GradeStructure: React.FC = () => {
 		setEditingKey(0);
 	};
 	const handleAdd = () => {
-		const newData: gradeCompositions = {
-			id: gradeCompositions.length + 1,
-			key: gradeCompositions.length + 1,
+		const newData: newGradeCompositions = {
 			name: `New gradeCompositions`,
 			description: `New gradeCompositions`,
 			gradeScale: 0,
 			courseId: 0,
-			order: gradeCompositions.length,
-			createdAt: "string",
-			updatedAt: "string",
 		};
-		setGradeCompositions([...gradeCompositions, newData]);
+		mutationAddGradeColumn.mutate(newData,
+			{
+				onSuccess() { 
+					setGradeCompositions([...gradeCompositions]);
+				},
+				onError(error:any) {
+					console.log(error);
+				},
+			})
+		
+		
 	};
 	const save = async (key: React.Key) => {
 		try {

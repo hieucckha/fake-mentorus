@@ -28,12 +28,6 @@ export interface gradeCompositions {
 	createdAt: string;
 	updatedAt: string;
 }
-export interface newGradeCompositions {
-	name: string;
-	courseId: number;
-	description: string;
-	gradeScale: number;
-}
 export interface requests{
 	id: number;
 	studentId: number;
@@ -58,4 +52,3 @@ export interface ClassDetail {
 	requests: requests[];
 
 }
-
