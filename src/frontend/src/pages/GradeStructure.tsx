@@ -135,15 +135,14 @@ const RowDragable = (props: RowProps) => {
 const GradeStructure: React.FC = () => {
 	const { id } = useParams();
 
-    // const {data:classDetailData, isLoading,error,isError} = classDetailQuery(id as string );
-    
+    // const {data, isLoading,error,isError} = classDetailQuery(id as string );
+    // if (isLoading) return <>Loading</>;
+	// if (isError) return <>{error}</>;
+	// console.log("data")
+	// console.log(data?.gradeCompositions)
 	
 	const [form] = Form.useForm();
-	// if (!classDetailData) return <>Error</>;
-	// if (isError) return <>{error}</>;
-	// console.log("classDetailData")
-	// console.log(classDetailData.gradeCompositions)
-	const [data, setData] = useState(originData);
+	const [gradeCompositions, setGradeCompositions] = useState(originData);
 	const [editingKey, setEditingKey] = useState(0);
 
 	const isEditing = (record: gradeCompositions) => record.id == editingKey;
@@ -157,7 +156,7 @@ const GradeStructure: React.FC = () => {
 	);
 	const onDragEnd = ({ active, over }: DragEndEvent) => {
 		if (active.id !== over?.id) {
-			setData((prev) => {
+			setGradeCompositions((prev) => {
 				const activeIndex = prev.findIndex((i) => i.id === active.id);
 				const overIndex = prev.findIndex((i) => i.id === over?.id);
 				return arrayMove(prev, activeIndex, overIndex);
@@ -176,23 +175,23 @@ const GradeStructure: React.FC = () => {
 	};
 	const handleAdd = () => {
 		const newData: gradeCompositions = {
-			id: data.length+1,
-			key: data.length+1,
+			id: gradeCompositions.length+1,
+			key: gradeCompositions.length+1,
 			name: `New gradeCompositions`,
 			description: `New gradeCompositions`,
 			gradeScale: 0,
 			courseId: 0,
-			order: data.length,
+			order: gradeCompositions.length,
 			createdAt: "string",
 			updatedAt: "string"
 		};
-		setData([...data, newData]);
+		setGradeCompositions([...gradeCompositions, newData]);
 	};
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as gradeCompositions;
 			console.log(row);
-			const newData = [...data];
+			const newData = [...gradeCompositions];
 			console.log(newData);
 
 			const index = newData.findIndex((item) => key === item.id);
@@ -202,11 +201,11 @@ const GradeStructure: React.FC = () => {
 					...item,
 					...row,
 				});
-				setData(newData);
+				setGradeCompositions(newData);
 				setEditingKey(0);
 			} else {
 				newData.push(row);
-				setData(newData);
+				setGradeCompositions(newData);
 				setEditingKey(0);
 			}
 		} catch (errInfo) {
@@ -294,7 +293,7 @@ const GradeStructure: React.FC = () => {
 			>
 				<SortableContext
 					// rowKey array
-					items={data.map((i) => i.id)}
+					items={gradeCompositions.map((i) => i.id)}
 					strategy={verticalListSortingStrategy}
 				>
 					<Form form={form} component={false}>
@@ -306,7 +305,7 @@ const GradeStructure: React.FC = () => {
 								},
 							}}
 							bordered
-							dataSource={data}
+							dataSource={gradeCompositions}
 							columns={mergedColumns}
 							rowClassName="editable-row"
 							pagination={false}
