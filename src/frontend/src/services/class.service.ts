@@ -216,7 +216,7 @@ function generateArray(count:number) {
             gradeScale: Math.ceil(100 - Math.random() * 30),
             description: `London Park no. ${i}`,
             courseId: 0,
-            order: 0,
+            order: i,
             createdAt: "stringnumber",
             updatedAt: "stringnumber",
         });

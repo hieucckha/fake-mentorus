@@ -145,8 +145,6 @@ const GradeStructure: React.FC = () => {
 	// const {data, isLoading,error,isError} = classDetailQuery(id as string );
 	// if (isLoading) return <>Loading</>;
 	// if (isError) return <>{error}</>;
-	console.log("data")
-	console.log(data?.gradeCompositions)
 
 	const [form] = Form.useForm();
 	const [gradeCompositions, setGradeCompositions] = useState<gradeCompositions[]>([]);
@@ -161,7 +159,25 @@ const GradeStructure: React.FC = () => {
 			},
 		})
 	);
-
+	const reOrderArray = ()=>{
+		if (!Array.isArray(gradeCompositions) ) return;
+		const array = gradeCompositions.map((item,idx)=>{
+			return {
+				...item,
+				order: idx+1
+			}
+		})
+		console.log("Call api reindex")
+		console.log(array)
+		// setGradeCompositions(array)
+	}
+	useEffect(()=>{
+		console.log("gradeCompositions")
+		console.log(gradeCompositions)
+		if(gradeCompositions){
+			reOrderArray()
+		}
+	},[gradeCompositions])
 	useEffect(() => {
 		if (data) {
 			setGradeCompositions(addKeyWithId(data.gradeCompositions))
@@ -169,7 +185,7 @@ const GradeStructure: React.FC = () => {
 	}, [data])
 
 	if(isLoading) return <div>Loading...</div>;
-
+	
 	const onDragEnd = ({ active, over }: DragEndEvent) => {
 		if (active.id !== over?.id) {
 			setGradeCompositions((prev: gradeCompositions[]) => {
@@ -177,6 +193,7 @@ const GradeStructure: React.FC = () => {
 				const overIndex = prev.findIndex((i) => i.id === over?.id);
 				return arrayMove(prev, activeIndex, overIndex);
 			});
+			// save order
 		}
 	};
 	const edit = (record: Partial<gradeCompositions>) => {
@@ -206,9 +223,7 @@ const GradeStructure: React.FC = () => {
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as gradeCompositions;
-			console.log(row);
 			const newData = [...gradeCompositions];
-			console.log(newData);
 
 			const index = newData.findIndex((item) => key === item.id);
 			if (index > -1) {
@@ -278,7 +293,6 @@ const GradeStructure: React.FC = () => {
 		return {
 			...col,
 			onCell: (record: gradeCompositions) => {
-				console.log("onCell");
 				return {
 					record,
 					inputType: col.dataIndex === "age" ? "number" : "text",
@@ -289,7 +303,7 @@ const GradeStructure: React.FC = () => {
 			},
 		};
 	});
-
+	
 	return (
 		<div className="w-full">
 			<div className="row grid justify-items-end pl-5 pr-5">
