@@ -99,11 +99,13 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
         var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
         var urlOfSendMail = QueryHelpers.AddQueryString($"{appSettings.FrontendUrl}/activate-account/confirm",
-            new Dictionary<string, string>() { { "email", user.Email! }, { "code", code } });
+            new Dictionary<string, string>() { { "email", user.Email }, { "code", code } });
 
         await emailSender.SendEmailAsync(
             $"<div>Please confirm your account by <a href='{urlOfSendMail}'>clicking here</a>.</div>",
             "Activate your account",
-            new List<string> { user.Email! }, cancellationToken);
+            new List<string> { user.Email }, cancellationToken);
+
+        logger.LogInformation("Send email confirm to email {email}", command.Email);
     }
 }
