@@ -49,7 +49,7 @@ for (let i = 1; i < 5; i++) {
 		id: i,
 		key: i,
 		name: `Edward ${i}`,
-		gradeScale: Math.ceil(100 - Math.random()*30),
+		gradeScale: Math.ceil(100 - Math.random() * 30),
 		description: `London Park no. ${i}`,
 		courseId: 0,
 		order: 0,
@@ -135,12 +135,12 @@ const RowDragable = (props: RowProps) => {
 const GradeStructure: React.FC = () => {
 	const { id } = useParams();
 
-    // const {data, isLoading,error,isError} = classDetailQuery(id as string );
-    // if (isLoading) return <>Loading</>;
+	// const {data, isLoading,error,isError} = classDetailQuery(id as string );
+	// if (isLoading) return <>Loading</>;
 	// if (isError) return <>{error}</>;
 	// console.log("data")
 	// console.log(data?.gradeCompositions)
-	
+
 	const [form] = Form.useForm();
 	const [gradeCompositions, setGradeCompositions] = useState(originData);
 	const [editingKey, setEditingKey] = useState(0);
@@ -154,6 +154,7 @@ const GradeStructure: React.FC = () => {
 			},
 		})
 	);
+
 	const onDragEnd = ({ active, over }: DragEndEvent) => {
 		if (active.id !== over?.id) {
 			setGradeCompositions((prev) => {
@@ -163,9 +164,9 @@ const GradeStructure: React.FC = () => {
 			});
 		}
 	};
-	const edit = (record: Partial<gradeCompositions> ) => {
+	const edit = (record: Partial<gradeCompositions>) => {
 		form.setFieldsValue({ name: "", gradeScale: 0, ...record });
-		if(record.id){
+		if (record.id) {
 			setEditingKey(record.id);
 		}
 	};
@@ -175,15 +176,15 @@ const GradeStructure: React.FC = () => {
 	};
 	const handleAdd = () => {
 		const newData: gradeCompositions = {
-			id: gradeCompositions.length+1,
-			key: gradeCompositions.length+1,
+			id: gradeCompositions.length + 1,
+			key: gradeCompositions.length + 1,
 			name: `New gradeCompositions`,
 			description: `New gradeCompositions`,
 			gradeScale: 0,
 			courseId: 0,
 			order: gradeCompositions.length,
 			createdAt: "string",
-			updatedAt: "string"
+			updatedAt: "string",
 		};
 		setGradeCompositions([...gradeCompositions, newData]);
 	};
@@ -273,7 +274,7 @@ const GradeStructure: React.FC = () => {
 			},
 		};
 	});
-	
+
 	return (
 		<div className="w-full">
 			<div className="row grid justify-items-end pl-5 pr-5">
