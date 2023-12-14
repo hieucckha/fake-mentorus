@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
+import { Form, Input, InputNumber, Popconfirm, Table, Typography,Button } from "antd";
 
 interface Item {
 	key: string;
@@ -9,7 +9,7 @@ interface Item {
 }
 
 const originData: Item[] = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 12; i++) {
 	originData.push({
 		key: i.toString(),
 		name: `Edward ${i}`,
@@ -38,7 +38,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
 	...restProps
 }) => {
 	const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-
 	return (
 		<td {...restProps}>
 			{editing ? (
@@ -61,7 +60,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 	);
 };
 
-const App: React.FC = () => {
+const GradeStructure: React.FC = () => {
 	const [form] = Form.useForm();
 	const [data, setData] = useState(originData);
 	const [editingKey, setEditingKey] = useState("");
@@ -76,12 +75,22 @@ const App: React.FC = () => {
 	const cancel = () => {
 		setEditingKey("");
 	};
-
+	const handleAdd = () => {
+		const newData: Item = {
+			key: data.length.toString(),
+			name: `Edward ${data.length}`,
+			age: 32,
+			address: `London Park no. ${data.length}`,
+		};
+		setData([...data, newData]);
+	  };
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as Item;
-
+			console.log(row)
 			const newData = [...data];
+			console.log(newData)
+
 			const index = newData.findIndex((item) => key === item.key);
 			if (index > -1) {
 				const item = newData[index];
@@ -155,18 +164,29 @@ const App: React.FC = () => {
 		}
 		return {
 			...col,
-			onCell: (record: Item) => ({
-				record,
-				inputType: col.dataIndex === "age" ? "number" : "text",
-				dataIndex: col.dataIndex,
-				title: col.title,
-				editing: isEditing(record),
-			}),
+			onCell: (record: Item) => {
+				console.log("onCell")
+				return ({
+					record,
+					inputType: col.dataIndex === "age" ? "number" : "text",
+					dataIndex: col.dataIndex,
+					title: col.title,
+					editing: isEditing(record),
+				})
+			},
 		};
 	});
 
 	return (
 		<div className="w-full">
+			<div className="row grid justify-items-end pl-5 pr-5">
+				<Button onClick={handleAdd} ghost type="primary" style={{ marginBottom: 16 }}>
+					Add a row
+				</Button>
+			</div>
+			<div className="row">
+
+			</div>
 			<Form form={form} component={false}>
 				<Table
 					components={{
@@ -178,13 +198,11 @@ const App: React.FC = () => {
 					dataSource={data}
 					columns={mergedColumns}
 					rowClassName="editable-row"
-					pagination={{
-						onChange: cancel,
-					}}
+					pagination={false}
 				/>
 			</Form>
 		</div>
 	);
 };
 
-export default App;
+export default GradeStructure;
