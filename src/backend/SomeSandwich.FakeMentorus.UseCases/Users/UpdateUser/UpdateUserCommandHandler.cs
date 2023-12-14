@@ -45,7 +45,8 @@ internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
         userToUpdate.Email = request.Email ?? userToUpdate.Email;
         userToUpdate.FirstName = request.FirstName ?? userToUpdate.FirstName;
         userToUpdate.LastName = request.LastName ?? userToUpdate.LastName;
-        userToUpdate.SchoolId = request.SchoolId ?? userToUpdate.SchoolId;
+
+        userToUpdate.UpdatedAt = DateTime.UtcNow;
 
         userManager.UpdateAsync(userToUpdate);
         logger.LogInformation($"User {loggedUserId} updated.");

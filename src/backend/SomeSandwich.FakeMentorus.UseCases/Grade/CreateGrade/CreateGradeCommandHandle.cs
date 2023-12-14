@@ -24,24 +24,25 @@ internal class CreateGradeCommandHandle : IRequestHandler<CreateGradeCommand, in
     /// <inheritdoc />
     public async Task<int> Handle(CreateGradeCommand request, CancellationToken cancellationToken)
     {
-        var check = await dbContext.Grades.AnyAsync(
-            e => e.GradeCompositionId == request.GradeCompositionId && e.StudentId == request.StudentId,
-            cancellationToken);
-        if (check)
-        {
-            throw new NotFoundException("Grade already exists");
-        }
+        // var check = await dbContext.Grades.AnyAsync(
+        //     e => e.GradeCompositionId == request.GradeCompositionId && e.StudentId == request.StudentId,
+        //     cancellationToken);
+        // if (check)
+        // {
+        //     throw new NotFoundException("Grade already exists");
+        // }
+        //
+        // var grade = new Domain.Grade.Grade
+        // {
+        //     GradeCompositionId = request.GradeCompositionId,
+        //     StudentId = request.StudentId,
+        //     GradeValue = request.GradeValue
+        // };
+        //
+        // await dbContext.Grades.AddAsync(grade, cancellationToken);
+        // await dbContext.SaveChangesAsync(cancellationToken);
 
-        var grade = new Domain.Grade.Grade
-        {
-            GradeCompositionId = request.GradeCompositionId,
-            StudentId = request.StudentId,
-            GradeValue = request.GradeValue
-        };
-
-        await dbContext.Grades.AddAsync(grade, cancellationToken);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        return grade.Id;
+        // return grade.Id;
+        return 1;
     }
 }

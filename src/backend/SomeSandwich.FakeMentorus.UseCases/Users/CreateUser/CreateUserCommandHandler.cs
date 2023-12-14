@@ -2,8 +2,10 @@ using System.Web;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Saritasa.Tools.Domain.Exceptions;
+using SomeSandwich.FakeMentorus.Domain.Student;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 
@@ -18,6 +20,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
     private readonly UserManager<User> userManager;
     private readonly IEmailSender emailSender;
     private readonly IAppSettings appSettings;
+    private readonly IAppDbContext appDbContext;
 
     /// <summary>
     /// Constructor.
@@ -26,15 +29,17 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
     /// <param name="userManager"></param>
     /// <param name="emailSender"></param>
     /// <param name="appSettings"></param>
+    /// <param name="appDbContext"></param>
     public CreateUserCommandHandler(
         ILogger<CreateUserCommandHandler> logger,
         UserManager<User> userManager,
-        IEmailSender emailSender, IAppSettings appSettings)
+        IEmailSender emailSender, IAppSettings appSettings, IAppDbContext appDbContext)
     {
         this.logger = logger;
         this.userManager = userManager;
         this.emailSender = emailSender;
         this.appSettings = appSettings;
+        this.appDbContext = appDbContext;
     }
 
     /// <inheritdoc />
@@ -49,6 +54,23 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
             FirstName = command.FirstName,
             LastName = command.LastName
         };
+
+        if (!string.IsNullOrEmpty(command.StudentId))
+        {
+            if (!await appDbContext.Students.AnyAsync(s => s.StudentId == command.StudentId, cancellationToken))
+            {
+                appDbContext.Students.Add(new Student { StudentId = command.StudentId });
+            }
+
+            if (await appDbContext.Users.AnyAsync(e => e.StudentId == command.StudentId, cancellationToken))
+            {
+                logger.LogError($"Student with id {command.StudentId} already exists.");
+                throw new ArgumentException($"Student with id {command.StudentId} already exists.");
+            }
+
+            user.StudentId = command.StudentId;
+        }
+
 
         var result = await userManager.CreateAsync(user, command.Password);
         logger.LogInformation("User creation result: {Result}", result);
@@ -77,11 +99,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
         var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
         var urlOfSendMail = QueryHelpers.AddQueryString($"{appSettings.FrontendUrl}/activate-account/confirm",
-            new Dictionary<string, string>()
-            {
-                { "email", user.Email! },
-                { "code", code }
-            });
+            new Dictionary<string, string>() { { "email", user.Email! }, { "code", code } });
 
         await emailSender.SendEmailAsync(
             $"<div>Please confirm your account by <a href='{urlOfSendMail}'>clicking here</a>.</div>",

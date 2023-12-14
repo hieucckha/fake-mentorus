@@ -51,10 +51,15 @@ public class User : IdentityUser<int>
     /// </summary>
     public string? AvatarPath { get; set; }
 
+    // /// <summary>
+    // /// School Identity.
+    // /// </summary>
+    // public string? SchoolId { get; set; }
+
     /// <summary>
-    /// School Identity.
+    /// Student Identity.
     /// </summary>
-    public string? SchoolId { get; set; }
+    public string? StudentId { get; set; }
 
     // ---------------------------------------------------------------------------------------------
 
@@ -91,10 +96,15 @@ public class User : IdentityUser<int>
     /// <summary>
     /// List of grades.
     /// </summary>
-    public virtual ICollection<Grade.Grade> Grades { get; set; } = null!;
+    // public virtual ICollection<Grade.Grade> Grades { get; set; } = null!;
 
     /// <summary>
-    ///List of courses.
+    /// List of courses.
     /// </summary>
     public virtual ICollection<Course.Course> Courses { get; set; } = null!;
+
+    /// <summary>
+    /// Student.
+    /// </summary>
+    public Student.Student Student { get; set; } = null!;
 }

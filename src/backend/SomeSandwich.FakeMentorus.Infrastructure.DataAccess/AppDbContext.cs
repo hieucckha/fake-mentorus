@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SomeSandwich.FakeMentorus.Domain.Course;
 using SomeSandwich.FakeMentorus.Domain.Grade;
 using SomeSandwich.FakeMentorus.Domain.Request;
+using SomeSandwich.FakeMentorus.Domain.Student;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 
@@ -23,39 +24,49 @@ public class AppDbContext : IdentityDbContext<User, AppIdentityRole, int>, IAppD
     }
 
     /// <summary>
-    ///     Courses.
+    /// Courses.
     /// </summary>
     public DbSet<Course> Courses { get; private set; }
 
     /// <summary>
-    ///     Course students.
+    /// Course students.
     /// </summary>
     public DbSet<CourseStudent> CourseStudents { get; private set; }
 
     /// <summary>
-    ///     Course teachers.
+    /// Course teachers.
     /// </summary>
     public DbSet<CourseTeacher> CourseTeachers { get; private set; }
 
     /// <summary>
-    ///     Grade compositions.
+    /// Grade compositions.
     /// </summary>
     public DbSet<GradeComposition> GradeCompositions { get; private set; }
 
     /// <summary>
-    ///     Grades.
+    /// Grades.
     /// </summary>
     public DbSet<Grade> Grades { get; private set; }
 
     /// <summary>
-    ///     Requests.
+    /// Requests.
     /// </summary>
     public DbSet<Request> Requests { get; private set; }
 
     /// <summary>
-    ///     Comment requests.
+    /// Comment requests.
     /// </summary>
     public DbSet<CommentRequest> CommentRequests { get; private set; }
+
+    /// <summary>
+    /// Students.
+    /// </summary>
+    public DbSet<Student> Students { get; private set; }
+
+    /// <summary>
+    /// Student infos.
+    /// </summary>
+    public DbSet<StudentInfo> StudentInfos { get; private set; }
 
     /// <inheritdoc />
     public DbSet<DataProtectionKey> DataProtectionKeys { get; private set; }

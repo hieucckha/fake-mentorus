@@ -22,7 +22,4 @@ public class UpdateUserCommand : IRequest
     /// Avatar file.
     /// </summary>
     public IFormFile? AvatarFile { get; set; }
-
-    /// <inheritdoc cref="User.SchoolId" />
-    public string? SchoolId { get; set; }
 }
