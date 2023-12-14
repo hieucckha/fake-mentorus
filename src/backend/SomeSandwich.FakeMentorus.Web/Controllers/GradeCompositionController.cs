@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SomeSandwich.FakeMentorus.UseCases.Grade.CreateGrade;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.CreateGradeComposition;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.GetGradeCompositionById;
+using SomeSandwich.FakeMentorus.UseCases.GradeComposition.SortGradeComposition;
 using SomeSandwich.FakeMentorus.Web.Requests;
 
 namespace SomeSandwich.FakeMentorus.Web.Controllers;
@@ -70,6 +71,19 @@ public class GradeCompositionController
             {
                 GradeCompositionId = id, StudentId = studentId, GradeValue = request.GradeValue
             },
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// Sort grade composition.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    [HttpPatch("sort")]
+    [Authorize]
+    public async Task Sort([FromBody] SortGradeCompositionRequest request, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new SortGradeCompositionCommand() { GradeCompositions = request.GradeCompositions },
             cancellationToken);
     }
 }
