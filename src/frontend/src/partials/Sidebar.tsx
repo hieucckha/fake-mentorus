@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { NavLink } from "react-router-dom";
 
 /**
  *
@@ -7,7 +8,8 @@ import type { FC } from "react";
  * Sidebar.
  */
 
-const Sidebar: FC = () => (
+const Sidebar: FC = () => {
+	return (
 		<aside
 			id="logo-sidebar"
 			className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
@@ -16,8 +18,8 @@ const Sidebar: FC = () => (
 			<div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
 				<ul className="space-y-2 font-medium">
 					<li>
-						<a
-							href="/home"
+						<NavLink
+							to="/home"
 							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 						>
 							<svg
@@ -31,16 +33,29 @@ const Sidebar: FC = () => (
 								<path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
 							</svg>
 							<span className="ms-3">Dashboard</span>
-						</a>
+						</NavLink>
 					</li>
-          <li>
+					<li>
 						<a
-							href="home"
+							href="/home"
 							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
 						>
-             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect x={2} y={2} width={20} height={8} rx={2} ry={2} /><rect x={2} y={14} width={20} height={8} rx={2} ry={2} /><line x1={6} y1={6} x2="6.01" y2={6} /><line x1={6} y1={18} x2="6.01" y2={18} /></svg>
-
-							
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width={24}
+								height={24}
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#000000"
+								strokeWidth={2}
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<rect x={2} y={2} width={20} height={8} rx={2} ry={2} />
+								<rect x={2} y={14} width={20} height={8} rx={2} ry={2} />
+								<line x1={6} y1={6} x2="6.01" y2={6} />
+								<line x1={6} y1={18} x2="6.01" y2={18} />
+							</svg>
 
 							<span className="ms-3">My class</span>
 						</a>
@@ -48,5 +63,6 @@ const Sidebar: FC = () => (
 				</ul>
 			</div>
 		</aside>
-);
+	);
+};
 export default Sidebar;

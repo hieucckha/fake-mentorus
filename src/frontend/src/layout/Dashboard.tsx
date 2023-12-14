@@ -12,7 +12,7 @@ const Dashboard: FC = (): JSX.Element => {
 	console.log(user);
 	const [isOpenModalCreateClass, setIsOpenModalCreateClass] = useState(false);
 	const [isOpenModalJoinClass, setIsOpenModalJoinClass] = useState(false);
-	const {data,isLoading}  = classQuery(user?.id );
+	const {data,isLoading}  = classQuery(user?.id);
 
 	
 	const handleCloseModalCreateClass = (): void => {

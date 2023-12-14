@@ -21,7 +21,7 @@ const EditUser: FC<EditUserProps> = ({
 		studentId: "",
 		email: "",
 		id: 0,
-		rold: "",
+		role: "",
 	});
 
 	const { data: user, isLoading } = useAuth();
@@ -40,6 +40,7 @@ const EditUser: FC<EditUserProps> = ({
 			studentId: user?.studentId ?? "",
 			email: user?.email ?? "",
 			id: user?.id ?? null,
+			role: ""
 		});
 	}, [user]);
 
