@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using SomeSandwich.FakeMentorus.Domain.Users;
 
 namespace SomeSandwich.FakeMentorus.Domain.Grade;
 
@@ -24,7 +23,7 @@ public class Grade
     /// <summary>
     /// Student id.
     /// </summary>
-    required public int StudentId { get; set; }
+    public int StudentId { get; set; }
 
     /// <summary>
     /// Grade value.
@@ -53,5 +52,5 @@ public class Grade
     /// <summary>
     /// Student.
     /// </summary>
-    public virtual User Student { get; set; } = null!;
+    public virtual Student.Student Student { get; set; } = null!;
 }

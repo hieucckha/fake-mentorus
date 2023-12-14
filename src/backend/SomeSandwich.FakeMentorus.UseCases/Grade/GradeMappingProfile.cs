@@ -8,9 +8,12 @@ namespace SomeSandwich.FakeMentorus.UseCases.Grade;
 /// </summary>
 public class GradeMappingProfile: Profile
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GradeMappingProfile"/> class.
+    /// </summary>
     public GradeMappingProfile()
     {
         CreateMap<Domain.Grade.Grade, GradeDto>()
-            .AfterMap((src, des) => des.StudentName = $"{src.Student.FirstName} {src.Student.LastName}");
+            .AfterMap((src, des) => des.StudentName = src.Student.StudentInfo.Name);
     }
 }

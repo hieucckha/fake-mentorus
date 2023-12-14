@@ -2,6 +2,7 @@
 using SomeSandwich.FakeMentorus.Domain.Course;
 using SomeSandwich.FakeMentorus.Domain.Grade;
 using SomeSandwich.FakeMentorus.Domain.Request;
+using SomeSandwich.FakeMentorus.Domain.Student;
 using SomeSandwich.FakeMentorus.Domain.Users;
 
 namespace SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
@@ -50,4 +51,8 @@ public interface IAppDbContext : IDbContextWithSets, IDisposable
     /// Comment requests.
     /// </summary>
     DbSet<CommentRequest> CommentRequests { get; }
+
+    DbSet<Student> Students { get; }
+
+    DbSet<StudentInfo> StudentInfos { get; }
 }
