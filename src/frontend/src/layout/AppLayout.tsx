@@ -12,10 +12,10 @@ const AppLayout: FC = () => {
 	console.log(location.pathname);
 	return (
 		// <div className="flex flex-col h-screen">
-		<>
+		<div className="bg-white">
 			<NavBarLogin />
-			<div className="w-full h-full flex">
-				<div className="flex-none w-64 h-full ...">
+			<div className="bg-white w-full h-screen flex">
+				<div className="flex-none sm:w-64 h-full ...">
 					<Sidebar />
 				</div>
 				<div className="grow h-full ...">
@@ -23,7 +23,7 @@ const AppLayout: FC = () => {
 				</div>
 			</div>
 			
-		</>
+		</div>
 	);
 };
 
