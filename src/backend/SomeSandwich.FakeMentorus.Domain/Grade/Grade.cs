@@ -23,7 +23,7 @@ public class Grade
     /// <summary>
     /// Student id.
     /// </summary>
-    public int StudentId { get; set; }
+    public string StudentId { get; set; }
 
     /// <summary>
     /// Grade value.
