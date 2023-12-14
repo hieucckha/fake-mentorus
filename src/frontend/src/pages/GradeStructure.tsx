@@ -1,6 +1,29 @@
 import React, { useState } from "react";
-import { Form, Input, InputNumber, Popconfirm, Table, Typography,Button } from "antd";
-
+import {
+	Form,
+	Input,
+	InputNumber,
+	Popconfirm,
+	Table,
+	Typography,
+	Button,
+} from "antd";
+import type { DragEndEvent } from "@dnd-kit/core";
+import {
+	DndContext,
+	PointerSensor,
+	useSensor,
+	useSensors,
+} from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+	SortableContext,
+	arrayMove,
+	useSortable,
+	verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import type { ColumnsType } from "antd/es/table";
 interface Item {
 	key: string;
 	name: string;
@@ -59,14 +82,62 @@ const EditableCell: React.FC<EditableCellProps> = ({
 		</td>
 	);
 };
+interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+	"data-row-key": string;
+}
+const RowDragable = (props: RowProps) => {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({
+		id: props["data-row-key"],
+	});
 
+	const style: React.CSSProperties = {
+		...props.style,
+		transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
+		transition,
+		cursor: "move",
+		...(isDragging ? { position: "relative", zIndex: 9999 } : {}),
+	};
+
+	return (
+		<tr
+			{...props}
+			ref={setNodeRef}
+			style={style}
+			{...attributes}
+			{...listeners}
+		/>
+	);
+};
 const GradeStructure: React.FC = () => {
 	const [form] = Form.useForm();
 	const [data, setData] = useState(originData);
 	const [editingKey, setEditingKey] = useState("");
 
 	const isEditing = (record: Item) => record.key === editingKey;
-
+	const sensors = useSensors(
+		useSensor(PointerSensor, {
+			activationConstraint: {
+				// https://docs.dndkit.com/api-documentation/sensors/pointer#activation-constraints
+				distance: 1,
+			},
+		})
+	);
+	const onDragEnd = ({ active, over }: DragEndEvent) => {
+		if (active.id !== over?.id) {
+			setData((prev) => {
+				const activeIndex = prev.findIndex((i) => i.key === active.id);
+				const overIndex = prev.findIndex((i) => i.key === over?.id);
+				return arrayMove(prev, activeIndex, overIndex);
+			});
+		}
+	};
 	const edit = (record: Partial<Item> & { key: React.Key }) => {
 		form.setFieldsValue({ name: "", age: "", address: "", ...record });
 		setEditingKey(record.key);
@@ -83,13 +154,13 @@ const GradeStructure: React.FC = () => {
 			address: `London Park no. ${data.length}`,
 		};
 		setData([...data, newData]);
-	  };
+	};
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as Item;
-			console.log(row)
+			console.log(row);
 			const newData = [...data];
-			console.log(newData)
+			console.log(newData);
 
 			const index = newData.findIndex((item) => key === item.key);
 			if (index > -1) {
@@ -165,14 +236,14 @@ const GradeStructure: React.FC = () => {
 		return {
 			...col,
 			onCell: (record: Item) => {
-				console.log("onCell")
-				return ({
+				console.log("onCell");
+				return {
 					record,
 					inputType: col.dataIndex === "age" ? "number" : "text",
 					dataIndex: col.dataIndex,
 					title: col.title,
 					editing: isEditing(record),
-				})
+				};
 			},
 		};
 	});
@@ -180,27 +251,42 @@ const GradeStructure: React.FC = () => {
 	return (
 		<div className="w-full">
 			<div className="row grid justify-items-end pl-5 pr-5">
-				<Button onClick={handleAdd} ghost type="primary" style={{ marginBottom: 16 }}>
+				<Button
+					onClick={handleAdd}
+					ghost
+					type="primary"
+					style={{ marginBottom: 16 }}
+				>
 					Add a row
 				</Button>
 			</div>
-			<div className="row">
-
-			</div>
-			<Form form={form} component={false}>
-				<Table
-					components={{
-						body: {
-							cell: EditableCell,
-						},
-					}}
-					bordered
-					dataSource={data}
-					columns={mergedColumns}
-					rowClassName="editable-row"
-					pagination={false}
-				/>
-			</Form>
+			<DndContext
+				sensors={sensors}
+				modifiers={[restrictToVerticalAxis]}
+				onDragEnd={onDragEnd}
+			>
+				<SortableContext
+					// rowKey array
+					items={data.map((i) => i.key)}
+					strategy={verticalListSortingStrategy}
+				>
+					<Form form={form} component={false}>
+						<Table
+							components={{
+								body: {
+									cell: EditableCell,
+									row: RowDragable,
+								},
+							}}
+							bordered
+							dataSource={data}
+							columns={mergedColumns}
+							rowClassName="editable-row"
+							pagination={false}
+						/>
+					</Form>
+				</SortableContext>
+			</DndContext>
 		</div>
 	);
 };
