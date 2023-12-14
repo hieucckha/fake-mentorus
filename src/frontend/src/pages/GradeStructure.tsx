@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Form,
 	Input,
@@ -132,17 +132,24 @@ const RowDragable = (props: RowProps) => {
 		/>
 	);
 };
+import { App } from "antd";
+import useClassDetail from "../hooks/useClassDetail";
+const addKeyWithId= (array:any)=>{
+	let arrClone = array.map((item:any)=>({...item,key:item.id}))
+	return arrClone;
+}
 const GradeStructure: React.FC = () => {
-	const { id } = useParams();
+	const { message,  } = App.useApp();
+    const {data, isLoading } = useClassDetail();
 
 	// const {data, isLoading,error,isError} = classDetailQuery(id as string );
 	// if (isLoading) return <>Loading</>;
 	// if (isError) return <>{error}</>;
-	// console.log("data")
-	// console.log(data?.gradeCompositions)
+	console.log("data")
+	console.log(data?.gradeCompositions)
 
 	const [form] = Form.useForm();
-	const [gradeCompositions, setGradeCompositions] = useState(originData);
+	const [gradeCompositions, setGradeCompositions] = useState<gradeCompositions[]>([]);
 	const [editingKey, setEditingKey] = useState(0);
 
 	const isEditing = (record: gradeCompositions) => record.id == editingKey;
@@ -155,9 +162,17 @@ const GradeStructure: React.FC = () => {
 		})
 	);
 
+	useEffect(() => {
+		if (data) {
+			setGradeCompositions(addKeyWithId(data.gradeCompositions))
+		}
+	}, [data])
+
+	if(isLoading) return <div>Loading...</div>;
+
 	const onDragEnd = ({ active, over }: DragEndEvent) => {
 		if (active.id !== over?.id) {
-			setGradeCompositions((prev) => {
+			setGradeCompositions((prev: gradeCompositions[]) => {
 				const activeIndex = prev.findIndex((i) => i.id === active.id);
 				const overIndex = prev.findIndex((i) => i.id === over?.id);
 				return arrayMove(prev, activeIndex, overIndex);
@@ -216,19 +231,19 @@ const GradeStructure: React.FC = () => {
 
 	const columns = [
 		{
-			title: "name",
+			title: "Name",
 			dataIndex: "name",
 			width: "40%",
 			editable: true,
 		},
 		{
-			title: "gradeScale",
+			title: "GradeScale",
 			dataIndex: "gradeScale",
 			width: "40%",
 			editable: true,
 		},
 		{
-			title: "operation",
+			title: "Operation",
 			dataIndex: "operation",
 			render: (_: any, record: gradeCompositions) => {
 				const editable = isEditing(record);
