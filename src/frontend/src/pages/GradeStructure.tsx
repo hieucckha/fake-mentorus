@@ -24,20 +24,37 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { ColumnsType } from "antd/es/table";
-interface Item {
-	key: string;
-	name: string;
-	age: number;
-	address: string;
-}
+import { useParams } from "react-router-dom";
+import { classDetailQuery } from "../api/store/class/queries";
+import { gradeCompositions } from "../api/store/class/interface";
+// interface Item extends gradeCompositions{
+// 	id: number;
+// 	name: string;
+// 	courseId: number;
+// 	description: string;
+// 	gradeScale: number;
+// 	order: number;
+// 	createdAt: string;
+// 	updatedAt: string;
+// 	// key: string;
+// 	// name: string;
+// 	// age: number;
+// 	// address: string;
+// }
 
-const originData: Item[] = [];
-for (let i = 0; i < 12; i++) {
+const originData: gradeCompositions[] = [];
+const fullPercent = 100;
+for (let i = 1; i < 5; i++) {
 	originData.push({
-		key: i.toString(),
+		id: i,
+		key: i,
 		name: `Edward ${i}`,
-		age: 32,
-		address: `London Park no. ${i}`,
+		gradeScale: Math.ceil(100 - Math.random()*30),
+		description: `London Park no. ${i}`,
+		courseId: 0,
+		order: 0,
+		createdAt: "stringnumber",
+		updatedAt: "stringnumber",
 	});
 }
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
@@ -45,7 +62,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	dataIndex: string;
 	title: any;
 	inputType: "number" | "text";
-	record: Item;
+	record: gradeCompositions;
 	index: number;
 	children: React.ReactNode;
 }
@@ -116,11 +133,20 @@ const RowDragable = (props: RowProps) => {
 	);
 };
 const GradeStructure: React.FC = () => {
-	const [form] = Form.useForm();
-	const [data, setData] = useState(originData);
-	const [editingKey, setEditingKey] = useState("");
+	const { id } = useParams();
 
-	const isEditing = (record: Item) => record.key === editingKey;
+    // const {data:classDetailData, isLoading,error,isError} = classDetailQuery(id as string );
+    
+	
+	const [form] = Form.useForm();
+	// if (!classDetailData) return <>Error</>;
+	// if (isError) return <>{error}</>;
+	// console.log("classDetailData")
+	// console.log(classDetailData.gradeCompositions)
+	const [data, setData] = useState(originData);
+	const [editingKey, setEditingKey] = useState(0);
+
+	const isEditing = (record: gradeCompositions) => record.id == editingKey;
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
 			activationConstraint: {
@@ -132,37 +158,44 @@ const GradeStructure: React.FC = () => {
 	const onDragEnd = ({ active, over }: DragEndEvent) => {
 		if (active.id !== over?.id) {
 			setData((prev) => {
-				const activeIndex = prev.findIndex((i) => i.key === active.id);
-				const overIndex = prev.findIndex((i) => i.key === over?.id);
+				const activeIndex = prev.findIndex((i) => i.id === active.id);
+				const overIndex = prev.findIndex((i) => i.id === over?.id);
 				return arrayMove(prev, activeIndex, overIndex);
 			});
 		}
 	};
-	const edit = (record: Partial<Item> & { key: React.Key }) => {
-		form.setFieldsValue({ name: "", age: "", address: "", ...record });
-		setEditingKey(record.key);
+	const edit = (record: Partial<gradeCompositions> ) => {
+		form.setFieldsValue({ name: "", gradeScale: 0, ...record });
+		if(record.id){
+			setEditingKey(record.id);
+		}
 	};
 
 	const cancel = () => {
-		setEditingKey("");
+		setEditingKey(0);
 	};
 	const handleAdd = () => {
-		const newData: Item = {
-			key: data.length.toString(),
-			name: `Edward ${data.length}`,
-			age: 32,
-			address: `London Park no. ${data.length}`,
+		const newData: gradeCompositions = {
+			id: data.length+1,
+			key: data.length+1,
+			name: `New gradeCompositions`,
+			description: `New gradeCompositions`,
+			gradeScale: 0,
+			courseId: 0,
+			order: data.length,
+			createdAt: "string",
+			updatedAt: "string"
 		};
 		setData([...data, newData]);
 	};
 	const save = async (key: React.Key) => {
 		try {
-			const row = (await form.validateFields()) as Item;
+			const row = (await form.validateFields()) as gradeCompositions;
 			console.log(row);
 			const newData = [...data];
 			console.log(newData);
 
-			const index = newData.findIndex((item) => key === item.key);
+			const index = newData.findIndex((item) => key === item.id);
 			if (index > -1) {
 				const item = newData[index];
 				newData.splice(index, 1, {
@@ -170,11 +203,11 @@ const GradeStructure: React.FC = () => {
 					...row,
 				});
 				setData(newData);
-				setEditingKey("");
+				setEditingKey(0);
 			} else {
 				newData.push(row);
 				setData(newData);
-				setEditingKey("");
+				setEditingKey(0);
 			}
 		} catch (errInfo) {
 			console.log("Validate Failed:", errInfo);
@@ -185,30 +218,24 @@ const GradeStructure: React.FC = () => {
 		{
 			title: "name",
 			dataIndex: "name",
-			width: "25%",
+			width: "40%",
 			editable: true,
 		},
 		{
-			title: "age",
-			dataIndex: "age",
-			width: "15%",
-			editable: true,
-		},
-		{
-			title: "address",
-			dataIndex: "address",
+			title: "gradeScale",
+			dataIndex: "gradeScale",
 			width: "40%",
 			editable: true,
 		},
 		{
 			title: "operation",
 			dataIndex: "operation",
-			render: (_: any, record: Item) => {
+			render: (_: any, record: gradeCompositions) => {
 				const editable = isEditing(record);
 				return editable ? (
 					<span>
 						<Typography.Link
-							onClick={() => save(record.key)}
+							onClick={() => save(record.id)}
 							style={{ marginRight: 8 }}
 						>
 							Save
@@ -219,7 +246,7 @@ const GradeStructure: React.FC = () => {
 					</span>
 				) : (
 					<Typography.Link
-						disabled={editingKey !== ""}
+						disabled={editingKey !== 0}
 						onClick={() => edit(record)}
 					>
 						Edit
@@ -235,7 +262,7 @@ const GradeStructure: React.FC = () => {
 		}
 		return {
 			...col,
-			onCell: (record: Item) => {
+			onCell: (record: gradeCompositions) => {
 				console.log("onCell");
 				return {
 					record,
@@ -247,7 +274,7 @@ const GradeStructure: React.FC = () => {
 			},
 		};
 	});
-
+	
 	return (
 		<div className="w-full">
 			<div className="row grid justify-items-end pl-5 pr-5">
@@ -267,7 +294,7 @@ const GradeStructure: React.FC = () => {
 			>
 				<SortableContext
 					// rowKey array
-					items={data.map((i) => i.key)}
+					items={data.map((i) => i.id)}
 					strategy={verticalListSortingStrategy}
 				>
 					<Form form={form} component={false}>

@@ -197,7 +197,7 @@ const classService = {
         //         },
         //     ],
         // } }; 
-        return response.data;
+        return {...response.data,gradeCompositions:generateArray(16)};
     },
     async joinClassByCode(classData:{code:string}) {
         const response = await axios.post('/api/course/'+ classData.code +'/join',);

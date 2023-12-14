@@ -19,6 +19,7 @@ export interface Student  {
 }
 export interface gradeCompositions {
 	id: number;
+	key: number;
 	name: string;
 	courseId: number;
 	description: string;
