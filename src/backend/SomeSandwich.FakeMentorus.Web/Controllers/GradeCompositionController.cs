@@ -5,6 +5,7 @@ using SomeSandwich.FakeMentorus.UseCases.Grade.CreateGrade;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.CreateGradeComposition;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.GetGradeCompositionById;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.SortGradeComposition;
+using SomeSandwich.FakeMentorus.UseCases.GradeComposition.UpdateGradeComposition;
 using SomeSandwich.FakeMentorus.Web.Requests;
 
 namespace SomeSandwich.FakeMentorus.Web.Controllers;
@@ -52,6 +53,27 @@ public class GradeCompositionController
     public async Task<GradeCompositionDetailDto> Get([FromRoute] int id, CancellationToken cancellationToken)
     {
         return await mediator.Send(new GetGradeCompositionByIdQuery() { Id = id }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Update grade composition.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    [HttpPut("{id:int}")]
+    [Authorize]
+    public async Task Update([FromRoute] int id, [FromBody] UpdateGradeCompositionRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateGradeCompositionCommand()
+        {
+            GradeCompositionId = id,
+            Name = request.Name,
+            Description = request.Description,
+            GradeScale = request.GradeScale
+        };
+        await mediator.Send(command, cancellationToken);
     }
 
     /// <summary>
