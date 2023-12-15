@@ -71,7 +71,6 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
             user.StudentId = command.StudentId;
         }
 
-
         var result = await userManager.CreateAsync(user, command.Password);
         logger.LogInformation("User creation result: {Result}", result);
         if (result.Succeeded)

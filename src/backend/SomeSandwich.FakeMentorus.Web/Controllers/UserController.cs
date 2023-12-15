@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 using SomeSandwich.FakeMentorus.UseCases.Users.CreateUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.UpdateUser;
 
