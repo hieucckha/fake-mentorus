@@ -2,6 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SomeSandwich.FakeMentorus.UseCases.Users.CreateUser;
+using SomeSandwich.FakeMentorus.UseCases.Users.LockoutUser.LockUser;
+using SomeSandwich.FakeMentorus.UseCases.Users.LockoutUser.UnlockUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.UpdateUser;
 
 namespace SomeSandwich.FakeMentorus.Web.Controllers;
@@ -36,14 +38,46 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
-    ///
+    /// Update user information.
     /// </summary>
-    /// <param name="command"></param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="command">Update user command.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the request.</param>
     [HttpPut]
     [Authorize]
     public async Task Update(UpdateUserCommand command, CancellationToken cancellationToken)
     {
         await mediator.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// Lock a user.
+    /// </summary>
+    /// <param name="id">Id of user.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the request.</param>
+    [HttpPut("{id:int}/lock")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task LockUser([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new LockUserCommand
+        {
+            UserId = id
+        }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Unlock a user.
+    /// </summary>
+    /// <param name="id">Id of user.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the request.</param>
+    [HttpPut("{id:int}/unlock")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task UnlockUser([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new UnlockUserCommand
+        {
+            UserId = id
+        }, cancellationToken);
     }
 }
