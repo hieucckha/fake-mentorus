@@ -209,9 +209,13 @@ const classService = {
         const response = await axios.patch('/api/grade-composition/sort', {gradeCompositions: gradeCompositions});
         return response.data;
     },
-    async updateGradeComposit(gradeCompositions:gradeCompositions[]) {
-        console.log("Call api update order grade")
-        const response = await axios.post('/api/grade-composition', {gradeCompositions: gradeCompositions});
+    async updateGradeColumn(gradeComposition:gradeCompositions) {
+        console.log("Call api update column grade")
+        const response = await axios.put('/api/grade-composition/'+ gradeComposition.id, {
+            name: gradeComposition.name,
+            description: gradeComposition.description,
+            gradeScale: gradeComposition.gradeScale,
+        });
         return response.data;
     },
     async addNewGradeComposit(composition:newGradeCompositions) {

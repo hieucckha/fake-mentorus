@@ -134,8 +134,9 @@ const RowDragable = (props: RowProps) => {
 };
 import { App } from "antd";
 import useClassDetail from "../hooks/useClassDetail";
-import { useAddNewGradeComposit, useUpdateOrderGradeComposit } from "../api/store/gradeComposits/mutation";
+import { useAddNewGradeComposit, useUpdateGradeColumn, useUpdateOrderGradeComposit } from "../api/store/gradeComposits/mutation";
 import { useJoinClassMutation } from "../api/store/class/mutation";
+import Swal from "sweetalert2";
 const addKeyWithId= (array:any)=>{
 	let arrClone = array.map((item:any)=>({...item,key:item.id}))
 	return arrClone;
@@ -147,6 +148,7 @@ const GradeStructure: React.FC = () => {
     const {data, isLoading } = useClassDetail();
 	const mutation = useUpdateOrderGradeComposit();
 	const mutationAddGradeColumn = useAddNewGradeComposit();
+	const mutationUpdateGradeColumn = useUpdateGradeColumn();
 	// const {data, isLoading,error,isError} = classDetailQuery(id as string );
 	// if (isLoading) return <>Loading</>;
 	// if (isError) return <>{error}</>;
@@ -241,7 +243,6 @@ const GradeStructure: React.FC = () => {
 		try {
 			const row = (await form.validateFields()) as gradeCompositions;
 			const newData = [...gradeCompositions];
-
 			const index = newData.findIndex((item) => key === item.id);
 			if (index > -1) {
 				const item = newData[index];
@@ -249,6 +250,34 @@ const GradeStructure: React.FC = () => {
 					...item,
 					...row,
 				});
+				mutationUpdateGradeColumn.mutate({
+					...item,
+					...row,
+				},{
+					onSuccess() { 
+						Swal.fire({
+							title: "Success",
+							text: "Save Grade Composition successfully",
+							icon: "success",
+							timer: 1000,
+							showCancelButton: false,
+							showConfirmButton: false,
+						})
+					},
+					onError(error:any) {
+						Swal.fire({
+							title: "Error",
+							text: "Some error happening",
+							icon: "error",
+							timer: 1000,
+							showCancelButton: false,
+							showConfirmButton: false,
+						})
+						console.log(error);
+					},
+				}
+				)
+				
 				setGradeCompositions(newData);
 				setEditingKey(0);
 			} else {

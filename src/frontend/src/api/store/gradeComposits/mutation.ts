@@ -15,13 +15,13 @@ export const useUpdateOrderGradeComposit = () => {
     });
 }
 
-export const useUpdateGradeComposit = () => {
+export const useUpdateGradeColumn = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (gradeCompositions:gradeCompositions[]) => classService.updateGradeComposit(gradeCompositions),
+        mutationFn: (gradeComposition:gradeCompositions) => classService.updateGradeColumn(gradeComposition),
         retry: false,
         onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['class'] });
+            // queryClient.invalidateQueries({ queryKey: ['class'] });
         },
     });
 }
