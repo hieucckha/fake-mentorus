@@ -86,8 +86,8 @@ public class Course
     /// </summary>
     public virtual ICollection<GradeComposition> GradeCompositions { get; set; } = null!;
 
-    /// <summary>
-    /// List of grade compositions of the class.
-    /// </summary>
-    public virtual ICollection<Request.Request> Requests { get; set; } = null!;
+    // /// <summary>
+    // /// List of grade compositions of the class.
+    // /// </summary>
+    // public virtual ICollection<Request.Request> Requests { get; set; } = null!;
 }

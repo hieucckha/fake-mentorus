@@ -52,7 +52,7 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
             await dbContext.Courses
                 .Include(c=>c.Creator)
                 .Include(c => c.GradeCompositions.OrderBy(e=>e.Order))
-                .Include(c => c.Requests)
+                // .Include(c => c.Requests)
                 .Include(c => c.Students).ThenInclude(cs => cs.Student)
                 .Include(c => c.Teachers).ThenInclude(ct => ct.Teacher)
                 .GetAsync(c => c.Id == request.CourseId, cancellationToken);
