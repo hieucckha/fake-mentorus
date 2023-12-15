@@ -47,6 +47,11 @@ public class Course
     /// </summary>
     public bool IsActivated { get; set; } = true;
 
+    /// <summary>
+    /// Is the class finished.
+    /// </summary>
+    public bool IsFinished { get; set; } = false;
+
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>
