@@ -14,6 +14,17 @@ export const useUpdateOrderGradeComposit = () => {
         },
     });
 }
+
+export const useUpdateGradeComposit = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (gradeCompositions:gradeCompositions[]) => classService.updateGradeComposit(gradeCompositions),
+        retry: false,
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['class'] });
+        },
+    });
+}
 export const useAddNewGradeComposit = () => {
     const queryClient = useQueryClient();
     return useMutation({
