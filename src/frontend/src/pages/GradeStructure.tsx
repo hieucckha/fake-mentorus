@@ -134,13 +134,15 @@ const RowDragable = (props: RowProps) => {
 };
 import { App } from "antd";
 import useClassDetail from "../hooks/useClassDetail";
-import { useUpdateOrderGradeComposit } from "../api/store/gradeComposits/mutation";
+import { useAddNewGradeComposit, useUpdateOrderGradeComposit } from "../api/store/gradeComposits/mutation";
 import { useJoinClassMutation } from "../api/store/class/mutation";
 const addKeyWithId= (array:any)=>{
 	let arrClone = array.map((item:any)=>({...item,key:item.id}))
 	return arrClone;
 }
 const GradeStructure: React.FC = () => {
+	const {id} = useParams()
+	if(!id) return null;
 	const { message,  } = App.useApp();
     const {data, isLoading } = useClassDetail();
 	const mutation = useUpdateOrderGradeComposit();
@@ -222,12 +224,11 @@ const GradeStructure: React.FC = () => {
 			name: `New gradeCompositions`,
 			description: `New gradeCompositions`,
 			gradeScale: 0,
-			courseId: 0,
+			courseId: +id,
 		};
 		mutationAddGradeColumn.mutate(newData,
 			{
 				onSuccess() { 
-					setGradeCompositions([...gradeCompositions]);
 				},
 				onError(error:any) {
 					console.log(error);

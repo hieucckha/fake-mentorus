@@ -197,7 +197,8 @@ const classService = {
         //         },
         //     ],
         // } }; 
-        return {...response.data,gradeCompositions:generateArray(16)};
+        return response.data;
+        // return {...response.data,gradeCompositions:generateArray(16)};
     },
     async joinClassByCode(classData:{code:string}) {
         const response = await axios.post('/api/course/join', {inviteCode: classData.code});
@@ -205,13 +206,13 @@ const classService = {
     },
     async updateOrderGradeComposit(gradeCompositions:gradeCompositions[]) {
         console.log("Call api update order grade")
-        const response = await axios.post('/api/grade-composition/sort', {gradeCompositions: gradeCompositions});
+        const response = await axios.patch('/api/grade-composition/sort', {gradeCompositions: gradeCompositions});
         return response.data;
     },
     async addNewGradeComposit(composition:newGradeCompositions) {
         console.log("addNewGradeComposit")
         const response = await axios.post('/api/grade-composition', {
-            gradeValue: composition.gradeScale,
+            gradeScale: composition.gradeScale,
             name: composition.name,
             courseId: composition.courseId,
             description: composition.description
