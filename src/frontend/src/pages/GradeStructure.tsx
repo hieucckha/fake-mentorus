@@ -158,6 +158,10 @@ const GradeStructure: React.FC = () => {
 	const [editingKey, setEditingKey] = useState(0);
 
 	const isEditing = (record: gradeCompositions) => record.id == editingKey;
+	function isGradeScaleSumValid(gradeScaleArray: gradeCompositions[]) {
+		const sum = gradeScaleArray.reduce((total, item) => total + (item.gradeScale || 0), 0);
+		return sum <= 100;
+	  }
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
 			activationConstraint: {
@@ -250,6 +254,19 @@ const GradeStructure: React.FC = () => {
 					...item,
 					...row,
 				});
+				console.log("Save")
+				console.log(newData)
+				if(!isGradeScaleSumValid(newData)){
+					Swal.fire({
+						title: "Error",
+						text: "Total Grade Scale > 100%",
+						icon: "error",
+						timer: 2000,
+						showCancelButton: false,
+						showConfirmButton: false,
+					})
+					return
+				}
 				mutationUpdateGradeColumn.mutate({
 					...item,
 					...row,
