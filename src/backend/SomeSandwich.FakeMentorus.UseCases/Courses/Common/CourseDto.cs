@@ -23,7 +23,12 @@ public class CourseDto
     /// <summary>
     /// Is the class activated.
     /// </summary>
-    public bool IsActivated { get; set; } = false;
+    public bool IsActivated { get; set; }
+
+    /// <summary>
+    /// Is the class finished.
+    /// </summary>
+    public bool IsFinished { get; set; }
 
     /// <summary>
     /// Course start date.
@@ -54,6 +59,4 @@ public class CourseDto
     ///   Number of teachers in the course.
     /// </summary>
     public int NumberOfTeachers { get; set; }
-
-
 }

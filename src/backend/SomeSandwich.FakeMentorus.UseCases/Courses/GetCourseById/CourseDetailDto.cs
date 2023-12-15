@@ -31,6 +31,12 @@ public class CourseDetailDto
     public bool IsActivated { get; set; } = false;
 
     /// <summary>
+    /// Is the class finished.
+    /// </summary>
+    public bool IsFinished { get; set; }
+
+
+    /// <summary>
     ///   Creator id of the class.
     /// </summary>
     public int? CreatorId { get; set; }
@@ -61,7 +67,7 @@ public class CourseDetailDto
     public DateTime UpdatedAt { get; set; }
 
     /// <summary>
-    ///Number of students in the course.
+    /// Number of students in the course.
     /// </summary>
     public int NumberOfStudents { get; set; }
 
