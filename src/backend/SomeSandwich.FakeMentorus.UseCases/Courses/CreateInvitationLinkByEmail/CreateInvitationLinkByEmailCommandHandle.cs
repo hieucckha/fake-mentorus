@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using NPOI.HSSF.Record;
 using Saritasa.Tools.Domain.Exceptions;
 using Saritasa.Tools.EntityFrameworkCore;
 using shortid.Configuration;
@@ -75,14 +76,23 @@ internal class CreateInvitationLinkByEmailCommandHandle :
 
         if (role is not null)
         {
-            throw role switch
+            switch (role)
             {
-                "Student" when course.Students.Any(s => s.StudentId == user.Id) => new DomainException(
-                    "User is already student in this course"),
-                "Teacher" when course.Teachers.Any(x => x.TeacherId == user.Id) => new DomainException(
-                    "User is already teacher in this course"),
-                _ => new DomainException("User is not student or teacher")
-            };
+                case "Student":
+                    if (course.Students.Any(s => s.StudentId == user.Id))
+                    {
+                        throw new DomainException("User is already student in this course");
+                    }
+                    break;
+                case "Teacher":
+                    if (course.Teachers.Any(s => s.TeacherId == user.Id))
+                    {
+                        throw new DomainException("User is already teacher in this course");
+                    }
+                    break;
+                default:
+                    throw new DomainException("User is not student or teacher");
+            }
         }
 
         var cacheKey = shortid.ShortId
