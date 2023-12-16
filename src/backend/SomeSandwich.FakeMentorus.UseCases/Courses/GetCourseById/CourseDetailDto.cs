@@ -6,7 +6,7 @@ using SomeSandwich.FakeMentorus.UseCases.Users.Common.Dtos;
 namespace SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseById;
 
 /// <summary>
-///Course detail DTO.
+/// Course detail DTO.
 /// </summary>
 public class CourseDetailDto
 {
@@ -31,12 +31,6 @@ public class CourseDetailDto
     public bool IsActivated { get; set; } = false;
 
     /// <summary>
-    /// Is the class finished.
-    /// </summary>
-    public bool IsFinished { get; set; }
-
-
-    /// <summary>
     ///   Creator id of the class.
     /// </summary>
     public int? CreatorId { get; set; }
@@ -44,7 +38,7 @@ public class CourseDetailDto
     /// <summary>
     ///   Creator of the course.
     /// </summary>
-    public String CreatorFullName { get; set; } = string.Empty;
+    public string CreatorFullName { get; set; } = string.Empty;
 
     /// <summary>
     /// Invite code for the course.
@@ -79,20 +73,20 @@ public class CourseDetailDto
     /// <summary>
     ///   List of student in the course.
     /// </summary>
-    public ICollection<UserDto> Students { get; set; }
+    public ICollection<UserDto> Students { get; set; } = null!;
 
     /// <summary>
     ///  List of teachers in the course.
     /// </summary>
-    public ICollection<UserDto> Teachers { get; set; }
+    public ICollection<UserDto> Teachers { get; set; } = null!;
 
     /// <summary>
     /// List of grade compositions in the course.
     /// </summary>
-    public ICollection<GradeCompositionDto> GradeCompositions { get; set; }
+    public ICollection<GradeCompositionDto> GradeCompositions { get; set; } = null!;
 
     /// <summary>
     /// List of requests in the course.
     /// </summary>
-    public ICollection<RequestDto> Requests { get; set; }
+    public ICollection<RequestDto> Requests { get; set; } = null!;
 }

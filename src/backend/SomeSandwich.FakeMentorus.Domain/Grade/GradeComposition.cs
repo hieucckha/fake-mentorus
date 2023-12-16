@@ -41,6 +41,11 @@ public class GradeComposition
     public int Order { get; set; }
 
     /// <summary>
+    /// Is Grade Composition final?.
+    /// </summary>
+    public bool IsFinal { get; set; } = false;
+
+    /// <summary>
     /// Grade Composition is deleted.
     /// </summary>
     public bool IsDeleted { get; set; }
