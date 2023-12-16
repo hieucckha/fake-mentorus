@@ -59,7 +59,6 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
                 .Include(c => c.Teachers).ThenInclude(ct => ct.Teacher)
                 .GetAsync(c => c.Id == request.CourseId, cancellationToken);
 
-
         logger.LogInformation("Course with id {CourseId} was found", request.CourseId);
         var result = mapper.Map<CourseDetailDto>(course);
         result.Requests = course.GradeCompositions.SelectMany(gc => gc.Grades)
