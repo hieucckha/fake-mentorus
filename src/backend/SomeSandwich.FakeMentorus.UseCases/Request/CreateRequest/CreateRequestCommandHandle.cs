@@ -50,8 +50,13 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
             throw new ForbiddenException("Only students can create requests");
         }
 
-        if (await dbContext.Requests.AnyAsync(r => r.StudentId == user.Id && r.GradeId == request.GradeId,
-                cancellationToken))
+        var grade = dbContext.Grades.FirstOrDefault(g => g.Id == request.GradeId);
+        if (grade == null)
+        {
+            throw new NotFoundException("Grade not found");
+        }
+
+        if (grade.IsRequested == true)
         {
             throw new DomainException("You already have request for this grade");
         }
@@ -61,10 +66,16 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
             StudentId = user.Id,
             GradeId = request.GradeId,
             Reason = request.Reason,
+            ExpectedGrade = request.ExceptedGrade,
+            CurrentGrade = grade.GradeValue,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
         await dbContext.Requests.AddAsync(requestEntity, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        grade.IsRequested = true;
+        grade.UpdatedAt = DateTime.UtcNow;
         await dbContext.SaveChangesAsync(cancellationToken);
 
         var result = mapper.Map<RequestDto>(requestEntity);
