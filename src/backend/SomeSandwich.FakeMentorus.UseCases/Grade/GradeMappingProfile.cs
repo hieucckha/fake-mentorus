@@ -14,5 +14,6 @@ public class GradeMappingProfile : Profile
     public GradeMappingProfile()
     {
         CreateMap<Domain.Grade.Grade, GradeDto>();
+        CreateMap<Domain.Grade.Grade, GradeCellDto>();
     }
 }

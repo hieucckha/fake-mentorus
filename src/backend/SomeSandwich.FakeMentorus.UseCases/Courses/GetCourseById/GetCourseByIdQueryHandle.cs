@@ -74,7 +74,9 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
 
         var listStudent = course.StudentInfos.Select(e => new
         {
-            StudentId = e.StudentId, UserId = e.Student.User.Id, Name = e.Name
+            StudentId = e.StudentId,
+            UserId = e?.Student?.User?.Id ?? null,
+            Name = e.Name
         }).ToList();
 
 
