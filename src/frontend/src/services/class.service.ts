@@ -1,6 +1,6 @@
 import axios from "../api/AxiosClient";
 
-import type { ClassDetail, ClassDto,ClassQuery } from "../api/store/class/interface";
+import type { ClassDetail, ClassDto,ClassQuery, gradeCompositions, newGradeCompositions } from "../api/store/class/interface";
 
 const classService = {
     async createClass(classData: ClassDto) {
@@ -198,9 +198,34 @@ const classService = {
         //     ],
         // } }; 
         return response.data;
+        // return {...response.data,gradeCompositions:generateArray(16)};
     },
     async joinClassByCode(classData:{code:string}) {
         const response = await axios.post('/api/course/join', {inviteCode: classData.code});
+        return response.data;
+    },
+    async updateOrderGradeComposit(gradeCompositions:gradeCompositions[]) {
+        console.log("Call api update order grade")
+        const response = await axios.patch('/api/grade-composition/sort', {gradeCompositions: gradeCompositions});
+        return response.data;
+    },
+    async updateGradeColumn(gradeComposition:gradeCompositions) {
+        console.log("Call api update column grade")
+        const response = await axios.put('/api/grade-composition/'+ gradeComposition.id, {
+            name: gradeComposition.name,
+            description: gradeComposition.description,
+            gradeScale: gradeComposition.gradeScale,
+        });
+        return response.data;
+    },
+    async addNewGradeComposit(composition:newGradeCompositions) {
+        console.log("addNewGradeComposit")
+        const response = await axios.post('/api/grade-composition', {
+            gradeScale: composition.gradeScale,
+            name: composition.name,
+            courseId: composition.courseId,
+            description: composition.description
+        });
         return response.data;
     },
 
@@ -212,13 +237,13 @@ function generateArray(count:number) {
     for (let i = 1; i <= count; i++) {
         result.push({
             id: i,
-            name: "Điểm miệng",
-            courseId: 1,
-            description: "Điểm miệng",
-            gradeScale: (i % 4 === 0) ? 40 : (i % 3 === 0) ? 30 : (i % 2 === 0) ? 20 : 10,
-            order: (i % 4 === 0) ? 4 : (i % 3 === 0) ? 3 : (i % 2 === 0) ? 2 : 1,
-            createdAt: "2021-10-11T09:23:56.000Z",
-            updatedAt: "2021-10-11T09:23:56.000Z",
+            name: `Edward ${i}`,
+            gradeScale: Math.ceil(100 - Math.random() * 30),
+            description: `London Park no. ${i}`,
+            courseId: 0,
+            order: i,
+            createdAt: "stringnumber",
+            updatedAt: "stringnumber",
         });
     }
 

@@ -1,20 +1,60 @@
-import React, { useState } from "react";
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
+import React, { useEffect, useState } from "react";
+import {
+	Form,
+	Input,
+	InputNumber,
+	Popconfirm,
+	Table,
+	Typography,
+	Button,
+} from "antd";
+import type { DragEndEvent } from "@dnd-kit/core";
+import {
+	DndContext,
+	PointerSensor,
+	useSensor,
+	useSensors,
+} from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+	SortableContext,
+	arrayMove,
+	useSortable,
+	verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import type { ColumnsType } from "antd/es/table";
+import { useParams } from "react-router-dom";
+import { classDetailQuery } from "../api/store/class/queries";
+import { gradeCompositions, newGradeCompositions } from "../api/store/class/interface";
+// interface Item extends gradeCompositions{
+// 	id: number;
+// 	name: string;
+// 	courseId: number;
+// 	description: string;
+// 	gradeScale: number;
+// 	order: number;
+// 	createdAt: string;
+// 	updatedAt: string;
+// 	// key: string;
+// 	// name: string;
+// 	// age: number;
+// 	// address: string;
+// }
 
-interface Item {
-	key: string;
-	name: string;
-	age: number;
-	address: string;
-}
-
-const originData: Item[] = [];
-for (let i = 0; i < 100; i++) {
+const originData: gradeCompositions[] = [];
+const fullPercent = 100;
+for (let i = 1; i < 5; i++) {
 	originData.push({
-		key: i.toString(),
+		id: i,
+		key: i,
 		name: `Edward ${i}`,
-		age: 32,
-		address: `London Park no. ${i}`,
+		gradeScale: Math.ceil(100 - Math.random() * 30),
+		description: `London Park no. ${i}`,
+		courseId: 0,
+		order: 0,
+		createdAt: "stringnumber",
+		updatedAt: "stringnumber",
 	});
 }
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
@@ -22,7 +62,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	dataIndex: string;
 	title: any;
 	inputType: "number" | "text";
-	record: Item;
+	record: gradeCompositions;
 	index: number;
 	children: React.ReactNode;
 }
@@ -38,7 +78,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
 	...restProps
 }) => {
 	const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-
 	return (
 		<td {...restProps}>
 			{editing ? (
@@ -60,41 +99,208 @@ const EditableCell: React.FC<EditableCellProps> = ({
 		</td>
 	);
 };
+interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+	"data-row-key": string;
+}
+const RowDragable = (props: RowProps) => {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({
+		id: props["data-row-key"],
+	});
 
-const App: React.FC = () => {
+	const style: React.CSSProperties = {
+		...props.style,
+		transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
+		transition,
+		cursor: "move",
+		...(isDragging ? { position: "relative", zIndex: 9999 } : {}),
+	};
+
+	return (
+		<tr
+			{...props}
+			ref={setNodeRef}
+			style={style}
+			{...attributes}
+			{...listeners}
+		/>
+	);
+};
+import { App } from "antd";
+import useClassDetail from "../hooks/useClassDetail";
+import { useAddNewGradeComposit, useUpdateGradeColumn, useUpdateOrderGradeComposit } from "../api/store/gradeComposits/mutation";
+import { useJoinClassMutation } from "../api/store/class/mutation";
+import Swal from "sweetalert2";
+const addKeyWithId= (array:any)=>{
+	let arrClone = array.map((item:any)=>({...item,key:item.id}))
+	return arrClone;
+}
+const GradeStructure: React.FC = () => {
+	const {id} = useParams()
+	if(!id) return null;
+	const { message,  } = App.useApp();
+    const {data, isLoading } = useClassDetail();
+	const mutation = useUpdateOrderGradeComposit();
+	const mutationAddGradeColumn = useAddNewGradeComposit();
+	const mutationUpdateGradeColumn = useUpdateGradeColumn();
+	// const {data, isLoading,error,isError} = classDetailQuery(id as string );
+	// if (isLoading) return <>Loading</>;
+	// if (isError) return <>{error}</>;
+
 	const [form] = Form.useForm();
-	const [data, setData] = useState(originData);
-	const [editingKey, setEditingKey] = useState("");
+	const [gradeCompositions, setGradeCompositions] = useState<gradeCompositions[]>([]);
+	const [editingKey, setEditingKey] = useState(0);
 
-	const isEditing = (record: Item) => record.key === editingKey;
+	const isEditing = (record: gradeCompositions) => record.id == editingKey;
+	function isGradeScaleSumValid(gradeScaleArray: gradeCompositions[]) {
+		const sum = gradeScaleArray.reduce((total, item) => total + (item.gradeScale || 0), 0);
+		return sum <= 100;
+	  }
+	const sensors = useSensors(
+		useSensor(PointerSensor, {
+			activationConstraint: {
+				// https://docs.dndkit.com/api-documentation/sensors/pointer#activation-constraints
+				distance: 1,
+			},
+		})
+	);
+	const reOrderArray = ()=>{
+		if (!Array.isArray(gradeCompositions) ) return;
+		const array = gradeCompositions.map((item,idx)=>{
+			return {
+				...item,
+				order: idx+1
+			}
+		})
+		console.log("Call api reindex")
+		console.log(array)
+		mutation.mutate(array,
+		{
+			onSuccess() { 
+			},
+			onError(error) {
+				console.log(error);
+			},
+		});
+		// setGradeCompositions(array)
+	}
+	useEffect(()=>{
+		console.log("gradeCompositions")
+		console.log(gradeCompositions)
+		if(gradeCompositions){
+			reOrderArray()
+		}
+	},[gradeCompositions])
+	useEffect(() => {
+		if (data) {
+			setGradeCompositions(addKeyWithId(data.gradeCompositions))
+		}
+	}, [data])
 
-	const edit = (record: Partial<Item> & { key: React.Key }) => {
-		form.setFieldsValue({ name: "", age: "", address: "", ...record });
-		setEditingKey(record.key);
+	if(isLoading) return <div>Loading...</div>;
+	
+	const onDragEnd = ({ active, over }: DragEndEvent) => {
+		if (active.id !== over?.id) {
+			setGradeCompositions((prev: gradeCompositions[]) => {
+				const activeIndex = prev.findIndex((i) => i.id === active.id);
+				const overIndex = prev.findIndex((i) => i.id === over?.id);
+				return arrayMove(prev, activeIndex, overIndex);
+			});
+			// save order
+		}
+	};
+	const edit = (record: Partial<gradeCompositions>) => {
+		form.setFieldsValue({ name: "", gradeScale: 0, ...record });
+		if (record.id) {
+			setEditingKey(record.id);
+		}
 	};
 
 	const cancel = () => {
-		setEditingKey("");
+		setEditingKey(0);
 	};
-
+	const handleAdd = () => {
+		const newData: newGradeCompositions = {
+			name: `New gradeCompositions`,
+			description: `New gradeCompositions`,
+			gradeScale: 0,
+			courseId: +id,
+		};
+		mutationAddGradeColumn.mutate(newData,
+			{
+				onSuccess() { 
+				},
+				onError(error:any) {
+					console.log(error);
+				},
+			})
+		
+		
+	};
 	const save = async (key: React.Key) => {
 		try {
-			const row = (await form.validateFields()) as Item;
-
-			const newData = [...data];
-			const index = newData.findIndex((item) => key === item.key);
+			const row = (await form.validateFields()) as gradeCompositions;
+			const newData = [...gradeCompositions];
+			const index = newData.findIndex((item) => key === item.id);
 			if (index > -1) {
 				const item = newData[index];
 				newData.splice(index, 1, {
 					...item,
 					...row,
 				});
-				setData(newData);
-				setEditingKey("");
+				console.log("Save")
+				console.log(newData)
+				if(!isGradeScaleSumValid(newData)){
+					Swal.fire({
+						title: "Error",
+						text: "Total Grade Scale > 100%",
+						icon: "error",
+						timer: 2000,
+						showCancelButton: false,
+						showConfirmButton: false,
+					})
+					return
+				}
+				mutationUpdateGradeColumn.mutate({
+					...item,
+					...row,
+				},{
+					onSuccess() { 
+						Swal.fire({
+							title: "Success",
+							text: "Save Grade Composition successfully",
+							icon: "success",
+							timer: 1000,
+							showCancelButton: false,
+							showConfirmButton: false,
+						})
+					},
+					onError(error:any) {
+						Swal.fire({
+							title: "Error",
+							text: "Some error happening",
+							icon: "error",
+							timer: 1000,
+							showCancelButton: false,
+							showConfirmButton: false,
+						})
+						console.log(error);
+					},
+				}
+				)
+				
+				setGradeCompositions(newData);
+				setEditingKey(0);
 			} else {
 				newData.push(row);
-				setData(newData);
-				setEditingKey("");
+				setGradeCompositions(newData);
+				setEditingKey(0);
 			}
 		} catch (errInfo) {
 			console.log("Validate Failed:", errInfo);
@@ -103,32 +309,26 @@ const App: React.FC = () => {
 
 	const columns = [
 		{
-			title: "name",
+			title: "Name",
 			dataIndex: "name",
-			width: "25%",
-			editable: true,
-		},
-		{
-			title: "age",
-			dataIndex: "age",
-			width: "15%",
-			editable: true,
-		},
-		{
-			title: "address",
-			dataIndex: "address",
 			width: "40%",
 			editable: true,
 		},
 		{
-			title: "operation",
+			title: "GradeScale",
+			dataIndex: "gradeScale",
+			width: "40%",
+			editable: true,
+		},
+		{
+			title: "Operation",
 			dataIndex: "operation",
-			render: (_: any, record: Item) => {
+			render: (_: any, record: gradeCompositions) => {
 				const editable = isEditing(record);
 				return editable ? (
 					<span>
 						<Typography.Link
-							onClick={() => save(record.key)}
+							onClick={() => save(record.id)}
 							style={{ marginRight: 8 }}
 						>
 							Save
@@ -139,7 +339,7 @@ const App: React.FC = () => {
 					</span>
 				) : (
 					<Typography.Link
-						disabled={editingKey !== ""}
+						disabled={editingKey !== 0}
 						onClick={() => edit(record)}
 					>
 						Edit
@@ -155,36 +355,59 @@ const App: React.FC = () => {
 		}
 		return {
 			...col,
-			onCell: (record: Item) => ({
-				record,
-				inputType: col.dataIndex === "age" ? "number" : "text",
-				dataIndex: col.dataIndex,
-				title: col.title,
-				editing: isEditing(record),
-			}),
+			onCell: (record: gradeCompositions) => {
+				return {
+					record,
+					inputType: col.dataIndex === "age" ? "number" : "text",
+					dataIndex: col.dataIndex,
+					title: col.title,
+					editing: isEditing(record),
+				};
+			},
 		};
 	});
-
+	
 	return (
 		<div className="w-full">
-			<Form form={form} component={false}>
-				<Table
-					components={{
-						body: {
-							cell: EditableCell,
-						},
-					}}
-					bordered
-					dataSource={data}
-					columns={mergedColumns}
-					rowClassName="editable-row"
-					pagination={{
-						onChange: cancel,
-					}}
-				/>
-			</Form>
+			<div className="row grid justify-items-end pl-5 pr-5">
+				<Button
+					onClick={handleAdd}
+					ghost
+					type="primary"
+					style={{ marginBottom: 16 }}
+				>
+					Add a row
+				</Button>
+			</div>
+			<DndContext
+				sensors={sensors}
+				modifiers={[restrictToVerticalAxis]}
+				onDragEnd={onDragEnd}
+			>
+				<SortableContext
+					// rowKey array
+					items={gradeCompositions.map((i) => i.id)}
+					strategy={verticalListSortingStrategy}
+				>
+					<Form form={form} component={false}>
+						<Table
+							components={{
+								body: {
+									cell: EditableCell,
+									row: RowDragable,
+								},
+							}}
+							bordered
+							dataSource={gradeCompositions}
+							columns={mergedColumns}
+							rowClassName="editable-row"
+							pagination={false}
+						/>
+					</Form>
+				</SortableContext>
+			</DndContext>
 		</div>
 	);
 };
 
-export default App;
+export default GradeStructure;
