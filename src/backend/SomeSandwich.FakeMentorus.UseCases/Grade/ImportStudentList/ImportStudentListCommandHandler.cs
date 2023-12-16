@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -59,20 +60,25 @@ internal class ImportStudentListCommandHandler : IRequestHandler<ImportStudentLi
 
         while (!string.IsNullOrEmpty(studentId) && !string.IsNullOrEmpty(studentName))
         {
-            var student = appDbContext.Students.FirstOrDefault(e => e.StudentId == studentId);
+            var student = await appDbContext.Students.FirstOrDefaultAsync(e => e.StudentId == studentId, cancellationToken);
             if (student is null)
             {
                 student = new Student { StudentId = studentId };
                 await appDbContext.Students.AddAsync(student, cancellationToken);
+
+                logger.LogInformation("Create student with id {studentId}", studentId);
             }
 
-            var studentInfo = appDbContext.StudentInfos.Where(e => e.CourseId == command.CourseId)
-                .FirstOrDefault(e => e.StudentId == studentId);
+            var studentInfo = await appDbContext.StudentInfos
+                .Where(e => e.CourseId == command.CourseId)
+                .FirstOrDefaultAsync(e => e.StudentId == studentId, cancellationToken);
 
             if (studentInfo is null)
             {
                 studentInfo = new StudentInfo { StudentId = studentId, Student = student, Name = studentName, CourseId = command.CourseId };
                 await appDbContext.StudentInfos.AddAsync(studentInfo, cancellationToken);
+
+                logger.LogInformation("Create student information in course id {courseId} with id {studentId}, name {studentName}", command.CourseId, studentId, studentName);
             }
 
             rowIndex++;
