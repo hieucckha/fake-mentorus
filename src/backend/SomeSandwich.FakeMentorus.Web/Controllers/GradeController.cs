@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentGradeTemplate;
+using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentListTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Grade.ImportStudentGrade;
+using SomeSandwich.FakeMentorus.UseCases.Grade.ImportStudentList;
 using SomeSandwich.FakeMentorus.Web.Requests;
 
 namespace SomeSandwich.FakeMentorus.Web.Controllers;
@@ -25,6 +27,36 @@ public class GradeController
     public GradeController(IMediator mediator)
     {
         this.mediator = mediator;
+    }
+
+    /// <summary>
+    /// Generate student list template for import student to course.
+    /// </summary>
+    /// <param name="command">Generate student list template command.</param>
+    /// <param name="cancellationToken">Token to cancel the request.</param>
+    /// <returns></returns>
+    [HttpGet("student/tempalte")]
+    public async Task<ActionResult> GenerateStudentListTemplate([FromQuery] GenerateStudentListTemplateCommand command, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(command, cancellationToken);
+
+        result.FileContent.Position = 0;
+
+        return new FileStreamResult(result.FileContent, result.Mimetype) { FileDownloadName = result.FileName };
+    }
+
+    /// <summary>
+    /// Imports a student list for a specific course from a template.
+    /// </summary>
+    /// <param name="id">Id of course.</param>
+    /// <param name="request">Request that hold the sheet of student list.</param>
+    /// <param name="cancellationToken">Token to cancel the request.</param>
+    [HttpPost("student/template/{id:int}/import")]
+    public async Task ImportStudentList([FromRoute] int id, [FromForm] ImportStudentListRequest request, CancellationToken cancellationToken)
+    {
+        var command = new ImportStudentListCommand { CourseId = id, FileContent = request.File.OpenReadStream() };
+
+        await mediator.Send(command, cancellationToken);
     }
 
     /// <summary>
