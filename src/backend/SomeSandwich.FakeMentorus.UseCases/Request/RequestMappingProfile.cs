@@ -1,5 +1,6 @@
 using AutoMapper;
 using SomeSandwich.FakeMentorus.UseCases.Request.Common;
+using SomeSandwich.FakeMentorus.UseCases.Request.CreateRequest;
 
 namespace SomeSandwich.FakeMentorus.UseCases.Request;
 

@@ -5,38 +5,44 @@ namespace SomeSandwich.FakeMentorus.UseCases.Request.Common;
 /// </summary>
 public class RequestDto
 {
+
     /// <summary>
-    /// Request id.
+    /// The id of the request.
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// Course id.
+    /// The id of the grade to request.
     /// </summary>
-    public int CourseId { get; set; }
+    public int GradeId { get; set; }
 
     /// <summary>
-    /// Student id.
-    /// </summary>
-    public int StudentId { get; set; }
-
-    /// <summary>
-    /// Student name.
-    /// </summary>
-    public string StudentName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Request detail.
+    /// Reason of the request.
     /// </summary>
     public string Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// Created at.
+    /// The id of the student who made the request.
+    /// </summary>
+    public int StudentId { get; set; }
+
+    /// <summary>
+    /// The name of the student who made the request.
+    /// </summary>
+    public string StudentName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The status of the request.
+    /// </summary>
+    public int Status { get; set; }
+
+    /// <summary>
+    /// The date when the request was created.
     /// </summary>
     public DateTime CreatedAt { get; set; }
 
     /// <summary>
-    /// Updated at.
+    /// The date when the request was updated.
     /// </summary>
     public DateTime UpdatedAt { get; set; }
 }

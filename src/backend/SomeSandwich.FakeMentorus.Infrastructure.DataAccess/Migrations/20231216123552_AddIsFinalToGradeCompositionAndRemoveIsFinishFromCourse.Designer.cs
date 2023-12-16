@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SomeSandwich.FakeMentorus.Infrastructure.DataAccess;
@@ -11,9 +12,11 @@ using SomeSandwich.FakeMentorus.Infrastructure.DataAccess;
 namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231216123552_AddIsFinalToGradeCompositionAndRemoveIsFinishFromCourse")]
+    partial class AddIsFinalToGradeCompositionAndRemoveIsFinishFromCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -448,7 +451,8 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentId")
+                        .IsUnique();
 
                     b.ToTable("StudentInfos");
                 });
@@ -780,14 +784,14 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
             modelBuilder.Entity("SomeSandwich.FakeMentorus.Domain.Student.StudentInfo", b =>
                 {
                     b.HasOne("SomeSandwich.FakeMentorus.Domain.Course.Course", "Course")
-                        .WithMany("StudentInfos")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SomeSandwich.FakeMentorus.Domain.Student.Student", "Student")
-                        .WithMany("StudentInfo")
-                        .HasForeignKey("StudentId")
+                        .WithOne("StudentInfo")
+                        .HasForeignKey("SomeSandwich.FakeMentorus.Domain.Student.StudentInfo", "StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -810,8 +814,6 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
                 {
                     b.Navigation("GradeCompositions");
 
-                    b.Navigation("StudentInfos");
-
                     b.Navigation("Students");
 
                     b.Navigation("Teachers");
@@ -830,7 +832,8 @@ namespace SomeSandwich.FakeMentorus.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("SomeSandwich.FakeMentorus.Domain.Student.Student", b =>
                 {
-                    b.Navigation("StudentInfo");
+                    b.Navigation("StudentInfo")
+                        .IsRequired();
 
                     b.Navigation("User")
                         .IsRequired();

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SomeSandwich.FakeMentorus.Domain.Grade;
+using SomeSandwich.FakeMentorus.Domain.Student;
 using SomeSandwich.FakeMentorus.Domain.Users;
 
 namespace SomeSandwich.FakeMentorus.Domain.Course;
@@ -47,11 +48,6 @@ public class Course
     /// </summary>
     public bool IsActivated { get; set; } = true;
 
-    /// <summary>
-    /// Is the class finished.
-    /// </summary>
-    public bool IsFinished { get; set; } = false;
-
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>
@@ -87,7 +83,7 @@ public class Course
     public virtual ICollection<GradeComposition> GradeCompositions { get; set; } = null!;
 
     /// <summary>
-    /// List of grade compositions of the class.
+    /// List of student information of the class.
     /// </summary>
-    public virtual ICollection<Request.Request> Requests { get; set; } = null!;
+    public virtual ICollection<StudentInfo> StudentInfos { get; set; } = null!;
 }

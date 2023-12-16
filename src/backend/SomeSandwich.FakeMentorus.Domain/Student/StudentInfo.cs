@@ -28,7 +28,7 @@ public class StudentInfo
     /// </summary>
     public int CourseId { get; set; }
 
-    /// <summary>
+    /// <summary
     /// Course.
     /// </summary>
     public Course.Course Course { get; set; } = null!;

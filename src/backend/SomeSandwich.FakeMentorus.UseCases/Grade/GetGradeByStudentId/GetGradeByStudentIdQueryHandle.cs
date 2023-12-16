@@ -49,11 +49,6 @@ public class GetGradeByStudentIdQueryHandle : IRequestHandler<GetGradeByStudentI
             throw new NotFoundException("Student is not assigned to this course.");
         }
 
-        if (course.IsFinished == false)
-        {
-            throw new NotFoundException("Course is not finished.");
-        }
-
         var grades = await dbContext.Grades
             .Include(x => x.Student)
             .Include(x => x.GradeComposition)
