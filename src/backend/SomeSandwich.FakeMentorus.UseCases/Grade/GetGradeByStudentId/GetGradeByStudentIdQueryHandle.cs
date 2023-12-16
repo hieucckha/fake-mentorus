@@ -60,7 +60,8 @@ public class GetGradeByStudentIdQueryHandle : IRequestHandler<GetGradeByStudentI
         {
             GradeCompositionId = x.Id,
             GradeCompositionName = x.Name ?? "",
-            GradeValue = grades.FirstOrDefault(g => g.GradeCompositionId == x.Id)!.GradeValue
+            GradeValue = grades.FirstOrDefault(g => g.GradeCompositionId == x.Id)!.GradeValue,
+            IsRequested = grades.FirstOrDefault(g => g.GradeCompositionId == x.Id)!.IsRequested
         }).ToList();
 
         var result = new GetGradeByStudentIdDto
