@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SomeSandwich.FakeMentorus.UseCases.Grade.Common;
+using SomeSandwich.FakeMentorus.UseCases.Grade.CreateGrade;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentGradeTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentListTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Grade.ImportStudentGrade;
@@ -36,7 +38,8 @@ public class GradeController
     /// <param name="cancellationToken">Token to cancel the request.</param>
     /// <returns></returns>
     [HttpGet("student/tempalte")]
-    public async Task<ActionResult> GenerateStudentListTemplate([FromQuery] GenerateStudentListTemplateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult> GenerateStudentListTemplate([FromQuery] GenerateStudentListTemplateCommand command,
+        CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
 
@@ -52,7 +55,8 @@ public class GradeController
     /// <param name="request">Request that hold the sheet of student list.</param>
     /// <param name="cancellationToken">Token to cancel the request.</param>
     [HttpPost("student/template/{id:int}/import")]
-    public async Task ImportStudentList([FromRoute] int id, [FromForm] ImportStudentListRequest request, CancellationToken cancellationToken)
+    public async Task ImportStudentList([FromRoute] int id, [FromForm] ImportStudentListRequest request,
+        CancellationToken cancellationToken)
     {
         var command = new ImportStudentListCommand { CourseId = id, FileContent = request.File.OpenReadStream() };
 
@@ -65,7 +69,8 @@ public class GradeController
     /// <param name="command">Command generate student grade template.</param>
     /// <param name="cancellationToken">Token to cancel the request.</param>
     [HttpGet("template")]
-    public async Task<ActionResult> GenerateStudentGradeTemplate([FromQuery] GenerateStudentGradeTemplateCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult> GenerateStudentGradeTemplate(
+        [FromQuery] GenerateStudentGradeTemplateCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
         result.FileContent.Position = 0;
@@ -80,10 +85,23 @@ public class GradeController
     /// <param name="request">Request that hold the sheet of student grade.</param>
     /// <param name="cancellationToken">Token to cancel the request.</param>
     [HttpPost("template/{id:int}/import")]
-    public async Task ImportStudentGrade([FromRoute] int id, [FromForm] ImportStudentGradeRequest request, CancellationToken cancellationToken)
+    public async Task ImportStudentGrade([FromRoute] int id, [FromForm] ImportStudentGradeRequest request,
+        CancellationToken cancellationToken)
     {
         var command = new ImportStudentGradeCommand { CourseId = id, FileContent = request.File.OpenReadStream() };
 
         await mediator.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// Add grade to student.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost("add")]
+    public async Task<GradeDto> AddGrade([FromBody] CreateGradeCommand command, CancellationToken cancellationToken)
+    {
+        return await mediator.Send(command, cancellationToken);
     }
 }
