@@ -53,7 +53,7 @@ export interface ClassDetail {
 	numberOfStudents: number;
 	numberTeacher: number;
 	teachers: Teacher[];
-	student: Student[];
+	students: Student[];
 	gradeCompositions: gradeCompositions[];
 	requests: requests[];
 

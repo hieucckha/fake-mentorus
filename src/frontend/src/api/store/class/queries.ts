@@ -18,4 +18,5 @@ export const classDetailQuery = (id:string): UseQueryResult<ClassDetail> => {
 	});
 	return queryData;
 }
+
 export default classQuery;

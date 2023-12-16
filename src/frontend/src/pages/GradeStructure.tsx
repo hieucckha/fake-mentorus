@@ -7,6 +7,7 @@ import {
 	Table,
 	Typography,
 	Button,
+	FloatButton,
 } from "antd";
 import type { DragEndEvent } from "@dnd-kit/core";
 import {
@@ -26,21 +27,10 @@ import { CSS } from "@dnd-kit/utilities";
 import type { ColumnsType } from "antd/es/table";
 import { useParams } from "react-router-dom";
 import { classDetailQuery } from "../api/store/class/queries";
-import { gradeCompositions, newGradeCompositions } from "../api/store/class/interface";
-// interface Item extends gradeCompositions{
-// 	id: number;
-// 	name: string;
-// 	courseId: number;
-// 	description: string;
-// 	gradeScale: number;
-// 	order: number;
-// 	createdAt: string;
-// 	updatedAt: string;
-// 	// key: string;
-// 	// name: string;
-// 	// age: number;
-// 	// address: string;
-// }
+import {
+	gradeCompositions,
+	newGradeCompositions,
+} from "../api/store/class/interface";
 
 const originData: gradeCompositions[] = [];
 const fullPercent = 100;
@@ -134,18 +124,23 @@ const RowDragable = (props: RowProps) => {
 };
 import { App } from "antd";
 import useClassDetail from "../hooks/useClassDetail";
-import { useAddNewGradeComposit, useUpdateGradeColumn, useUpdateOrderGradeComposit } from "../api/store/gradeComposits/mutation";
+import {
+	useAddNewGradeComposit,
+	useUpdateGradeColumn,
+	useUpdateOrderGradeComposit,
+} from "../api/store/gradeComposits/mutation";
 import { useJoinClassMutation } from "../api/store/class/mutation";
 import Swal from "sweetalert2";
-const addKeyWithId= (array:any)=>{
-	let arrClone = array.map((item:any)=>({...item,key:item.id}))
+import { CommentOutlined, CustomerServiceOutlined } from "@ant-design/icons";
+const addKeyWithId = (array: any) => {
+	let arrClone = array.map((item: any) => ({ ...item, key: item.id }));
 	return arrClone;
-}
+};
 const GradeStructure: React.FC = () => {
-	const {id} = useParams()
-	if(!id) return null;
-	const { message,  } = App.useApp();
-    const {data, isLoading } = useClassDetail();
+	const { id } = useParams();
+	if (!id) return null;
+	const { message } = App.useApp();
+	const { data, isLoading } = useClassDetail();
 	const mutation = useUpdateOrderGradeComposit();
 	const mutationAddGradeColumn = useAddNewGradeComposit();
 	const mutationUpdateGradeColumn = useUpdateGradeColumn();
@@ -154,14 +149,19 @@ const GradeStructure: React.FC = () => {
 	// if (isError) return <>{error}</>;
 
 	const [form] = Form.useForm();
-	const [gradeCompositions, setGradeCompositions] = useState<gradeCompositions[]>([]);
+	const [gradeCompositions, setGradeCompositions] = useState<
+		gradeCompositions[]
+	>([]);
 	const [editingKey, setEditingKey] = useState(0);
 
 	const isEditing = (record: gradeCompositions) => record.id == editingKey;
 	function isGradeScaleSumValid(gradeScaleArray: gradeCompositions[]) {
-		const sum = gradeScaleArray.reduce((total, item) => total + (item.gradeScale || 0), 0);
+		const sum = gradeScaleArray.reduce(
+			(total, item) => total + (item.gradeScale || 0),
+			0
+		);
 		return sum <= 100;
-	  }
+	}
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
 			activationConstraint: {
@@ -170,41 +170,39 @@ const GradeStructure: React.FC = () => {
 			},
 		})
 	);
-	const reOrderArray = ()=>{
-		if (!Array.isArray(gradeCompositions) ) return;
-		const array = gradeCompositions.map((item,idx)=>{
+	const reOrderArray = () => {
+		if (!Array.isArray(gradeCompositions)) return;
+		const array = gradeCompositions.map((item, idx) => {
 			return {
 				...item,
-				order: idx+1
-			}
-		})
-		console.log("Call api reindex")
-		console.log(array)
-		mutation.mutate(array,
-		{
-			onSuccess() { 
-			},
+				order: idx + 1,
+			};
+		});
+		console.log("Call api reindex");
+		console.log(array);
+		mutation.mutate(array, {
+			onSuccess() {},
 			onError(error) {
 				console.log(error);
 			},
 		});
 		// setGradeCompositions(array)
-	}
-	useEffect(()=>{
-		console.log("gradeCompositions")
-		console.log(gradeCompositions)
-		if(gradeCompositions){
-			reOrderArray()
+	};
+	useEffect(() => {
+		console.log("gradeCompositions");
+		console.log(gradeCompositions);
+		if (gradeCompositions) {
+			reOrderArray();
 		}
-	},[gradeCompositions])
+	}, [gradeCompositions]);
 	useEffect(() => {
 		if (data) {
-			setGradeCompositions(addKeyWithId(data.gradeCompositions))
+			setGradeCompositions(addKeyWithId(data.gradeCompositions));
 		}
-	}, [data])
+	}, [data]);
 
-	if(isLoading) return <div>Loading...</div>;
-	
+	if (isLoading) return <div>Loading...</div>;
+
 	const onDragEnd = ({ active, over }: DragEndEvent) => {
 		if (active.id !== over?.id) {
 			setGradeCompositions((prev: gradeCompositions[]) => {
@@ -232,16 +230,12 @@ const GradeStructure: React.FC = () => {
 			gradeScale: 0,
 			courseId: +id,
 		};
-		mutationAddGradeColumn.mutate(newData,
-			{
-				onSuccess() { 
-				},
-				onError(error:any) {
-					console.log(error);
-				},
-			})
-		
-		
+		mutationAddGradeColumn.mutate(newData, {
+			onSuccess() {},
+			onError(error: any) {
+				console.log(error);
+			},
+		});
 	};
 	const save = async (key: React.Key) => {
 		try {
@@ -254,9 +248,9 @@ const GradeStructure: React.FC = () => {
 					...item,
 					...row,
 				});
-				console.log("Save")
-				console.log(newData)
-				if(!isGradeScaleSumValid(newData)){
+				console.log("Save");
+				console.log(newData);
+				if (!isGradeScaleSumValid(newData)) {
 					Swal.fire({
 						title: "Error",
 						text: "Total Grade Scale > 100%",
@@ -264,37 +258,39 @@ const GradeStructure: React.FC = () => {
 						timer: 2000,
 						showCancelButton: false,
 						showConfirmButton: false,
-					})
-					return
+					});
+					return;
 				}
-				mutationUpdateGradeColumn.mutate({
-					...item,
-					...row,
-				},{
-					onSuccess() { 
-						Swal.fire({
-							title: "Success",
-							text: "Save Grade Composition successfully",
-							icon: "success",
-							timer: 1000,
-							showCancelButton: false,
-							showConfirmButton: false,
-						})
+				mutationUpdateGradeColumn.mutate(
+					{
+						...item,
+						...row,
 					},
-					onError(error:any) {
-						Swal.fire({
-							title: "Error",
-							text: "Some error happening",
-							icon: "error",
-							timer: 1000,
-							showCancelButton: false,
-							showConfirmButton: false,
-						})
-						console.log(error);
-					},
-				}
-				)
-				
+					{
+						onSuccess() {
+							Swal.fire({
+								title: "Success",
+								text: "Save Grade Composition successfully",
+								icon: "success",
+								timer: 1000,
+								showCancelButton: false,
+								showConfirmButton: false,
+							});
+						},
+						onError(error: any) {
+							Swal.fire({
+								title: "Error",
+								text: "Some error happening",
+								icon: "error",
+								timer: 1000,
+								showCancelButton: false,
+								showConfirmButton: false,
+							});
+							console.log(error);
+						},
+					}
+				);
+
 				setGradeCompositions(newData);
 				setEditingKey(0);
 			} else {
@@ -366,9 +362,10 @@ const GradeStructure: React.FC = () => {
 			},
 		};
 	});
-	
+
 	return (
 		<div className="w-full">
+			
 			<div className="row grid justify-items-end pl-5 pr-5">
 				<Button
 					onClick={handleAdd}
