@@ -35,7 +35,7 @@ internal class GenerateStudentListTemplateCommandHandler : IRequestHandler<Gener
 
         var headerRow = gradeSheet.CreateRow(0);
 
-        var studentHeader = new string[] { "Student Id", "Student Name" };
+        var studentHeader = new[] { "Student Id", "Student Name" };
         for (var i = 0; i < studentHeader.Length; ++i)
         {
             headerRow.CreateCell(i).SetCellValue(studentHeader[i]);
