@@ -65,7 +65,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
             if (await appDbContext.Users.AnyAsync(e => e.StudentId == command.StudentId, cancellationToken))
             {
                 logger.LogError($"Student with id {command.StudentId} already exists.");
-                throw new ArgumentException($"Student with id {command.StudentId} already exists.");
+                throw new DomainException($"Student with id {command.StudentId} already exists.");
             }
 
             user.StudentId = command.StudentId;

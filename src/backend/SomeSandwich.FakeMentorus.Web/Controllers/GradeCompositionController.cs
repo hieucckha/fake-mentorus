@@ -76,25 +76,25 @@ public class GradeCompositionController
         await mediator.Send(command, cancellationToken);
     }
 
-    /// <summary>
-    /// Add student grade.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="studentId"></param>
-    /// <param name="request"></param>
-    /// <param name="cancellationToken"></param>
-    [HttpPost("{id:int}/students/{studentId:int}")]
-    [Authorize]
-    public async Task AddGrade([FromRoute] int id, [FromRoute] int studentId,
-        [FromBody] AddGradeRequest request, CancellationToken cancellationToken)
-    {
-        await mediator.Send(
-            new CreateGradeCommand()
-            {
-                GradeCompositionId = id, StudentId = studentId, GradeValue = request.GradeValue
-            },
-            cancellationToken);
-    }
+    // /// <summary>
+    // /// Add student grade.
+    // /// </summary>
+    // /// <param name="id"></param>
+    // /// <param name="studentId"></param>
+    // /// <param name="request"></param>
+    // /// <param name="cancellationToken"></param>
+    // [HttpPost("{id:int}/students/{studentId:int}")]
+    // [Authorize]
+    // public async Task AddGrade([FromRoute] int id, [FromRoute] string studentId,
+    //     [FromBody] AddGradeRequest request, CancellationToken cancellationToken)
+    // {
+    //     await mediator.Send(
+    //         new CreateGradeCommand()
+    //         {
+    //             GradeCompositionId = id, StudentId = studentId, GradeValue = request.GradeValue
+    //         },
+    //         cancellationToken);
+    // }
 
     /// <summary>
     /// Sort grade composition.

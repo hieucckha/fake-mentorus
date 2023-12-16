@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SomeSandwich.FakeMentorus.UseCases.Request.Common;
+using SomeSandwich.FakeMentorus.UseCases.Request.CreateRequest;
 
 namespace SomeSandwich.FakeMentorus.Web.Controllers;
 
@@ -22,11 +24,17 @@ public class RequestController
     {
         this.mediator = mediator;
     }
-    //
-    // [HttpPost]
-    // [Authorize]
-    // public async Task<int> Create(CreateGradeCompositionCommand command, CancellationToken cancellationToken)
-    // {
-    //     return await mediator.Send(command, cancellationToken);
-    // }
+
+    /// <summary>
+    /// Create request.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [Authorize]
+    public async Task<RequestDto> CreateRequest(CreateRequestCommand command)
+    {
+        var result = await mediator.Send(command);
+        return result;
+    }
 }
