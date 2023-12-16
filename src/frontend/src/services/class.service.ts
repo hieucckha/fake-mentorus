@@ -61,6 +61,14 @@ const classService = {
             throw new Error("classId is required");
         const response = await axios.get(`/api/grade/template`, {params: {courseId: classId}, responseType: 'blob'});
         return response.data;
+    },
+    async uploadGradeFile(classId:string, file:File) {
+        if(!classId || classId === "") 
+            throw new Error("classId is required");
+        const formData = new FormData();
+        formData.append("file", file);
+        const response = await axios.post(`/api/grade/template/${classId}/import`, formData, {headers: {'Content-Type': 'multipart/form-data'}});
+        return response.data;
     }
 
 };

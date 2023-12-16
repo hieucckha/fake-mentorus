@@ -4,14 +4,17 @@ import {
 	PieChartOutlined,
 	UploadOutlined,
 } from "@ant-design/icons";
-import { App, Dropdown, MenuProps } from "antd";
+import { App, Button, Dropdown, MenuProps, Upload, message } from "antd";
 import React from "react";
 import { useLocation, Link, useParams, Outlet } from "react-router-dom";
 import classService from "../services/class.service";
 import fileDownload from "js-file-download";
-import { AxiosError } from "axios";
+ 
 
 const ClassLayout: React.FC = (): JSX.Element => {
+	const config = {
+		baseUrl: import.meta.env['VITE_API_URL']
+	}
 	const location = useLocation();
 	const { id } = useParams<{ id: string }>();
 	const { notification } = App.useApp();
@@ -19,6 +22,24 @@ const ClassLayout: React.FC = (): JSX.Element => {
 	const classworkUrl = `/class/${id}/work-class`;
 	const gradeStructureUrl = `/class/${id}/grade-structure`;
 	const gradeUrl = `/class/${id}/grade`;
+	
+	const props = {
+    name: 'file',
+    action: `${config.baseUrl}/api/grade/template/${id}/import`,
+    headers: {
+      authorization: 'authorization-text',
+    },
+    onChange(info: any) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
 
 	const handleDownloadTemplate = async () => {
 		try {
@@ -26,22 +47,11 @@ const ClassLayout: React.FC = (): JSX.Element => {
 			fileDownload(blobData, "template.xlsx");
 		} catch (error) {
 			notification.error({
-        message: "Download template failed",
-        description: "Something went wrong",
-      });
+				message: "Download template failed",
+				description: "Something went wrong",
+			});
 		}
 	};
-  const handleUpload = async () => {
-    try {
-      const blobData = await classService.downloadTemplate(id ?? "");
-      fileDownload(blobData, "template.xlsx");
-    } catch (error) {
-      notification.error({
-        message: "Download template failed",
-        description: "Something went wrong",
-      });
-    }
-  }
 
 	const items: MenuProps["items"] = [
 		{
@@ -49,17 +59,39 @@ const ClassLayout: React.FC = (): JSX.Element => {
 			label: (
 				<a onClick={handleDownloadTemplate}>
 					<DownloadOutlined className="pr-3" />
-					Download template
+					Download template grade
 				</a>
 			),
 		},
 		{
 			key: "2",
 			label: (
-				<a onClick={handleUpload}>
-					<UploadOutlined className="pr-3" />
-					Import grade
+				<Upload {...props}>
+					<a >
+						<UploadOutlined className="pr-3" />
+						Import grade
+					</a>
+				</Upload>
+			),
+		},
+		{
+			key: "3",
+			label: (
+				<a onClick={handleDownloadTemplate}>
+					<DownloadOutlined className="pr-3" />
+					Download list student
 				</a>
+			),
+		},
+		{
+			key: "4",
+			label: (
+				<Upload {...props}>
+					<a >
+						<UploadOutlined className="pr-3" />
+						Import grade
+					</a>
+				</Upload>
 			),
 		},
 	];
