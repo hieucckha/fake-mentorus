@@ -4,7 +4,7 @@ import {
 	PieChartOutlined,
 	UploadOutlined,
 } from "@ant-design/icons";
-import { App, Button, Dropdown, MenuProps, Upload, message } from "antd";
+import { App, Dropdown, MenuProps, Upload, message } from "antd";
 import React from "react";
 import { useLocation, Link, useParams, Outlet } from "react-router-dom";
 import classService from "../services/class.service";

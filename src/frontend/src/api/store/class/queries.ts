@@ -6,7 +6,7 @@ const classQuery = (user_id:number): UseQueryResult<ClassQuery[]> => {
 	const queryData = useQuery({
 		queryKey: ["classes"],
 		queryFn: () => classService.getAllClass(user_id),
-		enabled: !!user_id,
+		enabled: user_id !== -1,
 	});
 	return queryData;
 };

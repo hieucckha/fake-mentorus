@@ -1,5 +1,5 @@
 import { useState, type FC } from "react";
-import { Button, Label, TextInput } from "flowbite-react";
+import { Button  } from "flowbite-react";
 import { UserOutlined } from '@ant-design/icons';
 import { useInviteClassMutationByEmail } from "../api/store/class/mutation";
 import { App, Flex, Input, Modal } from "antd";

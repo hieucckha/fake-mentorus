@@ -1,6 +1,4 @@
 import { FC } from "react";
-import { classDetailQuery } from "../../api/store/class/queries";
-import {  useParams } from "react-router-dom";
 import moment from "moment";
 import { App } from "antd";
 import useClassDetail from "../../hooks/useClassDetail";

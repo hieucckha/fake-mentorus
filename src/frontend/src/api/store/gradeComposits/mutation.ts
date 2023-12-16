@@ -5,7 +5,6 @@ import { gradeCompositions } from "./interface";
 import { newGradeCompositions } from "../class/interface";
 
 export const useUpdateOrderGradeComposit = () => {
-    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (gradeCompositions:gradeCompositions[]) => classService.updateOrderGradeComposit(gradeCompositions),
         retry: false,
@@ -16,7 +15,6 @@ export const useUpdateOrderGradeComposit = () => {
 }
 
 export const useUpdateGradeColumn = () => {
-    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (gradeComposition:gradeCompositions) => classService.updateGradeColumn(gradeComposition),
         retry: false,

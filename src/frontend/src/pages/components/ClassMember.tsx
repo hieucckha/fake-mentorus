@@ -1,4 +1,4 @@
-import { MenuProps, Flex, Space, Avatar } from "antd";
+import {  Flex, Space, Avatar } from "antd";
 import { UserProfileDto } from "../../api/store/auth/interface";
 import { FC } from "react";
 
@@ -9,12 +9,8 @@ interface MemberCardProps extends Partial<UserProfileDto> {
   className?: string;
 }
 const ClassMember: FC<MemberCardProps> = ({
-  id,
   fullName,
-  isOwner = false,
   className = 'text-base px-4 h-[52px] md:h-[64px]',
-  isStudent = false,
-  isTeacher = false,
 }) => {
 
   return (

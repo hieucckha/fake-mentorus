@@ -7,7 +7,6 @@ import {
 	Table,
 	Typography,
 	Button,
-	FloatButton,
 } from "antd";
 import type { DragEndEvent } from "@dnd-kit/core";
 import {
@@ -24,16 +23,14 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import type { ColumnsType } from "antd/es/table";
 import { useParams } from "react-router-dom";
-import { classDetailQuery } from "../api/store/class/queries";
 import {
 	gradeCompositions,
 	newGradeCompositions,
 } from "../api/store/class/interface";
 
 const originData: gradeCompositions[] = [];
-const fullPercent = 100;
+// const fullPercent = 100;
 for (let i = 1; i < 5; i++) {
 	originData.push({
 		id: i,
@@ -122,16 +119,13 @@ const RowDragable = (props: RowProps) => {
 		/>
 	);
 };
-import { App } from "antd";
 import useClassDetail from "../hooks/useClassDetail";
 import {
 	useAddNewGradeComposit,
 	useUpdateGradeColumn,
 	useUpdateOrderGradeComposit,
 } from "../api/store/gradeComposits/mutation";
-import { useJoinClassMutation } from "../api/store/class/mutation";
 import Swal from "sweetalert2";
-import { CommentOutlined, CustomerServiceOutlined } from "@ant-design/icons";
 const addKeyWithId = (array: any) => {
 	let arrClone = array.map((item: any) => ({ ...item, key: item.id }));
 	return arrClone;
@@ -139,7 +133,7 @@ const addKeyWithId = (array: any) => {
 const GradeStructure: React.FC = () => {
 	const { id } = useParams();
 	if (!id) return null;
-	const { message } = App.useApp();
+	// const { message } = App.useApp();
 	const { data, isLoading } = useClassDetail();
 	const mutation = useUpdateOrderGradeComposit();
 	const mutationAddGradeColumn = useAddNewGradeComposit();
