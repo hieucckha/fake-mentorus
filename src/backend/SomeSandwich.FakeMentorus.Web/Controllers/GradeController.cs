@@ -5,6 +5,7 @@ using SomeSandwich.FakeMentorus.UseCases.Grade.Common;
 using SomeSandwich.FakeMentorus.UseCases.Grade.CreateGrade;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentGradeTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentListTemplate;
+using SomeSandwich.FakeMentorus.UseCases.Grade.GetAllGradeByCourseId;
 using SomeSandwich.FakeMentorus.UseCases.Grade.ImportStudentGrade;
 using SomeSandwich.FakeMentorus.UseCases.Grade.ImportStudentList;
 using SomeSandwich.FakeMentorus.Web.Requests;
@@ -91,6 +92,19 @@ public class GradeController
         var command = new ImportStudentGradeCommand { CourseId = id, FileContent = request.File.OpenReadStream() };
 
         await mediator.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("all")]
+    public async Task<ActionResult<GetAllGradeByCourseIdResult>> GetAllGradeByCourseId([FromQuery] GetAllGradeByCourseIdCommand command,
+        CancellationToken cancellationToken)
+    {
+        return await mediator.Send(command, cancellationToken);
     }
 
     /// <summary>
