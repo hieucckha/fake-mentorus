@@ -51,10 +51,7 @@ internal class ImportStudentListCommandHandler : IRequestHandler<ImportStudentLi
         var studentId = string.Empty;
 
         var studentIdCell = row.GetCell(0);
-        if (studentIdCell.CellType == CellType.Numeric)
-        {
-            studentId = studentIdCell.NumericCellValue.ToString(CultureInfo.CurrentCulture);
-        }
+        studentId = studentIdCell.CellType == CellType.Numeric ? studentIdCell.NumericCellValue.ToString(CultureInfo.CurrentCulture) : studentIdCell.StringCellValue;
         var studentNameCell = row.GetCell(1);
         var studentName = studentNameCell.StringCellValue;
 
@@ -90,10 +87,7 @@ internal class ImportStudentListCommandHandler : IRequestHandler<ImportStudentLi
             }
             studentIdCell = row.GetCell(0);
             studentNameCell = row.GetCell(1);
-            if (studentIdCell.CellType == CellType.Numeric)
-            {
-                studentId = studentIdCell.NumericCellValue.ToString(CultureInfo.CurrentCulture);
-            }
+            studentId = studentIdCell.CellType == CellType.Numeric ? studentIdCell.NumericCellValue.ToString(CultureInfo.CurrentCulture) : studentIdCell.StringCellValue;
             studentNameCell = row.GetCell(1);
             studentName = studentNameCell.StringCellValue;
         }
