@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SomeSandwich.FakeMentorus.Domain.Grade;
+using SomeSandwich.FakeMentorus.Domain.Student;
 using SomeSandwich.FakeMentorus.Domain.Users;
 
 namespace SomeSandwich.FakeMentorus.Domain.Course;
@@ -81,8 +82,8 @@ public class Course
     /// </summary>
     public virtual ICollection<GradeComposition> GradeCompositions { get; set; } = null!;
 
-    // /// <summary>
-    // /// List of grade compositions of the class.
-    // /// </summary>
-    // public virtual ICollection<Request.Request> Requests { get; set; } = null!;
+    /// <summary>
+    /// List of student information of the class.
+    /// </summary>
+    public virtual ICollection<StudentInfo> StudentInfos { get; set; } = null!;
 }

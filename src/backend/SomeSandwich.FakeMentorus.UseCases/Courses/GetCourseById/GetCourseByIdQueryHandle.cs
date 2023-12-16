@@ -55,6 +55,9 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
                 .Include(c => c.GradeCompositions.OrderBy(e => e.Order))
                 .ThenInclude(gc => gc.Grades)
                 .ThenInclude(g => g.Request)
+                .ThenInclude(r => r.Student)
+                .ThenInclude(s => s.Student)
+                .ThenInclude(s => s.StudentInfo)
                 .Include(c => c.Students).ThenInclude(cs => cs.Student)
                 .Include(c => c.Teachers).ThenInclude(ct => ct.Teacher)
                 .GetAsync(c => c.Id == request.CourseId, cancellationToken);
@@ -62,8 +65,15 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
 
         logger.LogInformation("Course with id {CourseId} was found", request.CourseId);
         var result = mapper.Map<CourseDetailDto>(course);
-        result.Requests = course.GradeCompositions.SelectMany(gc => gc.Grades)
-            .Select(g => mapper.Map<RequestDto>(g.Request)).ToList();
+
+        result.Requests = course.GradeCompositions
+            .SelectMany(gc => gc.Grades)
+            .Select(g => mapper.Map<Domain.Request.Request, RequestDto>(g.Request, opt =>
+                opt.AfterMap((src, des) =>
+                {
+                    des.StudentName = src.Student.Student.StudentInfo.FirstOrDefault(e => e.StudentId == src.Student.Student.StudentId)!.Name;
+                })))
+            .ToList();
 
         // TODO: Need url from frontend
         result.InviteLink = $"https://localhost:5001/invite/{course.ClassCode}";
