@@ -1,11 +1,10 @@
-namespace SomeSandwich.FakeMentorus.UseCases.Request.Common;
+namespace SomeSandwich.FakeMentorus.UseCases.Request.CreateRequest;
 
 /// <summary>
-///   Request dto.
+/// Response of the command to create a request of a student to a grade.
 /// </summary>
-public class RequestDto
+public class CreateRequestResponse
 {
-
     /// <summary>
     /// The id of the request.
     /// </summary>

@@ -23,5 +23,5 @@ public class Student
     /// <summary>
     /// Student info.
     /// </summary>
-    public StudentInfo StudentInfo { get; set; } = null!;
+    public ICollection<StudentInfo> StudentInfo { get; set; } = null!;
 }
