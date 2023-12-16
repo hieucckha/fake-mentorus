@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -56,6 +53,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
         var userWithStudentId = studentUsers
             .Where(e => e.StudentId != null)
             .ToList();
+
         var studentId1 = userWithStudentId.Select(e => e.StudentId).ToList();
 
         // Not UserId | StudentId
@@ -64,7 +62,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .Where(e => !studentIds.Contains(e.StudentId))
             .ToListAsync(cancellationToken);
 
-        var studentId2 = studentWithoutUserid.Select(e => e.StudentId).ToList();
+        var studentId2 = studentWithoutUserid.Where(e => !studentIds.Contains(e.StudentId)).Select(e => e.StudentId).ToList();
 
         // All grade
         var gradeComposites = await appDbContext.GradeCompositions
@@ -73,40 +71,51 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .OrderBy(e => e.GradeScale)
             .ToListAsync(cancellationToken);
 
-        var gradeTable = new Dictionary<string, List<GradeDto>>();
-        var isFirst = true;
+        var gradeTable = new Dictionary<string, List<GradeCellDto>>();
+        foreach (var studentId in studentIds)
+        {
+            gradeTable.Add(studentId, new List<GradeCellDto>(gradeComposites.Count));
+        }
+        foreach (var studentId in studentId2)
+        {
+            gradeTable.Add(studentId, new List<GradeCellDto>(gradeComposites.Count));
+        }
 
+        var index = 0;
         foreach (var gradeComposition in gradeComposites)
         {
-            if (isFirst)
+            foreach (var grade in gradeComposition.Grades)
             {
-                foreach (var grade in gradeComposition.Grades)
-                {
-                    var gradesStudent = new List<GradeDto>(gradeComposites.Count) { mapper.Map<GradeDto>(grade) };
-                    gradeTable.Add(grade.StudentId, gradesStudent);
-                }
+                var gradeStudent = gradeTable.GetValueOrDefault(grade.StudentId);
 
-                isFirst = false;
+                gradeStudent?.Append(mapper.Map<GradeCellDto>(grade));
             }
-            else
+
+            foreach (var (key, value) in gradeTable.Where(pair => pair.Value.Count != index + 1))
             {
-                foreach (var grade in gradeComposition.Grades)
+                value.Insert(index, new GradeCellDto
                 {
-                    var gradeStudent = gradeTable.GetValueOrDefault(grade.StudentId);
-
-                    gradeStudent?.Append(mapper.Map<GradeDto>(grade));
-                }
+                    Id = null,
+                    GradeCompositionId = gradeComposition.Id,
+                    GradeValue = null,
+                    IsRequested = false
+                });
             }
+
+            index++;
         }
 
         var gradeUserAndStudent = gradeTable
             .Where(e => studentId1.Contains(e.Key))
             .Select(pair =>
             {
+                var student = userWithStudentId.First(e => e.StudentId == pair.Key);
+
                 return new GradeCell
                 {
-                    StudnetId = pair.Key,
-                    UserId = userWithStudentId.First(e => e.StudentId == pair.Key).Id,
+                    StudentId = pair.Key,
+                    StudentName = student.FullName,
+                    UserId = student.Id,
                     GradeDto = pair.Value
                 };
             }).ToList();
@@ -115,7 +124,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .Where(e => studentId2.Contains(e.Key))
             .Select(pair => new GradeCell
             {
-                StudnetId = pair.Key,
+                StudentId = pair.Key,
                 UserId = null,
                 GradeDto = pair.Value
             }).ToList();
