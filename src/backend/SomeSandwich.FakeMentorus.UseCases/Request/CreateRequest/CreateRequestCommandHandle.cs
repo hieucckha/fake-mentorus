@@ -56,6 +56,11 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
             throw new DomainException("You already have request for this grade");
         }
 
+        if (await dbContext.Grades.AnyAsync(e => e.Id == request.GradeId && e.IsRequested == true, cancellationToken))
+        {
+            throw new DomainException("Grade already requested");
+        }
+
         var requestEntity = new Domain.Request.Request
         {
             StudentId = user.Id,
