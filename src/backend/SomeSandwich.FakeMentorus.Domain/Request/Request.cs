@@ -32,6 +32,16 @@ public class Request
     public int StudentId { get; set; }
 
     /// <summary>
+    /// Current grade.
+    /// </summary>
+    public float CurrentGrade { get; set; }
+
+    /// <summary>
+    /// Expected grade.
+    /// </summary>
+    public float ExpectedGrade { get; set; }
+
+    /// <summary>
     /// Request detail.
     /// </summary>
     public string Reason { get; set; } = string.Empty;

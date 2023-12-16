@@ -30,6 +30,8 @@ public class Grade
     /// </summary>
     required public float GradeValue { get; set; }
 
+    public bool IsRequested { get; set; } = false;
+
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>

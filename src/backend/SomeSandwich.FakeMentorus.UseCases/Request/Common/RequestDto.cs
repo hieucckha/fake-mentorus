@@ -5,7 +5,6 @@ namespace SomeSandwich.FakeMentorus.UseCases.Request.Common;
 /// </summary>
 public class RequestDto
 {
-
     /// <summary>
     /// The id of the request.
     /// </summary>
@@ -15,6 +14,16 @@ public class RequestDto
     /// The id of the grade to request.
     /// </summary>
     public int GradeId { get; set; }
+
+    /// <summary>
+    /// Current grade.
+    /// </summary>
+    public float CurrentGrade { get; set; }
+
+    /// <summary>
+    /// Expected grade.
+    /// </summary>
+    public float ExpectedGrade { get; set; }
 
     /// <summary>
     /// Reason of the request.

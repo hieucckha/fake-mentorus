@@ -14,6 +14,11 @@ public class CreateRequestCommand : IRequest<RequestDto>
     required public int GradeId { get; set; }
 
     /// <summary>
+    /// The grade that the student expect to get.
+    /// </summary>
+    required public int ExceptedGrade { get; set; }
+
+    /// <summary>
     /// Reason of the request.
     /// </summary>
     required public string Reason { get; set; }

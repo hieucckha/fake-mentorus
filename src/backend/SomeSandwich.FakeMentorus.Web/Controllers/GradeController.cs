@@ -99,7 +99,7 @@ public class GradeController
     /// <param name="command"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpPost("add")]
+    [HttpPost("")]
     public async Task<GradeDto> AddGrade([FromBody] CreateGradeCommand command, CancellationToken cancellationToken)
     {
         return await mediator.Send(command, cancellationToken);

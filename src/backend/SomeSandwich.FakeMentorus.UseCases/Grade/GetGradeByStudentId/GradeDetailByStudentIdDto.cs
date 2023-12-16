@@ -24,4 +24,9 @@ public class GradeDetailByStudentIdDto
     /// Grade value.
     /// </summary>
     public float? GradeValue { get; set; }
+
+    /// <summary>
+    /// Is requested.
+    /// </summary>
+    public bool IsRequested { get; set; }
 }
