@@ -25,6 +25,9 @@ public class GradeCompositionDto
     /// <inheritdoc cref="GradeComposition.Order"/>
     public int Order { get; set; }
 
+    /// <inheritdoc cref="GradeComposition.IsFinal"/>
+    public bool IsFinal { get; set; }
+
     /// <inheritdoc cref="GradeComposition.CreatedAt"/>
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 

@@ -16,10 +16,15 @@ public class Request
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
+    // /// <summary>
+    // /// Course id.
+    // /// </summary>
+    // public int CourseId { get; set; }
+
     /// <summary>
-    /// Course id.
+    /// Grade id.
     /// </summary>
-    public int CourseId { get; set; }
+    public int GradeId { get; set; }
 
     /// <summary>
     /// Student id.
@@ -50,13 +55,18 @@ public class Request
 
     // ---------------------------------------------------------------------------------------------
 
+    // /// <summary>
+    // /// Grade value.
+    // /// </summary>
+    // public virtual Course.Course Course { get; set; }
+
     /// <summary>
-    /// Grade value.
+    /// Grade.
     /// </summary>
-    public virtual Course.Course Course { get; set; }
+    public virtual Grade.Grade Grade { get; set; } = null!;
 
     /// <summary>
     /// Student.
     /// </summary>
-    public virtual User Student { get; set; }
+    public virtual User Student { get; set; } = null!;
 }

@@ -26,11 +26,6 @@ public class CourseDto
     public bool IsActivated { get; set; }
 
     /// <summary>
-    /// Is the class finished.
-    /// </summary>
-    public bool IsFinished { get; set; }
-
-    /// <summary>
     /// Course start date.
     /// </summary>
     public DateTime CreatedAt { get; set; }

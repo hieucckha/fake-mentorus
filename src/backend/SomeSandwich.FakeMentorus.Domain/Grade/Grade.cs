@@ -53,4 +53,9 @@ public class Grade
     /// Student.
     /// </summary>
     public virtual Student.Student Student { get; set; } = null!;
+
+    /// <summary>
+    /// Request.
+    /// </summary>
+    public virtual Request.Request Request { get; set; } = null!;
 }

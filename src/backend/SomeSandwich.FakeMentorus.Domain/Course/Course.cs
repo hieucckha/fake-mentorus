@@ -47,11 +47,6 @@ public class Course
     /// </summary>
     public bool IsActivated { get; set; } = true;
 
-    /// <summary>
-    /// Is the class finished.
-    /// </summary>
-    public bool IsFinished { get; set; } = false;
-
     // ---------------------------------------------------------------------------------------------
 
     /// <summary>
@@ -86,8 +81,8 @@ public class Course
     /// </summary>
     public virtual ICollection<GradeComposition> GradeCompositions { get; set; } = null!;
 
-    /// <summary>
-    /// List of grade compositions of the class.
-    /// </summary>
-    public virtual ICollection<Request.Request> Requests { get; set; } = null!;
+    // /// <summary>
+    // /// List of grade compositions of the class.
+    // /// </summary>
+    // public virtual ICollection<Request.Request> Requests { get; set; } = null!;
 }
