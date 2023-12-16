@@ -23,3 +23,13 @@ export const useJoinClassMutation = () => {
         },
     });
 }
+export const useInviteClassMutationByEmail = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (classData:{email:string,courseId:string}) => classService.inviteClassByEmail(classData),
+        retry: false,
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['class'] });
+        },
+    });
+}
