@@ -55,9 +55,9 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
                 .Include(c => c.GradeCompositions.OrderBy(e => e.Order))
                 .ThenInclude(gc => gc.Grades)
                 .ThenInclude(g => g.Request)
-                .ThenInclude(r => r.Student)
-                .ThenInclude(s => s.Student)
-                .ThenInclude(s => s.StudentInfo)
+                .Include(c => c.StudentInfos)
+                .ThenInclude(si => si.Student)
+                .ThenInclude(s => s.User)
                 .Include(c => c.Students).ThenInclude(cs => cs.Student)
                 .Include(c => c.Teachers).ThenInclude(ct => ct.Teacher)
                 .GetAsync(c => c.Id == request.CourseId, cancellationToken);
@@ -65,14 +65,26 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
         logger.LogInformation("Course with id {CourseId} was found", request.CourseId);
         var result = mapper.Map<CourseDetailDto>(course);
 
-        result.Requests = course.GradeCompositions
+        var requests = course.GradeCompositions
             .SelectMany(gc => gc.Grades)
-            .Select(g => mapper.Map<Domain.Request.Request, RequestDto>(g.Request, opt =>
-                opt.AfterMap((src, des) =>
-                {
-                    des.StudentName = src.Student.Student.StudentInfo.FirstOrDefault(e => e.StudentId == src.Student.Student.StudentId)!.Name;
-                })))
+            .Select(g => g.Request)
+            .Where(r => r != null)
             .ToList();
+        result.Requests = mapper.Map<List<RequestDto>>(requests);
+
+        var listStudent = course.StudentInfos.Select(e => new
+        {
+            StudentId = e.StudentId, UserId = e.Student.User.Id, Name = e.Name
+        }).ToList();
+
+
+        foreach (var resultRequest in result.Requests)
+        {
+            resultRequest.StudentName = listStudent
+                .Where(e => e.UserId == resultRequest.StudentId)
+                .Select(e => e.Name)
+                .FirstOrDefault() ?? "";
+        }
 
         // TODO: Need url from frontend
         result.InviteLink = $"https://localhost:5001/invite/{course.ClassCode}";

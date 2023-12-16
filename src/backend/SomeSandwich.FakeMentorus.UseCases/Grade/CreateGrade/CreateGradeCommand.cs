@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using MediatR;
+using SomeSandwich.FakeMentorus.UseCases.Grade.Common;
 
 namespace SomeSandwich.FakeMentorus.UseCases.Grade.CreateGrade;
 
 /// <summary>
 /// Command to create a new grade
 /// </summary>
-public class CreateGradeCommand : IRequest<int>
+public class CreateGradeCommand : IRequest<GradeDto>
 {
     /// <summary>
     ///     Grade Composition id.
@@ -16,7 +17,7 @@ public class CreateGradeCommand : IRequest<int>
     /// <summary>
     ///     Student id.
     /// </summary>
-    required public int StudentId { get; set; }
+    required public string StudentId { get; set; }
 
     /// <summary>
     ///     Grade value.

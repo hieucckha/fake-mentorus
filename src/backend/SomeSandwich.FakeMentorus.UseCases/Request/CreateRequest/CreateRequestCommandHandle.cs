@@ -20,7 +20,7 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
     private readonly IMapper mapper;
 
     /// <summary>
-    /// Constructor for <see cref="CreateRequestCommandHandle"/>
+    /// Constructor for <see cref="CreateRequestCommandHandle"/>.
     /// </summary>
     /// <param name="dbContext"></param>
     /// <param name="loggedUserAccessor"></param>
@@ -45,9 +45,15 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
         }
 
         var role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
-        if (role != null || role != "Student")
+        if (role is not "Student")
         {
             throw new ForbiddenException("Only students can create requests");
+        }
+
+        if (await dbContext.Requests.AnyAsync(r => r.StudentId == user.Id && r.GradeId == request.GradeId,
+                cancellationToken))
+        {
+            throw new DomainException("You already have request for this grade");
         }
 
         var requestEntity = new Domain.Request.Request
@@ -61,29 +67,29 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
         await dbContext.Requests.AddAsync(requestEntity, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        var courseId = await dbContext.Courses
-            .Include(c => c.GradeCompositions)
-            .ThenInclude(gc => gc.Grades
-                .FirstOrDefault(g => g.Id == request.GradeId))
-            .Select(c => c.Id)
-            .FirstOrDefaultAsync(cancellationToken);
-
         var result = mapper.Map<RequestDto>(requestEntity);
 
-        var aaa = await dbContext.StudentInfos
-            .Include(si => si.Student)
+        var course = await dbContext.Courses
+            .Include(c => c.StudentInfos)
+            .ThenInclude(e => e.Student)
             .ThenInclude(s => s.User)
-            .Include(e => e.Course)
-            .Where(si => si.CourseId == courseId)
-            .Where(si => si.Student.User.Id == user.Id)
+            .Include(c => c.GradeCompositions)
+            .ThenInclude(gc => gc.Grades)
+            .Where(c => c.GradeCompositions.Any(gc => gc.Grades.Any(g => g.Id == request.GradeId)))
+            .Where(c => c.StudentInfos.Any(si => si.Student.User.Id == user.Id))
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (aaa == null)
+        if (course == null)
         {
-            result.StudentName = user.FullName;
+            result.StudentName = "";
         }
-
-        result.StudentName = aaa!.Name;
+        else
+        {
+            result.StudentName = course.StudentInfos
+                .Where(si => si.Student.User.Id == user.Id)
+                .Select(si => si.Name)
+                .FirstOrDefault() ?? "";
+        }
 
         return result;
     }
