@@ -17,13 +17,13 @@ public class GradeMappingProfile : Profile
     {
         CreateMap<Domain.Grade.Grade, GradeDto>();
         CreateMap<Domain.Grade.Grade, GradeCellDto>();
-<<<<<<< Updated upstream
+
         CreateMap<User, UserWithoutStudentDto>()
             .ForMember(des => des.UserId, opt => opt.MapFrom(src => src.Id))
             .ForMember(des => des.Name, opt => opt.MapFrom(src => src.FullName));
-=======
+
 
         CreateMap<Domain.Grade.Grade, GradeDetailByStudentIdDto>();
->>>>>>> Stashed changes
+
     }
 }
