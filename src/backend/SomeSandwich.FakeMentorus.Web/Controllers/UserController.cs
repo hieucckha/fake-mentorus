@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using SomeSandwich.FakeMentorus.UseCases.Users.CreateUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.LockoutUser.LockUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.LockoutUser.UnlockUser;
+using SomeSandwich.FakeMentorus.UseCases.Users.MappingStudentId;
 using SomeSandwich.FakeMentorus.UseCases.Users.UpdateUser;
+using SomeSandwich.FakeMentorus.Web.Requests;
 
 namespace SomeSandwich.FakeMentorus.Web.Controllers;
 
@@ -59,10 +61,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(400)]
     public async Task LockUser([FromRoute] int id, CancellationToken cancellationToken)
     {
-        await mediator.Send(new LockUserCommand
-        {
-            UserId = id
-        }, cancellationToken);
+        await mediator.Send(new LockUserCommand { UserId = id }, cancellationToken);
     }
 
     /// <summary>
@@ -75,9 +74,22 @@ public class UserController : ControllerBase
     [ProducesResponseType(400)]
     public async Task UnlockUser([FromRoute] int id, CancellationToken cancellationToken)
     {
-        await mediator.Send(new UnlockUserCommand
-        {
-            UserId = id
-        }, cancellationToken);
+        await mediator.Send(new UnlockUserCommand { UserId = id }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Mapping student id to user.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="studentId"></param>
+    /// <param name="cancellationToken"></param>
+    [HttpPatch("{id:int}/mapping")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    public async Task MappingStudentId([FromRoute] int id, [FromQuery] string? studentId,
+        CancellationToken cancellationToken)
+    {
+        await mediator.Send(new MappingStudentIdCommand() { UserId = id, StudentId = studentId },
+            cancellationToken);
     }
 }
