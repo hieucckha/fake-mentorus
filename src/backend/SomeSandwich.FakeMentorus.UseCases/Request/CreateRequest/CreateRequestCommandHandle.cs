@@ -86,7 +86,8 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
             .ThenInclude(s => s.User)
             .Include(c => c.GradeCompositions)
             .ThenInclude(gc => gc.Grades)
-            .Where(c => c.GradeCompositions.Any(gc => gc.Grades.Any(g => g.Id == request.GradeId)))
+            .Where(c => c.GradeCompositions.Any(gc =>
+                gc.Grades.Any(g => g.Id == request.GradeId) && gc.IsDeleted != true))
             .Where(c => c.StudentInfos.Any(si => si.Student.User.Id == user.Id))
             .FirstOrDefaultAsync(cancellationToken);
 
