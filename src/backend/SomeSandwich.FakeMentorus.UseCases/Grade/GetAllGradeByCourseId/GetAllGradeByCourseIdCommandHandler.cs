@@ -42,6 +42,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .ToListAsync(cancellationToken);
 
         var studentIds = studentUsers
+            .Where(e => e.StudentId != null)
             .Select(e => e.StudentId)
             .ToList();
 
