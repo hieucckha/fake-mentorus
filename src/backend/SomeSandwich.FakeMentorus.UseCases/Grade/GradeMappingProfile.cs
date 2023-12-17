@@ -1,4 +1,5 @@
 using AutoMapper;
+using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.UseCases.Grade.Common;
 
 namespace SomeSandwich.FakeMentorus.UseCases.Grade;
@@ -15,5 +16,8 @@ public class GradeMappingProfile : Profile
     {
         CreateMap<Domain.Grade.Grade, GradeDto>();
         CreateMap<Domain.Grade.Grade, GradeCellDto>();
+        CreateMap<User, UserWithoutStudentDto>()
+            .ForMember(des => des.UserId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(des => des.Name, opt => opt.MapFrom(src => src.FullName));
     }
 }

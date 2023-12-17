@@ -20,17 +20,12 @@ public class GetAllGradeByCourseIdResult
     required public IReadOnlyList<GradeCompositionDto> GradeCompositionDtos { get; set; }
 
     /// <summary>
-    /// List of grade cell for student which have both StudentId and UserId.
+    /// List of grade cell for student.
     /// </summary>
-    public IReadOnlyList<GradeCell> StudentWithUserId { get; set; } = new List<GradeCell>();
-
-    /// <summary>
-    /// List of grade cell for student which have StudentId but not have UserId.
-    /// </summary>
-    public IReadOnlyList<GradeCell> StudentWithoutUserId { get; set; } = new List<GradeCell>();
+    public IReadOnlyList<GradeCell> Students { get; set; } = new List<GradeCell>();
 
     /// <summary>
     /// List of grade cell for user (student) have in class but not mapping with any StudentId.
     /// </summary>
-    public IReadOnlyList<UserDto> UserWithoutStudentId { get; set; } = new List<UserDto>();
+    public IReadOnlyList<UserWithoutStudentDto> UserWithoutStudentId { get; set; } = new List<UserWithoutStudentDto>();
 }

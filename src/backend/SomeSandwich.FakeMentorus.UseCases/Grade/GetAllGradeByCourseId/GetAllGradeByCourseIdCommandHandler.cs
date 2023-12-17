@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Saritasa.Tools.Common.Utils;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 using SomeSandwich.FakeMentorus.UseCases.Grade.Common;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.Common;
@@ -129,13 +130,14 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
                 GradeDto = pair.Value
             }).ToList();
 
+        var students = gradeUserAndStudent.Concat(gradeNotUserAndStudent).OrderBy(e => e.StudentId).ToList();
+
         var result = new GetAllGradeByCourseIdResult
         {
             CourseId = command.CourseId,
             GradeCompositionDtos = mapper.Map<IReadOnlyList<GradeCompositionDto>>(gradeComposites),
-            StudentWithUserId = gradeUserAndStudent,
-            StudentWithoutUserId = gradeNotUserAndStudent,
-            UserWithoutStudentId = userWithoutStudentId.Select(e => mapper.Map<UserDto>(e)).ToList()
+            Students = students,
+            UserWithoutStudentId = userWithoutStudentId.Select(e => mapper.Map<UserWithoutStudentDto>(e)).ToList()
         };
 
         return result;
