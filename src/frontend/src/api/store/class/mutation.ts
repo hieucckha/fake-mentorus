@@ -9,7 +9,7 @@ export const useCreateClassMutation = () => {
         mutationFn: (classData:ClassDto) => classService.createClass(classData),
         retry: false,
         onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['class'] });
+            queryClient.invalidateQueries({ queryKey: ['classes'] });
         },
     });
 }
@@ -19,7 +19,7 @@ export const useJoinClassMutation = () => {
         mutationFn: (classData:{code:string}) => classService.joinClassByCode(classData),
         retry: false,
         onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['class'] });
+            queryClient.invalidateQueries({ queryKey: ['classes'] });
         },
     });
 }
@@ -29,7 +29,7 @@ export const useInviteClassMutationByEmail = () => {
         mutationFn: (classData:{email:string,courseId:string}) => classService.inviteClassByEmail(classData),
         retry: false,
         onSuccess() {
-            queryClient.invalidateQueries({ queryKey: ['class'] });
+            queryClient.invalidateQueries({ queryKey: ['classes'] });
         },
     });
 }

@@ -2,6 +2,7 @@ import { useState, type FC } from "react";
 import { Button, Label, Modal, TextInput,Textarea } from "flowbite-react";
 import Swal from 'sweetalert2';
 import { useCreateClassMutation } from "../api/store/class/mutation";
+import { App } from "antd";
 interface CreateClassProps {
 	handleCloseModalCreateClass: () => void;
 	openModal: boolean;
@@ -15,7 +16,8 @@ const CreateClass: FC<CreateClassProps> = ({
         name: "",
         description: "",
     });
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    const app = App.useApp();
+    const { message } = app;
     const handleChange = (error: React.ChangeEvent<HTMLInputElement |HTMLTextAreaElement>) => 
         { setFormData({
             ...formData,
@@ -27,7 +29,12 @@ const CreateClass: FC<CreateClassProps> = ({
         event
       // eslint-disable-next-line @typescript-eslint/require-await
       ): Promise<void> => {
-		    event.preventDefault();
+        if(formData.name === "" || formData.description === "")
+        {
+          message.warning("Please fill all the fields");
+          return;
+        }
+        event.preventDefault();
         mutation.mutate(formData,
         {
             onSuccess() { 

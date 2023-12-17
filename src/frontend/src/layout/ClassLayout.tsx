@@ -9,6 +9,8 @@ import React from "react";
 import { useLocation, Link, useParams, Outlet } from "react-router-dom";
 import classService from "../services/class.service";
 import fileDownload from "js-file-download";
+import { AxiosError } from "axios";
+import { convertBlobToJson } from "../utils";
  
 
 const ClassLayout: React.FC = (): JSX.Element => {
@@ -42,15 +44,27 @@ const ClassLayout: React.FC = (): JSX.Element => {
   };
 
 	const handleDownloadTemplate = async () => {
-		try {
-			const blobData = await classService.downloadTemplate(id ?? "");
-			fileDownload(blobData, "template.xlsx");
-		} catch (error) {
-			notification.error({
-				message: "Download template failed",
-				description: "Something went wrong",
+		
+		classService
+			.downloadTemplate(id ?? "")
+			.then((res) => {
+				fileDownload(res.data, "template.xlsx");
+			})
+			.catch(async (error) => {
+				if (error instanceof AxiosError) {
+					console.log(error);
+					const errorBody = await convertBlobToJson(error.response?.data);
+					notification.error({
+						message: "Error",
+						description: errorBody.title,
+					});
+					return;
+				}
+				notification.error({
+						message: "Error",
+						description: "Something went wrong",
+					});
 			});
-		}
 	};
 
 	const items: MenuProps["items"] = [
@@ -83,17 +97,17 @@ const ClassLayout: React.FC = (): JSX.Element => {
 				</a>
 			),
 		},
-		{
-			key: "4",
-			label: (
-				<Upload {...props}>
-					<a >
-						<UploadOutlined className="pr-3" />
-						Import grade
-					</a>
-				</Upload>
-			),
-		},
+		// {
+		// 	key: "4",
+		// 	label: (
+		// 		<Upload {...props}>
+		// 			<a >
+		// 				<UploadOutlined className="pr-3" />
+		// 				Import grade
+		// 			</a>
+		// 		</Upload>
+		// 	),
+		// },
 	];
 
 	return (

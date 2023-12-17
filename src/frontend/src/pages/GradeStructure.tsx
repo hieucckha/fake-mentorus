@@ -7,6 +7,8 @@ import {
 	Table,
 	Typography,
 	Button,
+	App,
+	Space,
 } from "antd";
 import type { DragEndEvent } from "@dnd-kit/core";
 import {
@@ -133,7 +135,7 @@ const addKeyWithId = (array: any) => {
 const GradeStructure: React.FC = () => {
 	const { id } = useParams();
 	if (!id) return null;
-	// const { message } = App.useApp();
+	const { message } = App.useApp();
 	const { data, isLoading } = useClassDetail();
 	const mutation = useUpdateOrderGradeComposit();
 	const mutationAddGradeColumn = useAddNewGradeComposit();
@@ -234,14 +236,24 @@ const GradeStructure: React.FC = () => {
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as gradeCompositions;
+			if (isNaN(row.gradeScale)) {
+				message.error("GradeScale must be a number");
+				return;
+			}
+			row.gradeScale = isNaN(row.gradeScale) ? 0 : Number(row.gradeScale);
+			console.log(row);
+
 			const newData = [...gradeCompositions];
 			const index = newData.findIndex((item) => key === item.id);
 			if (index > -1) {
 				const item = newData[index];
+
 				newData.splice(index, 1, {
 					...item,
 					...row,
 				});
+				console.log("Item");
+				console.log(item);
 				console.log("Save");
 				console.log(newData);
 				if (!isGradeScaleSumValid(newData)) {
@@ -288,6 +300,8 @@ const GradeStructure: React.FC = () => {
 				setGradeCompositions(newData);
 				setEditingKey(0);
 			} else {
+				console.log(row);
+
 				newData.push(row);
 				setGradeCompositions(newData);
 				setEditingKey(0);
@@ -323,17 +337,30 @@ const GradeStructure: React.FC = () => {
 						>
 							Save
 						</Typography.Link>
-						<Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+						<Popconfirm
+							title="Sure to cancel?"
+							onConfirm={cancel}
+							okButtonProps={{ className: "bg-blue-500" }}
+						>
 							<a>Cancel</a>
 						</Popconfirm>
 					</span>
 				) : (
-					<Typography.Link
-						disabled={editingKey !== 0}
-						onClick={() => edit(record)}
-					>
-						Edit
-					</Typography.Link>
+					<Space>
+						<Typography.Link
+							disabled={editingKey !== 0}
+							onClick={() => edit(record)}
+						>
+							Edit
+						</Typography.Link>
+						<Popconfirm
+							title="Sure to delete?"
+							onConfirm={cancel}
+							okButtonProps={{ className: "bg-blue-500" }}
+						>
+							<a className="text-red-500 hover:text-red-600">Delete</a>
+						</Popconfirm>
+					</Space>
 				);
 			},
 		},
@@ -359,7 +386,6 @@ const GradeStructure: React.FC = () => {
 
 	return (
 		<div className="w-full">
-			
 			<div className="row grid justify-items-end pl-5 pr-5">
 				<Button
 					onClick={handleAdd}
