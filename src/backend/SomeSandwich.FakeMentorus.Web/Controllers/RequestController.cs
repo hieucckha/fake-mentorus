@@ -1,9 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SomeSandwich.FakeMentorus.UseCases.Comment.Common;
+using SomeSandwich.FakeMentorus.UseCases.Comment.CreateComment;
 using SomeSandwich.FakeMentorus.UseCases.Request.ApproveRequest;
 using SomeSandwich.FakeMentorus.UseCases.Request.Common;
 using SomeSandwich.FakeMentorus.UseCases.Request.CreateRequest;
+using SomeSandwich.FakeMentorus.UseCases.Request.GetRequestById;
 using SomeSandwich.FakeMentorus.UseCases.Request.RejectRequest;
 using SomeSandwich.FakeMentorus.Web.Requests;
 
@@ -64,5 +67,36 @@ public class RequestController
     {
         var command = new RejectRequestCommand() { RequestId = id };
         await mediator.Send(command);
+    }
+
+
+    /// <summary>
+    /// Create comment.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost("{id:int}/comment")]
+    [Authorize]
+    public async Task<CommentDto> CreateComment([FromRoute] int id, [FromBody] AddCommentRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new CreateCommentCommand() { RequestId = id, Comment = request.Comment };
+        return await mediator.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// Get request detail.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("{id:int}")]
+    [Authorize]
+    public async Task<RequestDetailDto> GetRequest([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var query = new GetRequestByIdQuery() { RequestId = id };
+        return await mediator.Send(query, cancellationToken);
     }
 }

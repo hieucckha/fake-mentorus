@@ -1,3 +1,5 @@
+using SomeSandwich.FakeMentorus.Domain.Request;
+
 namespace SomeSandwich.FakeMentorus.UseCases.Request.Common;
 
 /// <summary>
@@ -43,7 +45,7 @@ public class RequestDto
     /// <summary>
     /// The status of the request.
     /// </summary>
-    public int Status { get; set; }
+    public RequestStatus Status { get; set; }
 
     /// <summary>
     /// The date when the request was created.

@@ -17,11 +17,4 @@
       <PackageReference Include="Saritasa.Tools.EntityFrameworkCore" Version="7.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Comment\CreateComment\" />
-      <Folder Include="Comment\DeleteComment\" />
-      <Folder Include="Comment\GetCommentById\" />
-      <Folder Include="Comment\SearchComment\" />
-    </ItemGroup>
-
 </Project>

@@ -1,13 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SomeSandwich.FakeMentorus.Domain.Request;
 using SomeSandwich.FakeMentorus.Domain.Users;
+using SomeSandwich.FakeMentorus.UseCases.Comment.Common;
 
-namespace SomeSandwich.FakeMentorus.Domain.Request;
+namespace SomeSandwich.FakeMentorus.UseCases.Request.GetRequestById;
 
-/// <summary>
-/// Request entity.
-/// </summary>
-public class Request
+public class RequestDetailDto
 {
     /// <summary>
     /// Request id.
@@ -27,6 +26,11 @@ public class Request
     public int StudentId { get; set; }
 
     /// <summary>
+    /// The name of the student who made the request.
+    /// </summary>
+    public string StudentName { get; set; } = string.Empty;
+
+    /// <summary>
     /// Current grade.
     /// </summary>
     public float CurrentGrade { get; set; }
@@ -44,7 +48,7 @@ public class Request
     /// <summary>
     /// Request status.
     /// </summary>
-    public RequestStatus Status { get; set; } = RequestStatus.Pending;
+    public RequestStatus Status { get; set; }
 
     // ---------------------------------------------------------------------------------------------
 
@@ -58,25 +62,8 @@ public class Request
     /// </summary>
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    // ---------------------------------------------------------------------------------------------
-
-    // /// <summary>
-    // /// Grade value.
-    // /// </summary>
-    // public virtual Course.Course Course { get; set; }
-
-    /// <summary>
-    /// Grade.
-    /// </summary>
-    public virtual Grade.Grade Grade { get; set; } = null!;
-
-    /// <summary>
-    /// Student.
-    /// </summary>
-    public virtual User Student { get; set; } = null!;
-
     /// <summary>
     /// Comments.
     /// </summary>
-    public virtual ICollection<CommentRequest> Comments { get; set; } = null!;
+    public virtual ICollection<CommentDto> Comments { get; set; } = null!;
 }
