@@ -13,5 +13,5 @@ public class UserWithoutStudentDto
     /// <summary>
     /// Name of user.
     /// </summary>
-    public int Name { get; set; }
+    public string Name { get; set; }
 }
