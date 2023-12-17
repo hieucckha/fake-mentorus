@@ -71,6 +71,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .Include(e => e.Grades)
             .Where(e => e.CourseId == command.CourseId)
             .OrderBy(e => e.GradeScale)
+            .ThenBy(e => e.Id)
             .ToListAsync(cancellationToken);
 
         var gradeTable = new Dictionary<string, List<GradeCellDto>>();
