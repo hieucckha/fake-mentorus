@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NPOI.XSSF.UserModel;
@@ -45,7 +46,12 @@ internal class GenerateStudentGradeTemplateCommandHandler : IRequestHandler<Gene
             .Where(e => e.CourseId == command.CourseId)
             .ToListAsync(cancellationToken);
 
-        if (students.Count == 0)
+        var studentInfos = await appDbContext.StudentInfos
+            .Where(e => e.CourseId == command.CourseId)
+            .OrderBy(e => e.StudentId)
+            .ToListAsync(cancellationToken);
+
+        if (studentInfos.Count == 0)
         {
             throw new DomainException("No student in this class. Please invite some student and try again.");
         }
@@ -55,7 +61,7 @@ internal class GenerateStudentGradeTemplateCommandHandler : IRequestHandler<Gene
 
         var headerRow = gradeSheet.CreateRow(0);
 
-        var studentHeader = new string[] { "Student Id", "Student Name" };
+        var studentHeader = new[] { "Student Id" };
         for (var i = 0; i < studentHeader.Length; ++i)
         {
             headerRow.CreateCell(i).SetCellValue(studentHeader[i]);
@@ -69,12 +75,11 @@ internal class GenerateStudentGradeTemplateCommandHandler : IRequestHandler<Gene
         }
 
         var rowIndex = 1;
-        foreach (var student in students)
+        foreach (var studentInfo in studentInfos)
         {
             var row = gradeSheet.CreateRow(rowIndex);
 
-            row.CreateCell(0).SetCellValue(student.StudentId);
-            row.CreateCell(1).SetCellValue(student.Student.FullName);
+            row.CreateCell(0).SetCellValue(studentInfo.StudentId);
 
             rowIndex++;
         }
