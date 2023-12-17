@@ -90,12 +90,12 @@ const SignUp: FC = (): JSX.Element => {
 	};
 
 	return (
-		<div className="flex flex-col min-h-screen overflow-hidden">
+		<div className="flex flex-col bg-white h-screen overflow-auto">
 			{/* Page content. */}
 			<Header />
 
 			<main className="grow h-screen">
-				<section className="bg-gradient-to-b from-gray-100 to-white h-full">
+				<section className=" h-full">
 					<div className="max-w-6xl mx-auto px-4 sm:px-6">
 						<div className="pt-32 pb-12 md:pt-40 md:pb-20">
 							{/* Page header */}

@@ -7,11 +7,13 @@ import EditUser from "../modal/EditUser";
 import useAuth from "../hooks/auth";
 import CreateClass from "../modal/CreateClass";
 import JoinClass from "../modal/JoinClass";
+import { QueryClient } from "@tanstack/react-query";
 
 /**
  * Navigation bar.
  */
 const NavBarLogin: FC = () => {
+	const queryClient = new QueryClient();
 	const [isOpenModalEditUser, setIsOpenModalEditUser] = useState(false);
 	const [isOpenModalCreateClass, setIsOpenModalCreateClass] = useState(false);
 	const [isOpenModalJoinClass, setIsOpenModalJoinClass] = useState(false);
@@ -19,8 +21,10 @@ const NavBarLogin: FC = () => {
 		name: "",
 		email: "",
 	});
-	const handleSignOut = (): void => {
+	const handleSignOut = async () => {
 		const token = localStorageService.getItem("auth");
+		await queryClient.clear();
+		await queryClient.removeQueries();
 		if (token !== null) {
 			localStorageService.removeItem("auth");
 		}
@@ -175,7 +179,6 @@ const NavBarLogin: FC = () => {
 											to={"/home"}
 											className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
 											role="menuitem"
-											onClick={handleSignOut}
 										>
 											Dashboard
 										</Link>
