@@ -126,6 +126,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .Select(pair => new GradeCell
             {
                 StudentId = pair.Key,
+                StudentName = studentWithoutUserid.First(e => e.StudentId == pair.Key).Name,
                 UserId = null,
                 GradeDto = pair.Value
             }).ToList();
