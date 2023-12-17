@@ -11,30 +11,36 @@ using SomeSandwich.FakeMentorus.UseCases.Request.Common;
 namespace SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseById;
 
 /// <summary>
-///Handler for <see cref="GetCourseByIdQuery" />.
+/// Handler for <see cref="GetCourseByIdQuery" />.
 /// </summary>
 public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, CourseDetailDto>
 {
-    private readonly IMapper mapper;
+    private readonly ILogger<GetCourseByIdQueryHandle> logger;
     private readonly IAppDbContext dbContext;
     private readonly IAccessService accessService;
-    private readonly ILogger<GetCourseByIdQueryHandle> logger;
+    private readonly IAppSettings appSettings;
+    private readonly IMapper mapper;
 
     /// <summary>
-    ///Constructor.
+    /// Constructor.
     /// </summary>
-    /// <param name="mapper"></param>
-    /// <param name="dbContext"></param>
-    /// <param name="accessService"></param>
-    /// <param name="logger"></param>
-    public GetCourseByIdQueryHandle(IAppDbContext dbContext, IMapper mapper,
+    /// <param name="logger">Logger instance.</param>
+    /// <param name="dbContext">Database context instance.</param>
+    /// <param name="accessService">Access service instance.</param>
+    /// <param name="appSettings">App settings instance.</param>
+    /// <param name="mapper">Mapper instance.</param>
+    public GetCourseByIdQueryHandle(
+        IAppDbContext dbContext,
+        IMapper mapper,
         IAccessService accessService,
-        ILogger<GetCourseByIdQueryHandle> logger)
+        ILogger<GetCourseByIdQueryHandle> logger,
+        IAppSettings appSettings)
     {
         this.dbContext = dbContext;
         this.mapper = mapper;
         this.accessService = accessService;
         this.logger = logger;
+        this.appSettings = appSettings;
     }
 
     /// <inheritdoc />
@@ -74,11 +80,10 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
 
         var listStudent = course.StudentInfos.Select(e => new
         {
-            StudentId = e.StudentId,
-            UserId = e?.Student?.User?.Id ?? null,
-            Name = e.Name
+            e.StudentId,
+            UserId = e.Student.User?.Id ?? null,
+            e.Name
         }).ToList();
-
 
         foreach (var resultRequest in result.Requests)
         {
@@ -89,7 +94,7 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
         }
 
         // TODO: Need url from frontend
-        result.InviteLink = $"https://localhost:5001/invite/{course.ClassCode}";
+        result.InviteLink = $"{appSettings.FrontendUrl}/invite/{course.ClassCode}";
 
         return result;
     }
