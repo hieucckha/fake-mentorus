@@ -58,7 +58,7 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
         var course =
             await dbContext.Courses
                 .Include(c => c.Creator)
-                .Include(c => c.GradeCompositions.OrderBy(e => e.Order))
+                .Include(c => c.GradeCompositions.Where(e => e.IsDeleted == false).OrderBy(e => e.Order))
                 .ThenInclude(gc => gc.Grades)
                 .ThenInclude(g => g.Request)
                 .Include(c => c.StudentInfos)
@@ -80,9 +80,7 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
 
         var listStudent = course.StudentInfos.Select(e => new
         {
-            e.StudentId,
-            UserId = e.Student.User?.Id ?? null,
-            e.Name
+            e.StudentId, UserId = e.Student.User?.Id ?? null, e.Name
         }).ToList();
 
         foreach (var resultRequest in result.Requests)

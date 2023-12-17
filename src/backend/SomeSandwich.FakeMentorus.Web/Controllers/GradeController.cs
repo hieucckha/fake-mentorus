@@ -6,6 +6,7 @@ using SomeSandwich.FakeMentorus.UseCases.Grade.CreateGrade;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentGradeTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentListTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GetAllGradeByCourseId;
+using SomeSandwich.FakeMentorus.UseCases.Grade.GetGradeByStudentId;
 using SomeSandwich.FakeMentorus.UseCases.Grade.ImportStudentGrade;
 using SomeSandwich.FakeMentorus.UseCases.Grade.ImportStudentList;
 using SomeSandwich.FakeMentorus.Web.Requests;
@@ -101,9 +102,25 @@ public class GradeController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet("all")]
-    public async Task<ActionResult<GetAllGradeByCourseIdResult>> GetAllGradeByCourseId([FromQuery] GetAllGradeByCourseIdCommand command,
+    public async Task<ActionResult<GetAllGradeByCourseIdResult>> GetAllGradeByCourseId(
+        [FromQuery] GetAllGradeByCourseIdCommand command,
         CancellationToken cancellationToken)
     {
+        return await mediator.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// Get grade by student id in a course.
+    /// </summary>
+    /// <param name="courseId"></param>
+    /// <param name="studentId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("course/{courseId:int}/student/{studentId:int}")]
+    public async Task<ActionResult<GetGradeByStudentIdDto>> GetAllGradeByStudentId([FromRoute] int courseId,
+        [FromRoute] string studentId, CancellationToken cancellationToken)
+    {
+        var command = new GetGradeByStudentIdQuery() { CourseId = courseId, StudentId = studentId };
         return await mediator.Send(command, cancellationToken);
     }
 
