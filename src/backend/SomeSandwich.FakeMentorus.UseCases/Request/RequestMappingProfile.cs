@@ -1,6 +1,7 @@
 using AutoMapper;
 using SomeSandwich.FakeMentorus.UseCases.Request.Common;
 using SomeSandwich.FakeMentorus.UseCases.Request.CreateRequest;
+using SomeSandwich.FakeMentorus.UseCases.Request.GetRequestById;
 
 namespace SomeSandwich.FakeMentorus.UseCases.Request;
 
@@ -16,5 +17,7 @@ public class RequestMappingProfile : Profile
     {
         CreateMap<Domain.Request.Request, RequestDto>()
             .AfterMap((src, des) => { des.StudentName = src.Student.FirstName + " " + src.Student.LastName; });
+
+        CreateMap<Domain.Request.Request, RequestDetailDto>();
     }
 }
