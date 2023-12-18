@@ -89,36 +89,7 @@ const classService = {
 	},
 	async getAllGrade(classId: string) {
 		if (!classId || classId === "") throw new Error("classId is required");
-		// const response = await axios.get(`/api/grade/all`, {params: {courseId: classId}});
-		// export interface gradeCompositionsDto {
-		// 	id: number;
-		// 	key: number;
-		// 	name: string;
-		// 	courseId: number;
-		// 	description: string;
-		// 	isFinal: boolean;
-		// 	gradeScale: number;
-		// 	order: number;
-		// 	createdAt: string;
-		// 	updatedAt: string;
-		// }
-		// export interface GradeDTO {
-		// 	id: number;
-		// 	gradeCompositionId: number;
-		// 	gradeValue: number;
-		// 	isRequest: boolean;
-		// }
-		// export interface studentGradeDto {
-		// 	studentId: number;
-		// 	studentName: string;
-		// 	userId: number;
-		// 	gradeDto: GradeDTO[];
-		// }
-		// export interface gradeAll {
-		// 	courseId: number;
-		// 	gradeCompositionDtos: gradeCompositionsDto[];
-		// 	students: studentGradeDto[];
-		// }
+		
 		const response = {
 			data: {
 				courseId: 1,
@@ -212,6 +183,246 @@ const classService = {
 						],
 					},
 					{
+						studentId: 3,
+						studentName: "string",
+						userId: 3,
+						gradeDto: [
+							
+						
+							{
+								id: 3,
+								gradeCompositionId: 3,
+								gradeValue: 1,
+								isRequest: true,
+							},
+						],
+					},
+                    {
+                        studentId: 4,
+                        studentName: "string",
+                        userId: 4,
+                        gradeDto: [
+                            {
+                                id: 1,
+                                gradeCompositionId: 1,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 2,
+                                gradeCompositionId: 2,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 3,
+                                gradeCompositionId: 3,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                        ],
+                    },
+                    {
+                        studentId: 5,
+                        studentName: "string",
+                        userId: 5,
+                        gradeDto: [
+                            {
+                                id: 1,
+                                gradeCompositionId: 1,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 2,
+                                gradeCompositionId: 2,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 3,
+                                gradeCompositionId: 3,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                        ],
+                    },
+                    {
+                        studentId: 6,
+                        studentName: "string",
+                        userId: 6,
+                        gradeDto: [
+                            {
+                                id: 1,
+                                gradeCompositionId: 1,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 2,
+                                gradeCompositionId: 2,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 3,
+                                gradeCompositionId: 3,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                        ],
+                    },
+                    {
+                        studentId: 7,
+                        studentName: "string",
+                        userId: 7,
+                        gradeDto: [
+                            {
+                                id: 1,
+                                gradeCompositionId: 1,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 2,
+                                gradeCompositionId: 2,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 3,
+                                gradeCompositionId: 3,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                        ],
+                    },
+                    {
+                        studentId: 8,
+                        studentName: "string",
+                        userId: 8,
+                        gradeDto: [
+                            {
+                                id: 1,
+                                gradeCompositionId: 1,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 2,
+                                gradeCompositionId: 2,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 3,
+                                gradeCompositionId: 3,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                        ],
+                    },
+                    {
+                        studentId: 9,
+                        studentName: "string",
+                        userId: 9,
+                        gradeDto: [
+                            {
+                                id: 1,
+                                gradeCompositionId: 1,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 2,
+                                gradeCompositionId: 2,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 3,
+                                gradeCompositionId: 3,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                        ],
+                    },
+                    {
+                        studentId: 10,
+                        studentName: "string",
+                        userId: 10,
+                        gradeDto: [
+                            {
+                                id: 1,
+                                gradeCompositionId: 1,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 2,
+                                gradeCompositionId: 2,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                            {
+                                id: 3,
+                                gradeCompositionId: 3,
+                                gradeValue: 1,
+                                isRequest: true,
+                            },
+                        ],
+                    },
+                    {
+						studentId: 3,
+						studentName: "string",
+						userId: 3,
+						gradeDto: [
+							{
+								id: 1,
+								gradeCompositionId: 1,
+								gradeValue: 1,
+								isRequest: true,
+							},
+							{
+								id: 2,
+								gradeCompositionId: 2,
+								gradeValue: 1,
+								isRequest: true,
+							},
+							{
+								id: 3,
+								gradeCompositionId: 3,
+								gradeValue: 1,
+								isRequest: true,
+							},
+						],
+					},
+                    {
+						studentId: 3,
+						studentName: "string",
+						userId: 3,
+						gradeDto: [
+							{
+								id: 1,
+								gradeCompositionId: 1,
+								gradeValue: 1,
+								isRequest: true,
+							},
+							{
+								id: 2,
+								gradeCompositionId: 2,
+								gradeValue: 1,
+								isRequest: true,
+							},
+							{
+								id: 3,
+								gradeCompositionId: 3,
+								gradeValue: 1,
+								isRequest: true,
+							},
+						],
+					},
+                    {
 						studentId: 3,
 						studentName: "string",
 						userId: 3,

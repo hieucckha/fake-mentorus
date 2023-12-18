@@ -1,8 +1,10 @@
 import { FC, useEffect, useState } from "react";
 
-import { Table } from "antd";
+import { FloatButton, Table } from "antd";
 import { useParams } from "react-router-dom";
 import { listGradeAllClassQuery } from "../../../api/store/class/queries";
+import { PlusOutlined } from "@ant-design/icons";
+import useAuth from "../../../hooks/auth";
 
 const Grade: FC = () => {
 	const { id } = useParams();
@@ -11,6 +13,8 @@ const Grade: FC = () => {
 		{ title: "Name", dataIndex: "name", key: "name" },
 		{ title: "student ID", dataIndex: "studentID", key: "studentID" },
 	]);
+	
+	const {data: user} = useAuth();
 	const [student, setStudent] = useState<any[]>([]);
 	useEffect(() => {
 		if (gradeData) {
@@ -19,10 +23,11 @@ const Grade: FC = () => {
 				setGradeColumn((prev) => [
 					...prev,
 					{
-						title: item.gradeScale && `${item.name} (${item.gradeScale.toString()}%)`, 
+						title:
+							item.gradeScale &&
+							`${item.name} (${item.gradeScale.toString()}%)`,
 						dataIndex: item.id,
 						key: item.id,
-						
 					},
 				]);
 			});
@@ -36,20 +41,37 @@ const Grade: FC = () => {
 						...temp,
 						[grade.gradeCompositionId]: grade.gradeValue,
 					};
-				}
-				);
+				});
 				setStudent((prev) => [...prev, temp]);
-			}
-			);
+			});
 		}
-		
 	}, [gradeData]);
-	
+
 	return (
-		<div className="w-11/12">
-			
-			<Table columns={gradeColumn} dataSource={student} />
-		</div>
+		<>
+			<div className="w-11/12">
+				<Table columns={gradeColumn} dataSource={student} />
+			</div>
+			{
+				user?.role === "Teacher" ? (
+					<FloatButton
+						// onClick={handleOpenModalAddGrade}
+						shape="square"
+						type="primary"
+						style={{ right: 24 }}
+						icon={<PlusOutlined  />}
+					/>)
+				:(<FloatButton
+						// onClick={handleOpenModalRequestGrade}
+						shape="square"
+						type="primary"
+						style={{ right: 24 }}
+						icon={<PlusOutlined  />}
+					/>)
+
+			}
+
+		</>
 	);
 };
 
