@@ -29,7 +29,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
 	gradeCompositions,
 	newGradeCompositions,
-} from "../api/store/class/interface";
+} from "../../../api/store/class/interface";
 
 const originData: gradeCompositions[] = [];
 // const fullPercent = 100;
@@ -121,16 +121,17 @@ const RowDragable = (props: RowProps) => {
 		/>
 	);
 };
-import useClassDetail from "../hooks/useClassDetail";
+import useClassDetail from "../../../hooks/useClassDetail";
 import {
 	useAddNewGradeComposit,
 	useDeleteNewGradeComposit,
 	useUpdateGradeColumn,
 	useUpdateOrderGradeComposit,
-} from "../api/store/gradeComposits/mutation";
+} from "../../../api/store/gradeComposits/mutation";
 import Swal from "sweetalert2";
-import useAuth from "../hooks/auth";
-import { UserRole } from "../api/store/auth/interface";
+import { UserRole } from "../../../api/store/auth/interface";
+import useAuth from "../../../hooks/auth";
+
 const addKeyWithId = (array: any) => {
 	let arrClone = array.map((item: any) => ({ ...item, key: item.id }));
 	return arrClone;

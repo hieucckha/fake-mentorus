@@ -58,4 +58,33 @@ export interface ClassDetail {
 	requests: requests[];
 
 }
+export interface gradeCompositionsDto {
+	id: number;
+	key: number;
+	name: string;
+	courseId: number;
+	description: string;
+	isFinal: boolean;
+	gradeScale: number;
+	order: number;
+	createdAt: string;
+	updatedAt: string;
+}
+export interface GradeDTO {
+	id:number;
+	gradeCompositionId: number;
+	gradeValue: number;
+	isRequest: boolean;
+}
+export interface studentGradeDto{
+	studentId: number;
+	studentName: string;
+	userId: number;
+	gradeDto: GradeDTO[];
+}
+export interface gradeAll{
+	courseId: number;
+	gradeCompositionDtos: gradeCompositionsDto[];
+	students: studentGradeDto[];
+}
 
