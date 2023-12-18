@@ -38,9 +38,12 @@ export interface SignInFacebookData {
 
 export interface UserProfileDto {
 	/**
-	 * User name.
+	 * User full name.
 	 */
 	fullName: string;
+
+	lastName: string;
+	firstName: string;
 
 	/**
 	 * User id.
@@ -48,14 +51,18 @@ export interface UserProfileDto {
 	id: number;
 
 	/**
-	 * User name.
+	 * Email.
 	 */
 	email: string;
 
 	/**
-	 * Sex.
+	 * Student id.
 	 */
 	studentId: string;
+
+	/**
+	 * Role.
+	 */
 	role: string;
 }
 
@@ -75,6 +82,13 @@ export interface resetPasswordConfirmDto {
 	code: string;
 	password: string;
 	confirmPassword: string;
+}
+
+export interface editUserDto{
+	email: string;
+	firstName: string;
+	lastName: string;
+	studentId: string;
 }
 
 export enum UserRole {
