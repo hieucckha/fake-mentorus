@@ -13,6 +13,7 @@ import type {
 	resetPasswordDto,
 	signUpDto,
 	resetPasswordConfirmDto,
+	editUserDto,
 } from "./interface";
 
 export const useSignInMutation = () =>
@@ -49,7 +50,7 @@ export const userUpdateProfileMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		// eslint-disable-next-line @typescript-eslint/no-shadow
-		mutationFn: (user: UserProfileDto) => userService.updateProfile(user),
+		mutationFn: (user: editUserDto) => userService.updateProfile(user),
 		retry: false,
 		onSuccess() {
 			queryClient.invalidateQueries({ queryKey: ["auth"] });
@@ -69,7 +70,7 @@ export const userSignUpMutation = () =>
 				user.studentId
 			),
 		retry: false,
-	
+
 	});
 export const useResetPasswordMutation = () =>
 	useMutation({

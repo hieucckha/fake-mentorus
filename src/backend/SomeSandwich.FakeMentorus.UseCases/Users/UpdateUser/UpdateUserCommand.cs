@@ -19,6 +19,11 @@ public class UpdateUserCommand : IRequest
     public string? LastName { get; set; }
 
     /// <summary>
+    /// Student id.
+    /// </summary>
+    public string? StudentId { get; set; }
+
+    /// <summary>
     /// Avatar file.
     /// </summary>
     public IFormFile? AvatarFile { get; set; }
