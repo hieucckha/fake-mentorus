@@ -1,5 +1,5 @@
 import {  Flex, Space, Avatar } from "antd";
-import { UserProfileDto } from "../../api/store/auth/interface";
+import { UserProfileDto } from "../../../api/store/auth/interface";
 import { FC } from "react";
 
 interface MemberCardProps extends Partial<UserProfileDto> {

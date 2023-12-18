@@ -1,5 +1,5 @@
 import classService from '../../../services/class.service';
-import type { ClassDetail, ClassQuery } from './interface';
+import type { ClassDetail, ClassQuery, gradeAll } from './interface';
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 
 const classQuery = (user_id:number): UseQueryResult<ClassQuery[]> => {
@@ -14,6 +14,14 @@ export const classDetailQuery = (id:string): UseQueryResult<ClassDetail> => {
 	const queryData = useQuery({
 		queryKey: ["class", id],
 		queryFn: () => classService.getClassDetail(id),
+		enabled: !!id,
+	});
+	return queryData;
+};
+export const listGradeAllClassQuery = (id:string): UseQueryResult<gradeAll> => {
+	const queryData = useQuery({
+		queryKey: ["class", id],
+		queryFn: () => classService.getAllGrade(id),
 		enabled: !!id,
 	});
 	return queryData;

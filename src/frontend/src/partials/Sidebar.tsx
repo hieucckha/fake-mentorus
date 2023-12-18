@@ -1,17 +1,10 @@
 import React, { useState } from "react";
 import {
-	AppstoreOutlined,
 	BookOutlined,
-	ContainerOutlined,
-	DesktopOutlined,
 	HomeOutlined,
-	MailOutlined,
-	MenuFoldOutlined,
-	MenuUnfoldOutlined,
-	PieChartOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Button, Menu, Skeleton } from "antd";
+import {  Menu, Skeleton } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import classQuery from "../api/store/class/queries";
 import useAuth from "../hooks/auth";

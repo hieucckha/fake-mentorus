@@ -69,7 +69,13 @@ const classService = {
         formData.append("file", file);
         const response = await axios.post(`/api/grade/template/${classId}/import`, formData, {headers: {'Content-Type': 'multipart/form-data'}});
         return response.data;
-    }
+    },
+    async getAllGrade(classId:string) {
+        if(!classId || classId === "") 
+            throw new Error("classId is required");
+        const response = await axios.get(`/api/grade/all`, {params: {courseId: classId}});
+        return response.data;
+    },
 
 };
 export default classService;
