@@ -1,3 +1,4 @@
+import { editUserDto } from './../api/store/auth/interface';
 import axios from "../api/AxiosClient";
 import { UserProfileDto } from "../api/store/auth/interface";
 
@@ -10,8 +11,8 @@ const userService = {
 		const response = await axios.get("api/auth");
 		return response.data;
 	},
-	async updateProfile(user: UserProfileDto): Promise<UserProfileDto> {
-		const response = await axios.patch(`/users/${user.id}`, user);
+	async updateProfile(user: editUserDto) {
+		const response = await axios.put("/api/user", user);
 		return response.data;
 	},
 };

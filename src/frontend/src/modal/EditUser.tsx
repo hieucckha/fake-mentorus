@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useState, type FC, useEffect } from "react";
-import { Button, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Label, Modal, TextInput, Toast } from "flowbite-react";
 
 import useAuth from "../hooks/auth";
-import type { UserProfileDto } from "../api/store/auth/interface";
+import type { UserProfileDto, editUserDto } from "../api/store/auth/interface";
 import { userUpdateProfileMutation } from "../api/store/auth/mutations";
 
 interface EditUserProps {
@@ -18,6 +18,8 @@ const EditUser: FC<EditUserProps> = ({
 }): JSX.Element => {
 	const [formData, setFormData] = useState<UserProfileDto>({
 		fullName: "",
+		lastName:"",
+		firstName:"",
 		studentId: "",
 		email: "",
 		id: 0,
@@ -37,6 +39,8 @@ const EditUser: FC<EditUserProps> = ({
 
 		setFormData({
 			fullName: user?.fullName ?? "",
+			lastName: user?.lastName ?? "",
+			firstName: user?.firstName ?? "",
 			studentId: user?.studentId ?? "",
 			email: user?.email ?? "",
 			id: user?.id ?? null,
@@ -59,12 +63,22 @@ const EditUser: FC<EditUserProps> = ({
 
 	const handleSubmit = (error: React.FormEvent) => {
 		error.preventDefault();
-		updateProfile.mutate(formData, {
+		const data : editUserDto ={
+			firstName: formData.firstName,
+			lastName: formData.lastName,
+			studentId: formData.studentId,
+			email: formData.email,
+		}
+		updateProfile.mutate(data, {
 			onSuccess() {
 				handleCloseModalEditUser();
 			},
-			onError(error) {
+			onError(error:any) {
 				console.error(error);
+				Toast({
+					title: "Fail",
+					duration: 500,
+				});
 			},
 		});
 	};
@@ -87,7 +101,7 @@ const EditUser: FC<EditUserProps> = ({
 						</div>
 						<TextInput
 							id="email"
-							placeholder="Nguyen Van A"
+							placeholder="example@gnail.com"
 							value={formData.email}
 							onChange={handleChange}
 							required
@@ -101,20 +115,46 @@ const EditUser: FC<EditUserProps> = ({
 							id="name"
 							placeholder="Nguyen Van A"
 							value={formData.fullName}
+							// onChange={handleChange}
+							disabled
+						/>
+					</div>
+
+					<div>
+						<div className="mb-2 block">
+							<Label htmlFor="name" value="First Name" />
+						</div>
+						<TextInput
+							id="firstName"
+							placeholder="Nguyen"
+							value={formData.firstName}
 							onChange={handleChange}
 							required
 						/>
 					</div>
+
 					<div>
 						<div className="mb-2 block">
-							<Label htmlFor="studentId" value="StudentId" />
+							<Label htmlFor="name" value="Last Name" />
+						</div>
+						<TextInput
+							id="lastName"
+							placeholder="Van A"
+							value={formData.lastName}
+							onChange={handleChange}
+							required
+						/>
+					</div>
+					<div className={formData.role !== "Student" ? "" : "hidden"}>
+						<div className="mb-2 block" >
+							<Label htmlFor="studentId" value="Student Id" />
 						</div>
 						<TextInput
 							id="studentId"
-							placeholder="3043465"
+							placeholder="20127001"
 							value={formData.studentId}
 							onChange={handleChange}
-							required
+							// required
 						/>
 					</div>
 
