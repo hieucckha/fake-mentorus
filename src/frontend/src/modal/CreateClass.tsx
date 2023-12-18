@@ -1,6 +1,5 @@
 import { useState, type FC } from "react";
 import { Button, Label, Modal, TextInput,Textarea } from "flowbite-react";
-import Swal from 'sweetalert2';
 import { useCreateClassMutation } from "../api/store/class/mutation";
 import { App } from "antd";
 interface CreateClassProps {
@@ -37,15 +36,10 @@ const CreateClass: FC<CreateClassProps> = ({
         event.preventDefault();
         mutation.mutate(formData,
         {
-            onSuccess() { 
-                Swal.fire({
-            title: 'Success',
-            text: 'Create class successfully',
-            icon: 'success',
-            }).then(() => {
-              handleCloseModalCreateClass();
-            })
-
+            
+            onSuccess() {
+                message.success("Create class successfully");
+                handleCloseModalCreateClass();
             },
             onError(error) {
                 console.log(error);

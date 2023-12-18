@@ -5,7 +5,7 @@ import {
 	UploadOutlined,
 } from "@ant-design/icons";
 import { App, Dropdown, MenuProps, Upload, message } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, Link, useParams, Outlet } from "react-router-dom";
 import classService from "../services/class.service";
 import fileDownload from "js-file-download";
@@ -13,12 +13,11 @@ import { AxiosError } from "axios";
 import { convertBlobToJson } from "../utils";
 import useAuth from "../hooks/auth";
 import { UserRole } from "../api/store/auth/interface";
+import UploadModal from "../modal/UploadModal";
  
 
 const ClassLayout: React.FC = (): JSX.Element => {
-	const config = {
-		baseUrl: import.meta.env['VITE_API_URL']
-	}
+	
 	const location = useLocation();
 	const { id } = useParams<{ id: string }>();
 	const { notification } = App.useApp();
@@ -29,23 +28,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
 	const gradeStructureUrl = `/class/${id}/grade-structure`;
 	const gradeUrl = `/class/${id}/grade`;
 	
-	const props = {
-    name: 'file',
-    action: `${config.baseUrl}/api/grade/template/${id}/import`,
-    headers: {
-      authorization: 'authorization-text',
-    },
-    onChange(info: any) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
+	const [isModalVisible, setIsModalVisible] = useState(false);
 
 	const handleDownloadTemplate = async () => {
 		
@@ -56,7 +39,6 @@ const ClassLayout: React.FC = (): JSX.Element => {
 			})
 			.catch(async (error) => {
 				if (error instanceof AxiosError) {
-					console.log(error);
 					const errorBody = await convertBlobToJson(error.response?.data);
 					notification.error({
 						message: "Error",
@@ -70,48 +52,37 @@ const ClassLayout: React.FC = (): JSX.Element => {
 					});
 			});
 	};
+	const handleCloseModal = () => {
+		setIsModalVisible(false);
+	}
+	
+
 
 	const items: MenuProps["items"] = [
+		
 		{
 			key: "1",
 			label: (
-				<a onClick={handleDownloadTemplate}>
-					<DownloadOutlined className="pr-3" />
-					Download template grade
-				</a>
-			),
-		},
-		{
-			key: "2",
-			label: (
-				<Upload {...props}>
-					<a >
+				
+					<a onClick={()=>{
+						setIsModalVisible(true);
+					}} >
 						<UploadOutlined className="pr-3" />
 						Import grade
 					</a>
-				</Upload>
+				
 			),
 		},
+	
 		{
-			key: "3",
+			key: "2",
 			label: (
-				<a onClick={handleDownloadTemplate}>
-					<DownloadOutlined className="pr-3" />
-					Download list student
-				</a>
+					<a >
+						<UploadOutlined className="pr-3" />
+						Import list student
+					</a>
 			),
 		},
-		// {
-		// 	key: "4",
-		// 	label: (
-		// 		<Upload {...props}>
-		// 			<a >
-		// 				<UploadOutlined className="pr-3" />
-		// 				Import grade
-		// 			</a>
-		// 		</Upload>
-		// 	),
-		// },
 	];
 
 	return (
@@ -221,6 +192,13 @@ const ClassLayout: React.FC = (): JSX.Element => {
 					<div className="h-full w-full flex justify-center bg-slate-50 pt-6">
 						<Outlet />
 					</div>
+					{isModalVisible && (
+									<UploadModal
+										openModal={isModalVisible}
+										handleCloseModalUpload={handleCloseModal}
+									/>
+								)}
+						
 				</section>
 			</div>
 		</div>

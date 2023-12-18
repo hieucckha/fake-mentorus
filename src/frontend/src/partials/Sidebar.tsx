@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
 	BookOutlined,
 	HomeOutlined,
@@ -31,27 +31,22 @@ const fontSizeIcon = "20px";
 const fontSizeMenu = "16px";
 
 const Sidebar: React.FC = () => {
-	const [collapsed, setCollapsed] = useState(false);
+	// const [collapsed, setCollapsed] = useState(false);
 	const { data: user } = useAuth();
 
 	const { data, isLoading } = classQuery(user?.id ?? -1);
 	const { pathname } = useLocation();
-	console.log("pathname")
 	const getSelectedKey = (pathname: string) : string[]=>{
 		var splitPath = pathname.split('/');
 		if(splitPath.length>1){
-			console.log([splitPath[1],splitPath[2]].join('/'))
 			return [[splitPath[1],splitPath[2]].join('/')]
 		}
 		return ['']
 	}
 	const getDefaultOpenKey = (pathname: string) : string[]=>{
 		var splitPath = pathname.split('/');
-		console.log("open menu")
-		console.log(splitPath.includes('class') ? ['classes'] : [])
 		return splitPath.includes('class') ? ['classes'] : [];
 	}
-	console.log(pathname.split('/'))
 	var itemsMenu : MenuProps['items'] = []
 	if(isLoading){
 		itemsMenu = [
@@ -76,9 +71,7 @@ const Sidebar: React.FC = () => {
 			),
 		]
 	}
-	const toggleCollapsed = () => {
-		setCollapsed(!collapsed);
-	};
+	
 
 	return (
 		<div
@@ -92,7 +85,7 @@ const Sidebar: React.FC = () => {
 				defaultOpenKeys={getDefaultOpenKey(pathname)}
 				mode="inline"
 				theme="light"
-				inlineCollapsed={collapsed}
+				inlineCollapsed={false}
 				items={itemsMenu}
 			/>
 		</div>

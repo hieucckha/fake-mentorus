@@ -8,11 +8,9 @@ import JoinClass from "../modal/JoinClass";
 
 const Dashboard: FC = (): JSX.Element => {
 	const { data: user } = useAuth();
-	console.log(user);
 	const [isOpenModalCreateClass, setIsOpenModalCreateClass] = useState(false);
 	const [isOpenModalJoinClass, setIsOpenModalJoinClass] = useState(false);
 	
-	// const { data, isLoading } =  user?.id ? classQuery(user.id) : { data: undefined, isLoading: false };
 	const { data, isLoading } = classQuery(user?.id ?? -1 );
 
 	const handleCloseModalCreateClass = (): void => {

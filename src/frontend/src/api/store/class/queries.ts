@@ -20,7 +20,7 @@ export const classDetailQuery = (id:string): UseQueryResult<ClassDetail> => {
 };
 export const listGradeAllClassQuery = (id:string): UseQueryResult<gradeAll> => {
 	const queryData = useQuery({
-		queryKey: ["class", id],
+		queryKey: ["classes", id],
 		queryFn: () => classService.getAllGrade(id),
 		enabled: !!id,
 	});
