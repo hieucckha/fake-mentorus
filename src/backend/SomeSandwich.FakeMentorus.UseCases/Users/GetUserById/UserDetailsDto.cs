@@ -29,4 +29,9 @@ public class UserDetailsDto
     /// User role.
     /// </summary>
     public string Role { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Student id.
+    /// </summary>
+    public string? StudentId { get; set; }
 }
