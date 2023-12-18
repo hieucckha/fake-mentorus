@@ -25,7 +25,7 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
 	gradeCompositions,
 	newGradeCompositions,
@@ -124,10 +124,13 @@ const RowDragable = (props: RowProps) => {
 import useClassDetail from "../hooks/useClassDetail";
 import {
 	useAddNewGradeComposit,
+	useDeleteNewGradeComposit,
 	useUpdateGradeColumn,
 	useUpdateOrderGradeComposit,
 } from "../api/store/gradeComposits/mutation";
 import Swal from "sweetalert2";
+import useAuth from "../hooks/auth";
+import { UserRole } from "../api/store/auth/interface";
 const addKeyWithId = (array: any) => {
 	let arrClone = array.map((item: any) => ({ ...item, key: item.id }));
 	return arrClone;
@@ -135,11 +138,15 @@ const addKeyWithId = (array: any) => {
 const GradeStructure: React.FC = () => {
 	const { id } = useParams();
 	if (!id) return null;
+	const { data: user } = useAuth();
+	console.log(user);
+	const navigate = useNavigate();
 	const { message } = App.useApp();
 	const { data, isLoading } = useClassDetail();
 	const mutation = useUpdateOrderGradeComposit();
 	const mutationAddGradeColumn = useAddNewGradeComposit();
 	const mutationUpdateGradeColumn = useUpdateGradeColumn();
+	const mutationDeleteGradeColumn = useDeleteNewGradeComposit();
 	// const {data, isLoading,error,isError} = classDetailQuery(id as string );
 	// if (isLoading) return <>Loading</>;
 	// if (isError) return <>{error}</>;
@@ -196,6 +203,13 @@ const GradeStructure: React.FC = () => {
 			setGradeCompositions(addKeyWithId(data.gradeCompositions));
 		}
 	}, [data]);
+	useEffect(() => {
+		if (user) {
+			if(user.role == UserRole.Student){
+				navigate('/home')
+			}
+		}
+	}, [user]);
 
 	if (isLoading) return <div>Loading...</div>;
 
@@ -233,6 +247,7 @@ const GradeStructure: React.FC = () => {
 			},
 		});
 	};
+	
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as gradeCompositions;
@@ -311,6 +326,11 @@ const GradeStructure: React.FC = () => {
 		}
 	};
 
+	const handleDelete = async (gradeId : number)=>{
+		console.log("row Delete")
+		console.log(gradeId)
+		mutationDeleteGradeColumn.mutate(gradeId)
+	}
 	const columns = [
 		{
 			title: "Name",
@@ -355,7 +375,7 @@ const GradeStructure: React.FC = () => {
 						</Typography.Link>
 						<Popconfirm
 							title="Sure to delete?"
-							onConfirm={cancel}
+							onConfirm={()=>handleDelete(record.id)}
 							okButtonProps={{ className: "bg-blue-500" }}
 						>
 							<a className="text-red-500 hover:text-red-600">Delete</a>

@@ -76,3 +76,8 @@ export interface resetPasswordConfirmDto {
 	password: string;
 	confirmPassword: string;
 }
+
+export enum UserRole {
+	Teacher = "Teacher",
+	Student = "Student"
+}
