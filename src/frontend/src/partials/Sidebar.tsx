@@ -55,8 +55,8 @@ const Sidebar: React.FC = () => {
 	const getDefaultOpenKey = (pathname: string) : string[]=>{
 		var splitPath = pathname.split('/');
 		console.log("open menu")
-		console.log(splitPath.includes('class') ? ['class'] : [])
-		return splitPath.includes('class') ? ['class'] : [];
+		console.log(splitPath.includes('class') ? ['classes'] : [])
+		return splitPath.includes('class') ? ['classes'] : [];
 	}
 	console.log(pathname.split('/'))
 	var itemsMenu : MenuProps['items'] = []
@@ -73,7 +73,7 @@ const Sidebar: React.FC = () => {
 		itemsMenu = [
 			getItem(<NavLink style={{ fontSize: fontSizeMenu}} to={"home"}>Home</NavLink>, "home", <HomeOutlined style={{ fontSize: fontSizeIcon}}/>),
 		
-			getItem(<NavLink style={{ fontSize: fontSizeMenu}} to={"class"}>Class</NavLink>, "class", <BookOutlined style={{ fontSize: fontSizeIcon}} />, 
+			getItem('Class', "classes", <BookOutlined style={{ fontSize: fontSizeIcon}} />, 
 				data?.map((item)=>
 					getItem(
 						<NavLink to={`class/${item.id}/overview`}>{item.name}</NavLink>,
