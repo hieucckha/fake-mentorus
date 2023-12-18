@@ -1,8 +1,8 @@
 import {  useState, type FC } from "react";
-import { UserProfileDto } from "../api/store/auth/interface";
-import ClassMember from "./components/ClassMember";
-import useClassDetail from "../hooks/useClassDetail";
-import InviteMemberByEmail from "../modal/InviteMemberByEmail";
+import { UserProfileDto } from "../../../api/store/auth/interface";
+import ClassMember from "./ClassMember";
+import useClassDetail from "../../../hooks/useClassDetail";
+import InviteMemberByEmail from "../../../modal/InviteMemberByEmail";
 
 interface MemberCardProps extends Partial<UserProfileDto> {}
 const ClassroomMember: FC<MemberCardProps> = ({}) => {

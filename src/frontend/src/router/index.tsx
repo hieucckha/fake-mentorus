@@ -11,11 +11,12 @@ import NotFound from "../pages/NotFound";
 import ResetPassword from "../pages/ResetPassword";
 import ConfirmEmail from "../pages/ConfirmEmail";
 import ConfirmResetPassword from "../pages/ConfirmResetPassword";
-import GradeStructure from "../pages/GradeStructure";
 import Overview from "../component/card/Overview";
 import Dashboard from "../layout/Dashboard";
 import ClassLayout from "../layout/ClassLayout";
-import ClassroomMember from "../pages/ClassroomMember";
+import ClassroomMember from "../pages/class/components/ClassroomMember";
+import GradeStructure from "../pages/class/components/GradeStructure";
+import Grade from "../pages/class/components/Grade";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -85,6 +86,10 @@ const BrowserRouter = createBrowserRouter([
 									{
 										path: "grade-structure",
 										element: <GradeStructure />,
+									},
+									{
+										path: "grade",
+										element: <Grade />,
 									},
 								],
 							},
