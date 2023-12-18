@@ -38,7 +38,7 @@ public class RequestController
     /// <returns></returns>
     [HttpPost]
     [Authorize]
-    public async Task<RequestDto> CreateRequest(CreateRequestCommand command)
+    public async Task<RequestDto> CreateRequest([FromBody]CreateRequestCommand command)
     {
         var result = await mediator.Send(command);
         return result;

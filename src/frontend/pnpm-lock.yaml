@@ -44,6 +44,9 @@ dependencies:
   flowbite-react:
     specifier: ^0.7.0
     version: 0.7.0(@types/react@18.2.38)(esbuild@0.19.7)(next@13.5.6)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.3.5)
+  js-file-download:
+    specifier: ^0.4.12
+    version: 0.4.12
   moment:
     specifier: ^2.29.4
     version: 2.29.4
@@ -3926,6 +3929,10 @@ packages:
   /jiti@1.21.0:
     resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
     hasBin: true
+
+  /js-file-download@0.4.12:
+    resolution: {integrity: sha512-rML+NkoD08p5Dllpjo0ffy4jRHeY6Zsapvr/W86N7E0yuzAO6qa5X9+xog6zQNlH102J7IXljNY2FtS6Lj3ucg==}
+    dev: false
 
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}

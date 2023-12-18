@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Saritasa.Tools.Domain.Exceptions;
@@ -11,21 +12,24 @@ namespace SomeSandwich.FakeMentorus.UseCases.Grade.GetGradeByStudentId;
 public class GetGradeByStudentIdQueryHandle : IRequestHandler<GetGradeByStudentIdQuery, GetGradeByStudentIdDto>
 {
     private readonly IAppDbContext dbContext;
+    private readonly IMapper mapper;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext"></param>
-    public GetGradeByStudentIdQueryHandle(IAppDbContext dbContext)
+    /// <param name="mapper"></param>
+    public GetGradeByStudentIdQueryHandle(IAppDbContext dbContext, IMapper mapper)
     {
         this.dbContext = dbContext;
+        this.mapper = mapper;
     }
 
     /// <inheritdoc />
     public async Task<GetGradeByStudentIdDto> Handle(GetGradeByStudentIdQuery request,
         CancellationToken cancellationToken)
     {
-        if (dbContext.Students.Any(x => x.StudentId == request.StudentId))
+        if (!dbContext.Students.Any(x => x.StudentId == request.StudentId))
         {
             throw new NotFoundException("Student not found.");
         }
@@ -56,17 +60,17 @@ public class GetGradeByStudentIdQueryHandle : IRequestHandler<GetGradeByStudentI
             .Where(e => e.Student.StudentId == request.StudentId)
             .ToListAsync(cancellationToken);
 
-        var gradeDetails = course.GradeCompositions.Select(x => new GradeDetailByStudentIdDto()
+        var abc = grades.Select(x =>
         {
-            GradeCompositionId = x.Id,
-            GradeCompositionName = x.Name ?? "",
-            GradeValue = grades.FirstOrDefault(g => g.GradeCompositionId == x.Id)!.GradeValue,
-            IsRequested = grades.FirstOrDefault(g => g.GradeCompositionId == x.Id)!.IsRequested
+            var gradeDetail = mapper.Map<GradeDetailByStudentIdDto>(x);
+            gradeDetail.GradeCompositionName = x.GradeComposition.Name ?? "";
+            return gradeDetail;
         }).ToList();
+
 
         var result = new GetGradeByStudentIdDto
         {
-            StudentId = request.StudentId, StudentName = studentName, GradeDetails = gradeDetails
+            StudentId = request.StudentId, StudentName = studentName, GradeDetails = abc
         };
 
         return result;

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Saritasa.Tools.Common.Utils;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 using SomeSandwich.FakeMentorus.UseCases.Grade.Common;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.Common;
@@ -41,6 +42,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .ToListAsync(cancellationToken);
 
         var studentIds = studentUsers
+            .Where(e => e.StudentId != null)
             .Select(e => e.StudentId)
             .ToList();
 
@@ -69,6 +71,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .Include(e => e.Grades)
             .Where(e => e.CourseId == command.CourseId)
             .OrderBy(e => e.GradeScale)
+            .ThenBy(e => e.Id)
             .ToListAsync(cancellationToken);
 
         var gradeTable = new Dictionary<string, List<GradeCellDto>>();
@@ -125,17 +128,19 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .Select(pair => new GradeCell
             {
                 StudentId = pair.Key,
+                StudentName = studentWithoutUserid.First(e => e.StudentId == pair.Key).Name,
                 UserId = null,
                 GradeDto = pair.Value
             }).ToList();
+
+        var students = gradeUserAndStudent.Concat(gradeNotUserAndStudent).OrderBy(e => e.StudentId).ToList();
 
         var result = new GetAllGradeByCourseIdResult
         {
             CourseId = command.CourseId,
             GradeCompositionDtos = mapper.Map<IReadOnlyList<GradeCompositionDto>>(gradeComposites),
-            StudentWithUserId = gradeUserAndStudent,
-            StudentWithoutUserId = gradeNotUserAndStudent,
-            UserWithoutStudentId = userWithoutStudentId.Select(e => mapper.Map<UserDto>(e)).ToList()
+            Students = students,
+            UserWithoutStudentId = userWithoutStudentId.Select(e => mapper.Map<UserWithoutStudentDto>(e)).ToList()
         };
 
         return result;

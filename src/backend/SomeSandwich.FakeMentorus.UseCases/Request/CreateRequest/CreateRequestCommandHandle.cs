@@ -36,7 +36,7 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
     }
 
     /// <inheritdoc />
-    public async Task<RequestDto> Handle(CreateRequestCommand request, CancellationToken cancellationToken)
+    public async Task<RequestDto> Handle(CreateRequestCommand command, CancellationToken cancellationToken)
     {
         var user = await userManager.FindByIdAsync(loggedUserAccessor.GetCurrentUserId().ToString());
         if (user == null)
@@ -50,11 +50,21 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
             throw new ForbiddenException("Only students can create requests");
         }
 
-        var grade = dbContext.Grades.FirstOrDefault(g => g.Id == request.GradeId);
+        if (user.StudentId == null)
+        {
+            throw new NotFoundException("Student info not found");
+        }
+
+        var grade = await dbContext.Grades
+            .Where(e => e.GradeCompositionId == command.GradeCompositionId)
+            .Where(e => e.StudentId == user.StudentId)
+            .FirstOrDefaultAsync(cancellationToken);
+
         if (grade == null)
         {
             throw new NotFoundException("Grade not found");
         }
+
 
         if (grade.IsRequested == true)
         {
@@ -64,9 +74,9 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
         var requestEntity = new Domain.Request.Request
         {
             StudentId = user.Id,
-            GradeId = request.GradeId,
-            Reason = request.Reason,
-            ExpectedGrade = request.ExceptedGrade,
+            GradeId = grade.Id,
+            Reason = command.Reason,
+            ExpectedGrade = command.ExceptedGrade,
             CurrentGrade = grade.GradeValue,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
@@ -86,7 +96,8 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
             .ThenInclude(s => s.User)
             .Include(c => c.GradeCompositions)
             .ThenInclude(gc => gc.Grades)
-            .Where(c => c.GradeCompositions.Any(gc => gc.Grades.Any(g => g.Id == request.GradeId)))
+            .Where(c => c.GradeCompositions.Any(gc =>
+                gc.Grades.Any(g => g.Id == grade.Id) && gc.IsDeleted != true))
             .Where(c => c.StudentInfos.Any(si => si.Student.User.Id == user.Id))
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -97,7 +108,7 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
         else
         {
             result.StudentName = course.StudentInfos
-                .Where(si => si.Student.User.Id == user.Id)
+                .Where(si => si.StudentId == user.StudentId)
                 .Select(si => si.Name)
                 .FirstOrDefault() ?? "";
         }

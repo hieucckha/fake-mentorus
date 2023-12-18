@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SomeSandwich.FakeMentorus.UseCases.Grade.CreateGrade;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.CreateGradeComposition;
+using SomeSandwich.FakeMentorus.UseCases.GradeComposition.DeleteGradeComposition;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.GetGradeCompositionById;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.SortGradeComposition;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.UpdateGradeComposition;
@@ -107,5 +108,17 @@ public class GradeCompositionController
     {
         await mediator.Send(new SortGradeCompositionCommand() { GradeCompositions = request.GradeCompositions },
             cancellationToken);
+    }
+
+    /// <summary>
+    /// Delete grade composition.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    [HttpDelete("{id:int}")]
+    [Authorize]
+    public async Task Delete([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new DeleteGradeCompositionCommand() { GradeCompositionId = id }, cancellationToken);
     }
 }

@@ -11,6 +11,16 @@ public class UserDetailsDto
     public int Id { get; set; }
 
     /// <summary>
+    /// User first name.
+    /// </summary>
+    required public string FirstName { get; set; }
+
+    /// <summary>
+    /// User last name.
+    /// </summary>
+    required public string LastName { get; set; }
+
+    /// <summary>
     /// Full user name.
     /// </summary>
     required public string FullName { get; set; }
@@ -29,4 +39,9 @@ public class UserDetailsDto
     /// User role.
     /// </summary>
     public string Role { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Student id.
+    /// </summary>
+    public string? StudentId { get; set; }
 }
