@@ -1,74 +1,109 @@
-import type { FC } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import {
+	AppstoreOutlined,
+	BookOutlined,
+	ContainerOutlined,
+	DesktopOutlined,
+	HomeOutlined,
+	MailOutlined,
+	MenuFoldOutlined,
+	MenuUnfoldOutlined,
+	PieChartOutlined,
+} from "@ant-design/icons";
+import type { MenuProps } from "antd";
+import { Button, Menu, Skeleton } from "antd";
+import { NavLink, useLocation } from "react-router-dom";
 import classQuery from "../api/store/class/queries";
 import useAuth from "../hooks/auth";
 
-/**
- *
- * @returns Sidebar.
- * @description
- * Sidebar.
- */
+type MenuItem = Required<MenuProps>["items"][number];
 
-const Sidebar: FC = () => {
+function getItem(
+	label: React.ReactNode,
+	key: React.Key,
+	icon?: React.ReactNode,
+	children?: MenuItem[],
+	type?: "group"
+): MenuItem {
+	return {
+		key,
+		icon,
+		children,
+		label,
+		type,
+	} as MenuItem;
+}
+
+const fontSizeIcon = "20px";
+const fontSizeMenu = "16px";
+
+const Sidebar: React.FC = () => {
+	const [collapsed, setCollapsed] = useState(false);
 	const { data: user } = useAuth();
 
-	const { isLoading, data: classes } = classQuery(user?.id ?? -1);
+	const { data, isLoading } = classQuery(user?.id ?? -1);
+	const { pathname } = useLocation();
+	console.log("pathname")
+	const getSelectedKey = (pathname: string) : string[]=>{
+		var splitPath = pathname.split('/');
+		if(splitPath.length>1){
+			console.log([splitPath[1],splitPath[2]].join('/'))
+			return [[splitPath[1],splitPath[2]].join('/')]
+		}
+		return ['']
+	}
+	const getDefaultOpenKey = (pathname: string) : string[]=>{
+		var splitPath = pathname.split('/');
+		console.log("open menu")
+		console.log(splitPath.includes('class') ? ['class'] : [])
+		return splitPath.includes('class') ? ['class'] : [];
+	}
+	console.log(pathname.split('/'))
+	var itemsMenu : MenuProps['items'] = []
+	if(isLoading){
+		itemsMenu = [
+			getItem(<NavLink style={{ fontSize: fontSizeMenu}} to={"home"}>Home</NavLink>, "home", <HomeOutlined style={{ fontSize: fontSizeIcon}}/>),
+		
+			getItem(
+				<div className="flex flex-row items-center gap-x-2">
+					<Skeleton.Input className="w-14 h-6" active={true} size={"small"} />
+				</div>,'skeleton',<Skeleton.Avatar className="w-14 h-8" active={true} size={"default"} shape={"circle"} />),
+		]
+	}else if(data){
+		itemsMenu = [
+			getItem(<NavLink style={{ fontSize: fontSizeMenu}} to={"home"}>Home</NavLink>, "home", <HomeOutlined style={{ fontSize: fontSizeIcon}}/>),
+		
+			getItem(<NavLink style={{ fontSize: fontSizeMenu}} to={"class"}>Class</NavLink>, "class", <BookOutlined style={{ fontSize: fontSizeIcon}} />, 
+				data?.map((item)=>
+					getItem(
+						<NavLink to={`class/${item.id}/overview`}>{item.name}</NavLink>,
+						`class/${item.id}`
+					  )
+				)
+			),
+		]
+	}
+	const toggleCollapsed = () => {
+		setCollapsed(!collapsed);
+	};
 
 	return (
-		<aside
-			id="logo-sidebar"
-			className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-			aria-label="Sidebar"
+		<div
+			className="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+			style={{ width: 256 }}
 		>
-			<div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-				<ul className="space-y-2 font-medium">
-					<li>
-						<NavLink
-							to="/home"
-							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-						>
-							<svg
-								className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-								aria-hidden="true"
-								xmlns="http://www.w3.org/2000/svg"
-								fill="currentColor"
-								viewBox="0 0 22 21"
-							>
-								<path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-								<path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-							</svg>
-							<span className="ms-3">Dashboard</span>
-						</NavLink>
-					</li>
-					<li>
-						<a
-							href="/home"
-							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width={24}
-								height={24}
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="#000000"
-								strokeWidth={2}
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							>
-								<rect x={2} y={2} width={20} height={8} rx={2} ry={2} />
-								<rect x={2} y={14} width={20} height={8} rx={2} ry={2} />
-								<line x1={6} y1={6} x2="6.01" y2={6} />
-								<line x1={6} y1={18} x2="6.01" y2={18} />
-							</svg>
-
-							<span className="ms-3">My class</span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</aside>
+			<Menu
+				className="mt-0"
+				defaultSelectedKeys={getSelectedKey(pathname)}
+				selectedKeys={getSelectedKey(pathname)}
+				defaultOpenKeys={getDefaultOpenKey(pathname)}
+				mode="inline"
+				theme="light"
+				inlineCollapsed={collapsed}
+				items={itemsMenu}
+			/>
+		</div>
 	);
 };
+
 export default Sidebar;
