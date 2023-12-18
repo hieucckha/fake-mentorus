@@ -31,21 +31,7 @@ import {
 	newGradeCompositions,
 } from "../../../api/store/class/interface";
 
-const originData: gradeCompositions[] = [];
-// const fullPercent = 100;
-for (let i = 1; i < 5; i++) {
-	originData.push({
-		id: i,
-		key: i,
-		name: `Edward ${i}`,
-		gradeScale: Math.ceil(100 - Math.random() * 30),
-		description: `London Park no. ${i}`,
-		courseId: 0,
-		order: 0,
-		createdAt: "stringnumber",
-		updatedAt: "stringnumber",
-	});
-}
+
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
 	dataIndex: string;
@@ -128,19 +114,17 @@ import {
 	useUpdateGradeColumn,
 	useUpdateOrderGradeComposit,
 } from "../../../api/store/gradeComposits/mutation";
-import Swal from "sweetalert2";
 import { UserRole } from "../../../api/store/auth/interface";
 import useAuth from "../../../hooks/auth";
 
 const addKeyWithId = (array: any) => {
-	let arrClone = array.map((item: any) => ({ ...item, key: item.id }));
+	let arrClone = array?.map((item: any) => ({ ...item, key: item.id }));
 	return arrClone;
 };
 const GradeStructure: React.FC = () => {
 	const { id } = useParams();
 	if (!id) return null;
 	const { data: user } = useAuth();
-	console.log(user);
 	const navigate = useNavigate();
 	const { message } = App.useApp();
 	const { data, isLoading } = useClassDetail();
@@ -148,9 +132,7 @@ const GradeStructure: React.FC = () => {
 	const mutationAddGradeColumn = useAddNewGradeComposit();
 	const mutationUpdateGradeColumn = useUpdateGradeColumn();
 	const mutationDeleteGradeColumn = useDeleteNewGradeComposit();
-	// const {data, isLoading,error,isError} = classDetailQuery(id as string );
-	// if (isLoading) return <>Loading</>;
-	// if (isError) return <>{error}</>;
+	
 
 	const [form] = Form.useForm();
 	const [gradeCompositions, setGradeCompositions] = useState<
@@ -182,8 +164,7 @@ const GradeStructure: React.FC = () => {
 				order: idx + 1,
 			};
 		});
-		console.log("Call api reindex");
-		console.log(array);
+		
 		mutation.mutate(array, {
 			onSuccess() {},
 			onError(error) {
@@ -193,8 +174,7 @@ const GradeStructure: React.FC = () => {
 		// setGradeCompositions(array)
 	};
 	useEffect(() => {
-		console.log("gradeCompositions");
-		console.log(gradeCompositions);
+		
 		if (gradeCompositions) {
 			reOrderArray();
 		}
@@ -257,7 +237,6 @@ const GradeStructure: React.FC = () => {
 				return;
 			}
 			row.gradeScale = isNaN(row.gradeScale) ? 0 : Number(row.gradeScale);
-			console.log(row);
 
 			const newData = [...gradeCompositions];
 			const index = newData.findIndex((item) => key === item.id);
@@ -268,19 +247,8 @@ const GradeStructure: React.FC = () => {
 					...item,
 					...row,
 				});
-				console.log("Item");
-				console.log(item);
-				console.log("Save");
-				console.log(newData);
 				if (!isGradeScaleSumValid(newData)) {
-					Swal.fire({
-						title: "Error",
-						text: "Total Grade Scale > 100%",
-						icon: "error",
-						timer: 2000,
-						showCancelButton: false,
-						showConfirmButton: false,
-					});
+					message.error("GradeScale sum must be less than 100");
 					return;
 				}
 				mutationUpdateGradeColumn.mutate(
@@ -290,25 +258,10 @@ const GradeStructure: React.FC = () => {
 					},
 					{
 						onSuccess() {
-							Swal.fire({
-								title: "Success",
-								text: "Save Grade Composition successfully",
-								icon: "success",
-								timer: 1000,
-								showCancelButton: false,
-								showConfirmButton: false,
-							});
+							message.success("Update Grade Composition successfully");
 						},
-						onError(error: any) {
-							Swal.fire({
-								title: "Error",
-								text: "Some error happening",
-								icon: "error",
-								timer: 1000,
-								showCancelButton: false,
-								showConfirmButton: false,
-							});
-							console.log(error);
+						onError() {
+							message.error("Update Grade Composition failed");
 						},
 					}
 				);
@@ -316,7 +269,6 @@ const GradeStructure: React.FC = () => {
 				setGradeCompositions(newData);
 				setEditingKey(0);
 			} else {
-				console.log(row);
 
 				newData.push(row);
 				setGradeCompositions(newData);
@@ -328,9 +280,9 @@ const GradeStructure: React.FC = () => {
 	};
 
 	const handleDelete = async (gradeId : number)=>{
-		console.log("row Delete")
-		console.log(gradeId)
+		
 		mutationDeleteGradeColumn.mutate(gradeId)
+		message.success("Delete Grade Composition successfully");
 	}
 	const columns = [
 		{
@@ -424,7 +376,7 @@ const GradeStructure: React.FC = () => {
 			>
 				<SortableContext
 					// rowKey array
-					items={gradeCompositions.map((i) => i.id)}
+					items={gradeCompositions?.map((i) => i.id)}
 					strategy={verticalListSortingStrategy}
 				>
 					<Form form={form} component={false}>

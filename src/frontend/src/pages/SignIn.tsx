@@ -76,7 +76,6 @@ const SignIn: FC = (): JSX.Element => {
 					console.error(error);
 				},
 			});
-			console.log(response.authResponse.accessToken);
 		} catch (error: any) {
 			console.log(error);
 		}
@@ -100,7 +99,6 @@ const SignIn: FC = (): JSX.Element => {
 				console.error(error);
 			},
 		});
-		console.log(response);
 	};
 
 	return (

@@ -56,7 +56,6 @@ const ClassLayout: React.FC = (): JSX.Element => {
 			})
 			.catch(async (error) => {
 				if (error instanceof AxiosError) {
-					console.log(error);
 					const errorBody = await convertBlobToJson(error.response?.data);
 					notification.error({
 						message: "Error",
