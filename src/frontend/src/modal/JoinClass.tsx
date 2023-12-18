@@ -1,6 +1,5 @@
 import { useState, type FC } from "react";
 import { Button, Label, Modal, TextInput } from "flowbite-react";
-import Swal from "sweetalert2";
 import { useJoinClassMutation } from "../api/store/class/mutation";
 import { App } from "antd";
 import { AxiosError } from "axios";
@@ -35,16 +34,11 @@ const JoinClass: FC<JoinClassProps> = ({
 		event.preventDefault();
 		mutation.mutate(formData, {
 			onSuccess() {
-				Swal.fire({
-					title: "Success",
-					text: "Join class successfully",
-					icon: "success",
-					timer: 2000,
-					showCancelButton: false,
-					showConfirmButton: false,
-				}).then(() => {
-					handleCloseModalJoinClass();
+				notification.success({
+					message: "Join class success",
+					description: "You have joined the class successfully",
 				});
+				handleCloseModalJoinClass();
 			},
 			onError(error) {
 				if (error instanceof AxiosError) {
