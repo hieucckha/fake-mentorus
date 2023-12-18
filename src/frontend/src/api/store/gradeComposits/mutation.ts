@@ -33,3 +33,13 @@ export const useAddNewGradeComposit = () => {
         },
     });
 }
+export const useDeleteNewGradeComposit = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (compositionId:number) => classService.deleteGradeComposit(compositionId),
+        retry: false,
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ['class'] });
+        },
+    });
+}

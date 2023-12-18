@@ -11,6 +11,8 @@ import classService from "../services/class.service";
 import fileDownload from "js-file-download";
 import { AxiosError } from "axios";
 import { convertBlobToJson } from "../utils";
+import useAuth from "../hooks/auth";
+import { UserRole } from "../api/store/auth/interface";
  
 
 const ClassLayout: React.FC = (): JSX.Element => {
@@ -20,6 +22,8 @@ const ClassLayout: React.FC = (): JSX.Element => {
 	const location = useLocation();
 	const { id } = useParams<{ id: string }>();
 	const { notification } = App.useApp();
+	const { data: user } = useAuth();
+
 	const overviewUrl = `/class/${id}/overview`;
 	const classworkUrl = `/class/${id}/work-class`;
 	const gradeStructureUrl = `/class/${id}/grade-structure`;
@@ -165,6 +169,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
 									</Link>
 								</li>
 								<li className="me-2">
+									{user && user.role == UserRole.Teacher && 
 									<Link
 										to={gradeStructureUrl}
 										className={`inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
@@ -188,6 +193,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
 										</svg>
 										Grade structure
 									</Link>
+									}
 								</li>
 								<li className="me-2">
 									<Link

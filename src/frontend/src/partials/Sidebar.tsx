@@ -1,5 +1,7 @@
 import type { FC } from "react";
 import { NavLink } from "react-router-dom";
+import classQuery from "../api/store/class/queries";
+import useAuth from "../hooks/auth";
 
 /**
  *
@@ -9,6 +11,10 @@ import { NavLink } from "react-router-dom";
  */
 
 const Sidebar: FC = () => {
+	const { data: user } = useAuth();
+
+	const { isLoading, data: classes } = classQuery(user?.id ?? -1);
+
 	return (
 		<aside
 			id="logo-sidebar"
