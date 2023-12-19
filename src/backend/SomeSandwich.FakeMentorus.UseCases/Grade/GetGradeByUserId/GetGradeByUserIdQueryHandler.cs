@@ -61,7 +61,7 @@ public class GetGradeByUserIdQueryHandler : IRequestHandler<GetGradeByUserIdQuer
         {
             CourseId = query.CourseId,
             GradeCompositionDtos = gradeComposites.Select(e => mapper.Map<GradeCompositionDto>(e)).ToList(),
-            Students = gradeCell,
+            Students = new List<GradeCell>() { gradeCell },
         };
 
         return result;
