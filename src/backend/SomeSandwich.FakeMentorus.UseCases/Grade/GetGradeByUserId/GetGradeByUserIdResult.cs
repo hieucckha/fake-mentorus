@@ -21,5 +21,5 @@ public class GetGradeByUserIdResult
     /// <summary>
     /// List of grade cell for student.
     /// </summary>
-    public GradeCell Student { get; set; } = new GradeCell() { StudentId = "", StudentName = "", UserId = null };
+    public GradeCell Students { get; set; } = new GradeCell() { StudentId = "", StudentName = "", UserId = null };
 }
