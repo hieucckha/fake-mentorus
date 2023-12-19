@@ -7,6 +7,7 @@ using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentGradeTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentListTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GetAllGradeByCourseId;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GetGradeByStudentId;
+using SomeSandwich.FakeMentorus.UseCases.Grade.GetGradeByUserId;
 using SomeSandwich.FakeMentorus.UseCases.Grade.ImportStudentGrade;
 using SomeSandwich.FakeMentorus.UseCases.Grade.ImportStudentList;
 using SomeSandwich.FakeMentorus.Web.Requests;
@@ -116,11 +117,18 @@ public class GradeController
     /// <param name="studentId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
+    // [HttpGet("course/{courseId:int}/student/{studentId:int}")]
+    // public async Task<ActionResult<GetGradeByStudentIdDto>> GetAllGradeByStudentId([FromRoute] int courseId,
+    //     [FromRoute] string studentId, CancellationToken cancellationToken)
+    // {
+    //     var command = new GetGradeByStudentIdQuery() { CourseId = courseId, StudentId = studentId };
+    //     return await mediator.Send(command, cancellationToken);
+    // }
     [HttpGet("course/{courseId:int}/student/{studentId:int}")]
-    public async Task<ActionResult<GetGradeByStudentIdDto>> GetAllGradeByStudentId([FromRoute] int courseId,
+    public async Task<ActionResult<GetGradeByUserIdResult>> GetAllGradeByStudentId([FromRoute] int courseId,
         [FromRoute] string studentId, CancellationToken cancellationToken)
     {
-        var command = new GetGradeByStudentIdQuery() { CourseId = courseId, StudentId = studentId };
+        var command = new GetGradeByUserIdQuery() { CourseId = courseId, StudentId = studentId };
         return await mediator.Send(command, cancellationToken);
     }
 

@@ -69,7 +69,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
         // All grade
         var gradeComposites = await appDbContext.GradeCompositions
             .Include(e => e.Grades)
-            .Where(e => e.CourseId == command.CourseId)
+            .Where(e => e.CourseId == command.CourseId && e.IsDeleted == false)
             .OrderBy(e => e.GradeScale)
             .ThenBy(e => e.Id)
             .ToListAsync(cancellationToken);
