@@ -18,6 +18,12 @@ const Grade: FC = () => {
 	const [student, setStudent] = useState<any[]>([]);
 	useEffect(() => {
 		if (gradeData) {
+			console.log("test");
+			setStudent([]);
+			setGradeColumn([
+				{ title: "Name", dataIndex: "name", key: "name" },
+				{ title: "student ID", dataIndex: "studentID", key: "studentID" },
+			]);
 			gradeData?.gradeCompositionDtos?.sort((a, b) => a.order - b.order);
 			gradeData?.gradeCompositionDtos?.map((item) => {
 				setGradeColumn((prev) => [
