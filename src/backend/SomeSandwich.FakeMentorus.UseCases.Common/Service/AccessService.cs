@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Saritasa.Tools.EntityFrameworkCore;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
@@ -44,8 +45,10 @@ public class AccessService : IAccessService
         return userRole switch
         {
             "Admin" => true,
-            "Student" => dbContext.CourseStudents.Any(c => c.StudentId == loggedUserId && c.CourseId == courseId),
-            "Teacher" => dbContext.CourseTeachers.Any(c => c.TeacherId == loggedUserId && c.CourseId == courseId),
+            "Student" => await dbContext.CourseStudents.AnyAsync(
+                c => c.StudentId == loggedUserId && c.CourseId == courseId, cancellationToken),
+            "Teacher" => await dbContext.CourseTeachers.AnyAsync(
+                c => c.TeacherId == loggedUserId && c.CourseId == courseId, cancellationToken),
             _ => false
         };
     }
