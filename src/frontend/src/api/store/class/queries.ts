@@ -26,5 +26,13 @@ export const listGradeAllClassQuery = (id:string): UseQueryResult<gradeAll> => {
 	});
 	return queryData;
 }
+export const listGradeOneStudentQuery = (id:string,studentId: string): UseQueryResult<gradeAll> => {
+	const queryData = useQuery({
+		queryKey: ["classes", id],
+		queryFn: () => classService.getOneGradeStudent(id,studentId),
+		enabled: !!id && !!studentId && studentId !== "",
+	});
+	return queryData;
+}
 
 export default classQuery;
