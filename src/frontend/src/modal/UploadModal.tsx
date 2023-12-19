@@ -1,8 +1,12 @@
 import { useState, type FC } from "react";
-import { Button, Label, Modal, TextInput } from "flowbite-react";
+import { Button, Modal } from "flowbite-react";
 import { App, Table } from "antd";
 import { AxiosError } from "axios";
 import readXlsxFile from "read-excel-file";
+import classService from "../services/class.service";
+import { convertBlobToJson } from "../utils";
+import fileDownload from "js-file-download";
+import { useParams } from "react-router-dom";
 interface UploadProps {
 	handleCloseModalUpload: () => void;
 	openModal: boolean;
@@ -16,6 +20,8 @@ const Upload: FC<UploadProps> = ({
 	const [file, setFile] = useState<File>(new File([""], "filename"));
 	const [gradeColumn, setGradeColumn] = useState<any[]>([]);
 	const [student, setStudent] = useState<any[]>([]);
+	const { id } = useParams<{ id: string }>();
+	const { notification } = App.useApp();
 	const selectedFile = (e: any) => {
 		setFile(e.target.files[0]);
 	};
@@ -56,9 +62,52 @@ const Upload: FC<UploadProps> = ({
 			});
 		});
 	};
-	const handleClick = () => {
-		console.log(student);
-		console.log(gradeColumn);
+	const handleUpload = () => {
+		classService
+			.uploadGradeFile(id ?? "", file)
+			.then(() => {
+				notification.success({
+					message: "Success",
+					description: "Upload grade success",
+				});
+				handleCloseModalUpload();
+			})
+			.catch(async (error) => {
+				if (error instanceof AxiosError) {
+					const errorBody = await convertBlobToJson(error.response?.data);
+					notification.error({
+						message: "Error",
+						description: errorBody.title,
+					});
+					return;
+				}
+				notification.error({
+					message: "Error",
+					description: "Something went wrong",
+				});
+			});
+	};
+	const handleDownloadTemplate = async () => {
+		
+		classService
+			.downloadTemplate(id ?? "")
+			.then((res) => {
+				fileDownload(res.data, "template.xlsx");
+			})
+			.catch(async (error) => {
+				if (error instanceof AxiosError) {
+					const errorBody = await convertBlobToJson(error.response?.data);
+					notification.error({
+						message: "Error",
+						description: errorBody.title,
+					});
+					return;
+				}
+				notification.error({
+						message: "Error",
+						description: "Something went wrong",
+					});
+			});
 	};
 
 	return (
@@ -115,7 +164,7 @@ const Upload: FC<UploadProps> = ({
 						<Table columns={gradeColumn} dataSource={student} />
 					)}
 
-					{file?.size != 0 && (
+					{file?.size != 0 ? (
 						<div className="flex flex-row justify-center">
 							{!isPreview && (
 								<Button
@@ -127,13 +176,25 @@ const Upload: FC<UploadProps> = ({
 							)}
 
 							<Button
-								onClick={handleClick}
+								onClick={handleUpload}
 								className="items-center  m-4 justify-center"
 							>
 								Upload
 							</Button>
 						</div>
-					)}
+					):
+					(
+						<div className="flex flex-row justify-center">
+							<Button
+								onClick={handleDownloadTemplate}
+								className="items-center  m-4 justify-center"
+							>
+								Download template
+							</Button>
+						</div>
+					)
+
+				}
 				</Modal.Body>
 			</Modal>
 		</>

@@ -89,369 +89,380 @@ const classService = {
 	},
 	async getAllGrade(classId: string) {
 		if (!classId || classId === "") throw new Error("classId is required");
-		
-		const response = {
-			data: {
-				courseId: 1,
-				gradeCompositionDtos: [
-					{
-						id: 1,
-						key: 1,
-						name: "mount",
-						courseId: 1,
-						description: "string",
-						isFinal: true,
-						gradeScale: 1,
-						order: 1,
-						createdAt: "string",
-						updatedAt: "string",
-					},
-					{
-						id: 2,
-						key: 2,
-						name: "midterm",
-						courseId: 1,
-						description: "string",
-						isFinal: true,
-						gradeScale: 1,
-						order: 1,
-						createdAt: "string",
-						updatedAt: "string",
-					},
-					{
-						id: 3,
-						key: 3,
-						name: "final",
-						courseId: 1,
-						description: "string",
-						isFinal: true,
-						gradeScale: 1,
-						order: 1,
-						createdAt: "string",
-						updatedAt: "string",
-					},
-				],
-				students: [
-					{
-						studentId: 1,
-						studentName: "string",
-						userId: 1,
-						gradeDto: [
-							{
-								id: 1,
-								gradeCompositionId: 1,
-								gradeValue: 1,
-								isRequest: true,
-							},
-							{
-								id: 2,
-								gradeCompositionId: 2,
-								gradeValue: 1,
-								isRequest: true,
-							},
-							{
-								id: 3,
-								gradeCompositionId: 3,
-								gradeValue: 1,
-								isRequest: true,
-							},
-						],
-					},
-					{
-						studentId: 2,
-						studentName: "string",
-						userId: 2,
-						gradeDto: [
-							{
-								id: 1,
-								gradeCompositionId: 1,
-								gradeValue: 9,
-								isRequest: true,
-							},
-							{
-								id: 2,
-								gradeCompositionId: 2,
-								gradeValue: 10,
-								isRequest: true,
-							},
-							{
-								id: 3,
-								gradeCompositionId: 3,
-								gradeValue: 8,
-								isRequest: true,
-							},
-						],
-					},
-					{
-						studentId: 3,
-						studentName: "string",
-						userId: 3,
-						gradeDto: [
+		const response = await axios.get(`/api/grade/all`, { params: { courseId: classId } });
+		// const response = {
+		// 	data: {
+		// 		courseId: 1,
+		// 		gradeCompositionDtos: [
+		// 			{
+		// 				id: 1,
+		// 				key: 1,
+		// 				name: "mount",
+		// 				courseId: 1,
+		// 				description: "string",
+		// 				isFinal: true,
+		// 				gradeScale: 1,
+		// 				order: 1,
+		// 				createdAt: "string",
+		// 				updatedAt: "string",
+		// 			},
+		// 			{
+		// 				id: 2,
+		// 				key: 2,
+		// 				name: "midterm",
+		// 				courseId: 1,
+		// 				description: "string",
+		// 				isFinal: true,
+		// 				gradeScale: 1,
+		// 				order: 1,
+		// 				createdAt: "string",
+		// 				updatedAt: "string",
+		// 			},
+		// 			{
+		// 				id: 3,
+		// 				key: 3,
+		// 				name: "final",
+		// 				courseId: 1,
+		// 				description: "string",
+		// 				isFinal: true,
+		// 				gradeScale: 1,
+		// 				order: 1,
+		// 				createdAt: "string",
+		// 				updatedAt: "string",
+		// 			},
+		// 		],
+		// 		students: [
+		// 			{
+		// 				studentId: 1,
+		// 				studentName: "string",
+		// 				userId: 1,
+		// 				gradeDto: [
+		// 					{
+		// 						id: 1,
+		// 						gradeCompositionId: 1,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 					{
+		// 						id: 2,
+		// 						gradeCompositionId: 2,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 					{
+		// 						id: 3,
+		// 						gradeCompositionId: 3,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 				],
+		// 			},
+		// 			{
+		// 				studentId: 2,
+		// 				studentName: "string",
+		// 				userId: 2,
+		// 				gradeDto: [
+		// 					{
+		// 						id: 1,
+		// 						gradeCompositionId: 1,
+		// 						gradeValue: 9,
+		// 						isRequest: true,
+		// 					},
+		// 					{
+		// 						id: 2,
+		// 						gradeCompositionId: 2,
+		// 						gradeValue: 10,
+		// 						isRequest: true,
+		// 					},
+		// 					{
+		// 						id: 3,
+		// 						gradeCompositionId: 3,
+		// 						gradeValue: 8,
+		// 						isRequest: true,
+		// 					},
+		// 				],
+		// 			},
+		// 			{
+		// 				studentId: 3,
+		// 				studentName: "string",
+		// 				userId: 3,
+		// 				gradeDto: [
 							
 						
-							{
-								id: 3,
-								gradeCompositionId: 3,
-								gradeValue: 1,
-								isRequest: true,
-							},
-						],
-					},
-                    {
-                        studentId: 4,
-                        studentName: "string",
-                        userId: 4,
-                        gradeDto: [
-                            {
-                                id: 1,
-                                gradeCompositionId: 1,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 2,
-                                gradeCompositionId: 2,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 3,
-                                gradeCompositionId: 3,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                        ],
-                    },
-                    {
-                        studentId: 5,
-                        studentName: "string",
-                        userId: 5,
-                        gradeDto: [
-                            {
-                                id: 1,
-                                gradeCompositionId: 1,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 2,
-                                gradeCompositionId: 2,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 3,
-                                gradeCompositionId: 3,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                        ],
-                    },
-                    {
-                        studentId: 6,
-                        studentName: "string",
-                        userId: 6,
-                        gradeDto: [
-                            {
-                                id: 1,
-                                gradeCompositionId: 1,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 2,
-                                gradeCompositionId: 2,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 3,
-                                gradeCompositionId: 3,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                        ],
-                    },
-                    {
-                        studentId: 7,
-                        studentName: "string",
-                        userId: 7,
-                        gradeDto: [
-                            {
-                                id: 1,
-                                gradeCompositionId: 1,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 2,
-                                gradeCompositionId: 2,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 3,
-                                gradeCompositionId: 3,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                        ],
-                    },
-                    {
-                        studentId: 8,
-                        studentName: "string",
-                        userId: 8,
-                        gradeDto: [
-                            {
-                                id: 1,
-                                gradeCompositionId: 1,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 2,
-                                gradeCompositionId: 2,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 3,
-                                gradeCompositionId: 3,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                        ],
-                    },
-                    {
-                        studentId: 9,
-                        studentName: "string",
-                        userId: 9,
-                        gradeDto: [
-                            {
-                                id: 1,
-                                gradeCompositionId: 1,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 2,
-                                gradeCompositionId: 2,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 3,
-                                gradeCompositionId: 3,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                        ],
-                    },
-                    {
-                        studentId: 10,
-                        studentName: "string",
-                        userId: 10,
-                        gradeDto: [
-                            {
-                                id: 1,
-                                gradeCompositionId: 1,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 2,
-                                gradeCompositionId: 2,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                            {
-                                id: 3,
-                                gradeCompositionId: 3,
-                                gradeValue: 1,
-                                isRequest: true,
-                            },
-                        ],
-                    },
-                    {
-						studentId: 3,
-						studentName: "string",
-						userId: 3,
-						gradeDto: [
-							{
-								id: 1,
-								gradeCompositionId: 1,
-								gradeValue: 1,
-								isRequest: true,
-							},
-							{
-								id: 2,
-								gradeCompositionId: 2,
-								gradeValue: 1,
-								isRequest: true,
-							},
-							{
-								id: 3,
-								gradeCompositionId: 3,
-								gradeValue: 1,
-								isRequest: true,
-							},
-						],
-					},
-                    {
-						studentId: 3,
-						studentName: "string",
-						userId: 3,
-						gradeDto: [
-							{
-								id: 1,
-								gradeCompositionId: 1,
-								gradeValue: 1,
-								isRequest: true,
-							},
-							{
-								id: 2,
-								gradeCompositionId: 2,
-								gradeValue: 1,
-								isRequest: true,
-							},
-							{
-								id: 3,
-								gradeCompositionId: 3,
-								gradeValue: 1,
-								isRequest: true,
-							},
-						],
-					},
-                    {
-						studentId: 3,
-						studentName: "string",
-						userId: 3,
-						gradeDto: [
-							{
-								id: 1,
-								gradeCompositionId: 1,
-								gradeValue: 1,
-								isRequest: true,
-							},
-							{
-								id: 2,
-								gradeCompositionId: 2,
-								gradeValue: 1,
-								isRequest: true,
-							},
-							{
-								id: 3,
-								gradeCompositionId: 3,
-								gradeValue: 1,
-								isRequest: true,
-							},
-						],
-					},
-				],
-			},
-		};
+		// 					{
+		// 						id: 3,
+		// 						gradeCompositionId: 3,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 				],
+		// 			},
+        //             {
+        //                 studentId: 4,
+        //                 studentName: "string",
+        //                 userId: 4,
+        //                 gradeDto: [
+        //                     {
+        //                         id: 1,
+        //                         gradeCompositionId: 1,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 2,
+        //                         gradeCompositionId: 2,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 3,
+        //                         gradeCompositionId: 3,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                 ],
+        //             },
+        //             {
+        //                 studentId: 5,
+        //                 studentName: "string",
+        //                 userId: 5,
+        //                 gradeDto: [
+        //                     {
+        //                         id: 1,
+        //                         gradeCompositionId: 1,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 2,
+        //                         gradeCompositionId: 2,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 3,
+        //                         gradeCompositionId: 3,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                 ],
+        //             },
+        //             {
+        //                 studentId: 6,
+        //                 studentName: "string",
+        //                 userId: 6,
+        //                 gradeDto: [
+        //                     {
+        //                         id: 1,
+        //                         gradeCompositionId: 1,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 2,
+        //                         gradeCompositionId: 2,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 3,
+        //                         gradeCompositionId: 3,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                 ],
+        //             },
+        //             {
+        //                 studentId: 7,
+        //                 studentName: "string",
+        //                 userId: 7,
+        //                 gradeDto: [
+        //                     {
+        //                         id: 1,
+        //                         gradeCompositionId: 1,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 2,
+        //                         gradeCompositionId: 2,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 3,
+        //                         gradeCompositionId: 3,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                 ],
+        //             },
+        //             {
+        //                 studentId: 8,
+        //                 studentName: "string",
+        //                 userId: 8,
+        //                 gradeDto: [
+        //                     {
+        //                         id: 1,
+        //                         gradeCompositionId: 1,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 2,
+        //                         gradeCompositionId: 2,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 3,
+        //                         gradeCompositionId: 3,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                 ],
+        //             },
+        //             {
+        //                 studentId: 9,
+        //                 studentName: "string",
+        //                 userId: 9,
+        //                 gradeDto: [
+        //                     {
+        //                         id: 1,
+        //                         gradeCompositionId: 1,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 2,
+        //                         gradeCompositionId: 2,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 3,
+        //                         gradeCompositionId: 3,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                 ],
+        //             },
+        //             {
+        //                 studentId: 10,
+        //                 studentName: "string",
+        //                 userId: 10,
+        //                 gradeDto: [
+        //                     {
+        //                         id: 1,
+        //                         gradeCompositionId: 1,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 2,
+        //                         gradeCompositionId: 2,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                     {
+        //                         id: 3,
+        //                         gradeCompositionId: 3,
+        //                         gradeValue: 1,
+        //                         isRequest: true,
+        //                     },
+        //                 ],
+        //             },
+        //             {
+		// 				studentId: 3,
+		// 				studentName: "string",
+		// 				userId: 3,
+		// 				gradeDto: [
+		// 					{
+		// 						id: 1,
+		// 						gradeCompositionId: 1,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 					{
+		// 						id: 2,
+		// 						gradeCompositionId: 2,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 					{
+		// 						id: 3,
+		// 						gradeCompositionId: 3,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 				],
+		// 			},
+        //             {
+		// 				studentId: 3,
+		// 				studentName: "string",
+		// 				userId: 3,
+		// 				gradeDto: [
+		// 					{
+		// 						id: 1,
+		// 						gradeCompositionId: 1,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 					{
+		// 						id: 2,
+		// 						gradeCompositionId: 2,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 					{
+		// 						id: 3,
+		// 						gradeCompositionId: 3,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 				],
+		// 			},
+        //             {
+		// 				studentId: 3,
+		// 				studentName: "string",
+		// 				userId: 3,
+		// 				gradeDto: [
+		// 					{
+		// 						id: 1,
+		// 						gradeCompositionId: 1,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 					{
+		// 						id: 2,
+		// 						gradeCompositionId: 2,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 					{
+		// 						id: 3,
+		// 						gradeCompositionId: 3,
+		// 						gradeValue: 1,
+		// 						isRequest: true,
+		// 					},
+		// 				],
+		// 			},
+		// 		],
+		// 	},
+		// };
 		return response.data;
 	},
+	async importStudent(classId: string, file: File) {
+		if (!classId || classId === "") throw new Error("classId is required");
+		const formData = new FormData();
+		formData.append("file", file);
+		const response = await axios.post(
+			`/api/grade/student/template/${classId}/import`,
+			formData,
+			{ headers: { "Content-Type": "multipart/form-data" } }
+		);
+		return response.data;
+	}
 };
 export default classService;
 // function generateArray(count:number) {
