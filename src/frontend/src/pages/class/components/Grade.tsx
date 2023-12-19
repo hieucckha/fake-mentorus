@@ -2,23 +2,24 @@ import { FC, useEffect, useState } from "react";
 
 import { FloatButton, Table } from "antd";
 import { useParams } from "react-router-dom";
-import { listGradeAllClassQuery } from "../../../api/store/class/queries";
+import { listGradeAllClassQuery, listGradeOneStudentQuery } from "../../../api/store/class/queries";
 import { PlusOutlined } from "@ant-design/icons";
 import useAuth from "../../../hooks/auth";
 
 const Grade: FC = () => {
 	const { id } = useParams();
-	const { data: gradeData } = listGradeAllClassQuery(id as string);
 	const [gradeColumn, setGradeColumn] = useState<any[]>([
 		{ title: "Name", dataIndex: "name", key: "name" },
 		{ title: "student ID", dataIndex: "studentID", key: "studentID" },
 	]);
 	
 	const {data: user} = useAuth();
+
+	const { data: gradeData } = user?.role==="Teacher" ? listGradeAllClassQuery(id as string) : listGradeOneStudentQuery(id as string, user?.studentId ?? "" );
 	const [student, setStudent] = useState<any[]>([]);
 	useEffect(() => {
 		if (gradeData) {
-			console.log("test");
+			console.log(gradeData);
 			setStudent([]);
 			setGradeColumn([
 				{ title: "Name", dataIndex: "name", key: "name" },

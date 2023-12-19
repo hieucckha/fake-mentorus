@@ -462,6 +462,11 @@ const classService = {
 			{ headers: { "Content-Type": "multipart/form-data" } }
 		);
 		return response.data;
+	},
+	async getOneGradeStudent(classId: string, studentId: string) {
+		if (!classId || classId === "") throw new Error("classId is required");
+		const response = await axios.get(`/api/grade/course/${classId}/student/${studentId}`);
+		return response.data;
 	}
 };
 export default classService;
