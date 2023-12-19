@@ -1,88 +1,93 @@
 import {
-	DownloadOutlined,
 	MoreOutlined,
 	PieChartOutlined,
 	UploadOutlined,
 } from "@ant-design/icons";
-import { App, Dropdown, MenuProps, Upload, message } from "antd";
+import {  Dropdown, MenuProps,   message } from "antd";
 import React, { useState } from "react";
 import { useLocation, Link, useParams, Outlet } from "react-router-dom";
 import classService from "../services/class.service";
-import fileDownload from "js-file-download";
 import { AxiosError } from "axios";
-import { convertBlobToJson } from "../utils";
 import useAuth from "../hooks/auth";
 import { UserRole } from "../api/store/auth/interface";
 import UploadModal from "../modal/UploadModal";
- 
 
 const ClassLayout: React.FC = (): JSX.Element => {
-	
 	const location = useLocation();
 	const { id } = useParams<{ id: string }>();
-	const { notification } = App.useApp();
 	const { data: user } = useAuth();
 
 	const overviewUrl = `/class/${id}/overview`;
 	const classworkUrl = `/class/${id}/work-class`;
 	const gradeStructureUrl = `/class/${id}/grade-structure`;
 	const gradeUrl = `/class/${id}/grade`;
-	
+
 	const [isModalVisible, setIsModalVisible] = useState(false);
 
-	const handleDownloadTemplate = async () => {
-		
-		classService
-			.downloadTemplate(id ?? "")
-			.then((res) => {
-				fileDownload(res.data, "template.xlsx");
-			})
-			.catch(async (error) => {
-				if (error instanceof AxiosError) {
-					const errorBody = await convertBlobToJson(error.response?.data);
-					notification.error({
-						message: "Error",
-						description: errorBody.title,
-					});
-					return;
-				}
-				notification.error({
-						message: "Error",
-						description: "Something went wrong",
-					});
-			});
+	const chooseFile = () => {
+		document.getElementById("importInput")?.click();
 	};
+
 	const handleCloseModal = () => {
 		setIsModalVisible(false);
-	}
+	};
+	const handleSubmit = (e: any) => {
+		classService.importStudent(id ?? "", e.target.files[0]).then(
+			() => {
+				message.success("Import success");
+			}
+		).catch((err: AxiosError) => {
+			console.log(err.response?.data);
+			const mess = (err.response?.data as any ).title ?? "Import failed";
+			message.error(mess);
+		}
+		);
+	};
 	
-
-
+	
 	const items: MenuProps["items"] = [
-		
 		{
 			key: "1",
 			label: (
-				
-					<a onClick={()=>{
+				<a
+					onClick={() => {
 						setIsModalVisible(true);
-					}} >
-						<UploadOutlined className="pr-3" />
-						Import grade
-					</a>
-				
+					}}
+				>
+					<UploadOutlined className="pr-3" />
+					Import grade
+				</a>
 			),
 		},
-	
+
 		{
 			key: "2",
 			label: (
-					<a >
+				<>
+					<a onClick={chooseFile}>
 						<UploadOutlined className="pr-3" />
 						Import list student
+						<input
+							id="importInput"
+							onChange={handleSubmit}
+							type="file"
+							className="hidden"
+						></input>
 					</a>
+				</>
 			),
 		},
+		// {
+		// 	key: "3",
+		// 	label: (
+		// 		<>
+		// 			<Link to={`../../Student_Template_Class.xlsx`}>
+		// 				<DownloadOutlined className="pr-3" />
+		// 				Export grade
+		// 			</Link>
+		// 		</>
+		// 	),
+		// },
 	];
 
 	return (
@@ -140,31 +145,31 @@ const ClassLayout: React.FC = (): JSX.Element => {
 									</Link>
 								</li>
 								<li className="me-2">
-									{user && user.role == UserRole.Teacher && 
-									<Link
-										to={gradeStructureUrl}
-										className={`inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
-											location.pathname === gradeStructureUrl
-												? "text-blue-600 dark:text-blue-500"
-												: ""
-										}`}
-									>
-										<svg
-											className={`w-4 h-4 me-2  ${
+									{user && user.role == UserRole.Teacher && (
+										<Link
+											to={gradeStructureUrl}
+											className={`inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
 												location.pathname === gradeStructureUrl
 													? "text-blue-600 dark:text-blue-500"
 													: ""
 											}`}
-											aria-hidden="true"
-											xmlns="http://www.w3.org/2000/svg"
-											fill="currentColor"
-											viewBox="0 0 20 20"
 										>
-											<path d="M5 11.424V1a1 1 0 1 0-2 0v10.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.228 3.228 0 0 0 0-6.152ZM19.25 14.5A3.243 3.243 0 0 0 17 11.424V1a1 1 0 0 0-2 0v10.424a3.227 3.227 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.243 3.243 0 0 0 2.25-3.076Zm-6-9A3.243 3.243 0 0 0 11 2.424V1a1 1 0 0 0-2 0v1.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0V8.576A3.243 3.243 0 0 0 13.25 5.5Z" />
-										</svg>
-										Grade structure
-									</Link>
-									}
+											<svg
+												className={`w-4 h-4 me-2  ${
+													location.pathname === gradeStructureUrl
+														? "text-blue-600 dark:text-blue-500"
+														: ""
+												}`}
+												aria-hidden="true"
+												xmlns="http://www.w3.org/2000/svg"
+												fill="currentColor"
+												viewBox="0 0 20 20"
+											>
+												<path d="M5 11.424V1a1 1 0 1 0-2 0v10.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.228 3.228 0 0 0 0-6.152ZM19.25 14.5A3.243 3.243 0 0 0 17 11.424V1a1 1 0 0 0-2 0v10.424a3.227 3.227 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.243 3.243 0 0 0 2.25-3.076Zm-6-9A3.243 3.243 0 0 0 11 2.424V1a1 1 0 0 0-2 0v1.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0V8.576A3.243 3.243 0 0 0 13.25 5.5Z" />
+											</svg>
+											Grade structure
+										</Link>
+									)}
 								</li>
 								<li className="me-2">
 									<Link
@@ -193,12 +198,11 @@ const ClassLayout: React.FC = (): JSX.Element => {
 						<Outlet />
 					</div>
 					{isModalVisible && (
-									<UploadModal
-										openModal={isModalVisible}
-										handleCloseModalUpload={handleCloseModal}
-									/>
-								)}
-						
+						<UploadModal
+							openModal={isModalVisible}
+							handleCloseModalUpload={handleCloseModal}
+						/>
+					)}
 				</section>
 			</div>
 		</div>

@@ -9,7 +9,7 @@ import type {
 	SignInData,
 	SignInFacebookData,
 	SignInGoogleData,
-	UserProfileDto,
+	// UserProfileDto,
 	resetPasswordDto,
 	signUpDto,
 	resetPasswordConfirmDto,
