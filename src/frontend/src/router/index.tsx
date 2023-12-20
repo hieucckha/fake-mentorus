@@ -18,6 +18,7 @@ import ClassroomMember from "../pages/class/components/ClassroomMember";
 import GradeStructure from "../pages/class/components/GradeStructure";
 import Grade from "../pages/class/components/Grade";
 import JoinClassEmail from "../pages/JoinClassEmail";
+import JoinClassCode from "../pages/JoinClassCode";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -64,6 +65,10 @@ const BrowserRouter = createBrowserRouter([
 					{
 						path: "/course/invite-email/confirm/:token",
 						element: <JoinClassEmail />,
+					},
+					{
+						path: "/course/invite/:code",
+						element: <JoinClassCode />,
 					},
 					{
 						element: <AppLayout />,

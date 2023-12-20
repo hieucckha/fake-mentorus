@@ -77,7 +77,7 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
             .Where(r => r != null)
             .ToList();
         result.Requests = mapper.Map<List<RequestDto>>(requests);
-
+    
         var listStudent = course.StudentInfos.Select(e => new
         {
             e.StudentId, UserId = e.Student.User?.Id ?? null, e.Name
@@ -92,7 +92,7 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
         }
 
         // TODO: Need url from frontend
-        result.InviteLink = $"{appSettings.FrontendUrl}/invite/{course.ClassCode}";
+        result.InviteLink = $"{appSettings.FrontendUrl}/course/invite/{course.InviteCode}";
 
         return result;
     }
