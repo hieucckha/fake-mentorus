@@ -60,7 +60,7 @@ internal class AssignByEmailCommandHandle : IRequestHandler<AssignByEmailCommand
                 "The logged-in user's email {LoggedEmail} is not the same as the token email {TokenEmail} ",
                 user!.Email,
                 cacheInviteValue.Email);
-            throw new NotFoundException("Invitation link not valid");
+            throw new NotFoundException("Invitation link is for wrong person, Please try different account.");
         }
 
         var course = await dbContext.Courses
@@ -92,7 +92,6 @@ internal class AssignByEmailCommandHandle : IRequestHandler<AssignByEmailCommand
                 throw new DomainException("You are not allowed to assign to this course.");
                 break;
         }
-
 
         await dbContext.SaveChangesAsync(cancellationToken);
         logger.LogInformation("User with id {UserId} assigned to course with id {CourseId}",

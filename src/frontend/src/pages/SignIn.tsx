@@ -1,5 +1,5 @@
 import { useState, type FC } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import FacebookLogo from "../assets/facebook-logo.svg";
 
 import {
@@ -12,7 +12,7 @@ import type {
 	SignInFacebookData,
 	SignInGoogleData,
 } from "../api/store/auth/interface";
-import { GoogleLogin, type CredentialResponse} from "@react-oauth/google";
+import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 // import { GoogleLogin } from "@react-oauth/google";
 import { useLogin } from "react-facebook";
 import Header from "./LandingPage/Header";
@@ -22,6 +22,7 @@ import Header from "./LandingPage/Header";
  */
 const SignIn: FC = (): JSX.Element => {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -48,7 +49,9 @@ const SignIn: FC = (): JSX.Element => {
 		};
 		signInMutation.mutate(data, {
 			onSuccess() {
-				navigate("/home");
+				var origin = location.state.from.pathname || "/home";
+
+				navigate(origin);
 			},
 			onError(error) {
 				console.error(error);
@@ -70,7 +73,9 @@ const SignIn: FC = (): JSX.Element => {
 
 			signInFacebookMutation.mutate(data, {
 				onSuccess() {
-					navigate("/home");
+					var origin = location.state.from.pathname || "/home";
+
+					navigate(origin);
 				},
 				onError(error) {
 					console.error(error);
@@ -93,7 +98,9 @@ const SignIn: FC = (): JSX.Element => {
 
 		signInGoogleMutation.mutate(data, {
 			onSuccess() {
-				navigate("/home");
+				var origin = location.state.from.pathname || "/home";
+
+				navigate(origin);
 			},
 			onError(error) {
 				console.error(error);

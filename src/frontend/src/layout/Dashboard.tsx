@@ -1,17 +1,21 @@
-import { type FC, useState } from "react";
+import { type FC, useState, useEffect } from "react";
 import CardClass from "../component/card/CardClass";
 import classQuery from "../api/store/class/queries";
 import useAuth from "../hooks/auth";
 import { ClassQuery } from "../api/store/class/interface";
 import CreateClass from "../modal/CreateClass";
 import JoinClass from "../modal/JoinClass";
+import { useLocation } from "react-router-dom";
+import { App } from "antd";
 
 const Dashboard: FC = (): JSX.Element => {
+	const location = useLocation();
+	const { notification } = App.useApp();
 	const { data: user } = useAuth();
 	const [isOpenModalCreateClass, setIsOpenModalCreateClass] = useState(false);
 	const [isOpenModalJoinClass, setIsOpenModalJoinClass] = useState(false);
-	
-	const { data, isLoading } = classQuery(user?.id ?? -1 );
+
+	const { data, isLoading } = classQuery(user?.id ?? -1);
 
 	const handleCloseModalCreateClass = (): void => {
 		setIsOpenModalCreateClass(false);
@@ -25,6 +29,21 @@ const Dashboard: FC = (): JSX.Element => {
 	const handleOpenModalJoinClass = (): void => {
 		setIsOpenModalJoinClass(true);
 	};
+
+	useEffect(() => {
+		console.log(`Is state - ${JSON.stringify(location.state)}`);
+		if (location.state?.showToast) {
+			if (location.state.type == "success") {
+				notification.success({
+					message: location.state.message,
+				});
+			} else {
+				notification.error({
+					message: location.state.message,
+				});
+			}
+		}
+	}, []);
 
 	return (
 		<div className="">

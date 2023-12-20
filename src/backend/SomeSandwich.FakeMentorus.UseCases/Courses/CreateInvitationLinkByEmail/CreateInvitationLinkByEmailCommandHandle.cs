@@ -106,11 +106,7 @@ internal class CreateInvitationLinkByEmailCommandHandle :
 
         // Todo: Need url from frontend
 
-        var urlOfSendMail = QueryHelpers.AddQueryString($"{appSettings.FrontendUrl}/course/invite-email/confirm",
-            new Dictionary<string, string>()
-            {
-                { "token", cacheKey },
-            });
+        var urlOfSendMail = $"{appSettings.FrontendUrl}/course/invite-email/confirm/{cacheKey}";
 
         await emailSender.SendEmailAsync(
             $"<div>Please <a href='{urlOfSendMail}'>clicking here</a> to this course.</div>",
