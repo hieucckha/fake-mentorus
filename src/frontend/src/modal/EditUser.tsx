@@ -6,6 +6,8 @@ import { Button, Label, Modal, TextInput, Toast } from "flowbite-react";
 import useAuth from "../hooks/auth";
 import type { UserProfileDto, editUserDto } from "../api/store/auth/interface";
 import { userUpdateProfileMutation } from "../api/store/auth/mutations";
+import { Email } from "read-excel-file";
+import { App } from "antd";
 
 interface EditUserProps {
 	handleCloseModalEditUser: () => void;
@@ -18,8 +20,8 @@ const EditUser: FC<EditUserProps> = ({
 }): JSX.Element => {
 	const [formData, setFormData] = useState<UserProfileDto>({
 		fullName: "",
-		lastName:"",
-		firstName:"",
+		lastName: "",
+		firstName: "",
 		studentId: "",
 		email: "",
 		id: 0,
@@ -27,6 +29,8 @@ const EditUser: FC<EditUserProps> = ({
 	});
 
 	const { data: user, isLoading } = useAuth();
+	const app = App.useApp();
+	const { message } = app;
 
 	useEffect(() => {
 		if (!user) {
@@ -44,7 +48,7 @@ const EditUser: FC<EditUserProps> = ({
 			studentId: user?.studentId ?? "",
 			email: user?.email ?? "",
 			id: user?.id ?? null,
-			role: ""
+			role: "",
 		});
 	}, [user]);
 
@@ -53,32 +57,39 @@ const EditUser: FC<EditUserProps> = ({
 	}
 
 	const handleChange = (error: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData({
-			...formData,
-			[error.target.id]: error.target.value,
-		});
+		// setFormData({
+		// 	...formData,
+		// 	[error.target.id]: error.target.value,
+		// });
+		const { id, value } = error.target;
+		setFormData((prevState) => ({
+			...prevState,
+			[id]: value,
+		}));
 	};
 
 	const updateProfile = userUpdateProfileMutation();
 
 	const handleSubmit = (error: React.FormEvent) => {
 		error.preventDefault();
-		const data : editUserDto ={
+		const data: editUserDto = {
 			firstName: formData.firstName,
 			lastName: formData.lastName,
 			studentId: formData.studentId,
 			email: formData.email,
-		}
+		};
 		updateProfile.mutate(data, {
 			onSuccess() {
 				handleCloseModalEditUser();
+				message.success("Update profile successfully");
 			},
-			onError(error:any) {
+			onError(error: any) {
 				console.error(error);
-				Toast({
-					title: "Fail",
-					duration: 500,
-				});
+				// Toast({
+				// 	title: "Fail",
+				// 	duration: 500,
+				// });
+				message.error(error.response.data.title);
 			},
 		});
 	};
@@ -95,72 +106,86 @@ const EditUser: FC<EditUserProps> = ({
 					<h3 className="text-xl font-medium text-gray-900 dark:text-white">
 						Edit profile{" "}
 					</h3>
-					<div>
-						<div className="mb-2 block">
-							<Label htmlFor="email" value="Email" />
-						</div>
-						<TextInput
-							id="email"
-							placeholder="example@gnail.com"
-							value={formData.email}
-							onChange={handleChange}
-							required
-						/>
-					</div>
-					<div>
-						<div className="mb-2 block">
-							<Label htmlFor="name" value="Name" />
-						</div>
-						<TextInput
-							id="name"
-							placeholder="Nguyen Van A"
-							value={formData.fullName}
-							// onChange={handleChange}
-							disabled
-						/>
-					</div>
 
-					<div>
-						<div className="mb-2 block">
-							<Label htmlFor="name" value="First Name" />
+					<form onSubmit={handleSubmit}>
+						<div>
+							<div className="mb-2 block">
+								<Label htmlFor="email" value="Email" />
+							</div>
+							<TextInput
+								id="email"
+								type="email"
+								placeholder="example@gnail.com"
+								value={formData.email}
+								required
+								onChange={handleChange}
+							/>
 						</div>
-						<TextInput
-							id="firstName"
-							placeholder="Nguyen"
-							value={formData.firstName}
-							onChange={handleChange}
-							required
-						/>
-					</div>
+						<div>
+							<div className="mb-2 block">
+								<Label htmlFor="name" value="Name" />
+							</div>
+							<TextInput
+								id="name"
+								placeholder="Nguyen Van A"
+								value={formData.fullName}
+								// onChange={handleChange}
+								disabled
+							/>
+						</div>
 
-					<div>
-						<div className="mb-2 block">
-							<Label htmlFor="name" value="Last Name" />
+						<div>
+							<div className="mb-2 block">
+								<Label htmlFor="name" value="First Name" />
+							</div>
+							<TextInput
+								id="firstName"
+								type="text"
+								placeholder="Nguyen"
+								value={formData.firstName}
+								required
+								onChange={handleChange}
+							/>
 						</div>
-						<TextInput
-							id="lastName"
-							placeholder="Van A"
-							value={formData.lastName}
-							onChange={handleChange}
-							required
-						/>
-					</div>
-					<div className={formData.role !== "Student" ? "" : "hidden"}>
-						<div className="mb-2 block" >
-							<Label htmlFor="studentId" value="Student Id" />
-						</div>
-						<TextInput
-							id="studentId"
-							placeholder="20127001"
-							value={formData.studentId}
-							onChange={handleChange}
-							// required
-						/>
-					</div>
 
-					<div className="w-full text-center flex justify-end">
-						<Button onClick={handleSubmit}>Update</Button>
-					</div>
+						<div>
+							<div className="mb-2 block">
+								<Label htmlFor="name" value="Last Name" />
+							</div>
+							<TextInput
+								id="lastName"
+								type="text"
+								placeholder="Van A"
+								value={formData.lastName}
+								required
+								onChange={handleChange}
+							/>
+						</div>
+						<div className={formData.role === "Student" ? "" : "hidden"}>
+							<div className="mb-2 block">
+								<Label htmlFor="studentId" value="Student Id" />
+							</div>
+							<TextInput
+								id="studentId"
+								type="text"
+								placeholder="20127001"
+								value={formData.studentId}
+								onChange={handleChange}
+								// required
+							/>
+						</div>
+
+						{/* <div className="w-full text-center flex justify-end">
+							<Button onClick={handleSubmit}>Update</Button>
+						</div> */}
+						<div className="flex flex-wrap -mx-3 mb-3 mt-6">
+							<div className="w-full px-3">
+								<button className="btn text-white bg-gray-900 hover:bg-gray-700 w-full">
+									Update
+								</button>
+							</div>
+						</div>
+					</form>
 				</div>
 			</Modal.Body>
 		</Modal>
