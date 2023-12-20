@@ -31,6 +31,10 @@ const classService = {
 		});
 		return response.data;
 	},
+	async joinCourseByInvitationLink(token: string) {
+		const response = await axios.post("/api/course/invite-email/confirm", { token: token });
+		return response;
+	},
 	async updateOrderGradeComposit(gradeCompositions: gradeCompositions[]) {
 		const response = await axios.patch("/api/grade-composition/sort", {
 			gradeCompositions: gradeCompositions,

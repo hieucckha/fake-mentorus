@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import type { UseQueryResult } from "@tanstack/react-query";
 
@@ -9,17 +9,22 @@ import type { UserProfileDto } from "../api/store/auth/interface";
 /**
  * Auth hook.
  */
-
 const useAuth = (): Omit<
 	UseQueryResult<UserProfileDto>,
 	"error" | "isError"
 > => {
+	const location = useLocation();
 	const queryData = useAuthQuery();
+
 	if (queryData.isError && queryData.error) {
-		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const navigate = useNavigate();
 		localStorageService.removeItem("auth");
-		navigate("/sign-in");
+		navigate("/sign-in", {
+			replace: true,
+			state: {
+				from: location,
+			},
+		});
 	}
 	return queryData;
 };
