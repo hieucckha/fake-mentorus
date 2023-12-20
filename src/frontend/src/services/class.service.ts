@@ -74,7 +74,7 @@ const classService = {
 			params: { courseId: classId },
 			responseType: "blob",
 		});
-		return response.data;
+		return response;
 	},
 	async uploadGradeFile(classId: string, file: File) {
 		if (!classId || classId === "") throw new Error("classId is required");
