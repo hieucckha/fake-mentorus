@@ -57,7 +57,7 @@ public class GetGradeByStudentIdQueryHandle : IRequestHandler<GetGradeByStudentI
             .Include(x => x.Student)
             .Include(x => x.GradeComposition)
             .Where(e => e.GradeComposition.CourseId == request.CourseId)
-            .Where(e => e.Student.StudentId == request.StudentId)
+            .Where(e => e.Student.StudentId == request.StudentId && e.GradeComposition.IsFinal == false)
             .ToListAsync(cancellationToken);
 
         var abc = grades.Select(x =>

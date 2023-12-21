@@ -8,7 +8,7 @@ public class GradeDetailByStudentIdDto
     /// <summary>
     /// Grade id.
     /// </summary>
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
     /// <summary>
     /// Grade Composition id.

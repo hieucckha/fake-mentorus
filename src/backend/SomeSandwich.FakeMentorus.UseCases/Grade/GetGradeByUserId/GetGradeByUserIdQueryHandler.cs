@@ -35,19 +35,31 @@ public class GetGradeByUserIdQueryHandler : IRequestHandler<GetGradeByUserIdQuer
 
         var gradeCells = gradeComposites.Select(e =>
         {
-            var grade = e.Grades.FirstOrDefault(g => g.GradeCompositionId == e.Id && g.StudentId == query.StudentId);
+            var grade = e.Grades
+                .FirstOrDefault(g => g.GradeCompositionId == e.Id && g.StudentId == query.StudentId);
+            if (e.IsFinal == true)
+            {
+                return new GradeCellDto()
+                {
+                    Id = grade?.Id,
+                    GradeCompositionId = e.Id,
+                    GradeValue = grade?.GradeValue,
+                    IsRequested = grade?.IsRequested ?? false,
+                };
+            }
             return new GradeCellDto()
             {
-                Id = grade?.Id,
+                Id = null,
                 GradeCompositionId = e.Id,
-                GradeValue = grade?.GradeValue,
-                IsRequested = grade?.IsRequested ?? false,
+                GradeValue = null,
+                IsRequested = false,
             };
         }).ToList();
 
         var student = await appDbContext.StudentInfos
             .Include(e => e.Student).ThenInclude(f => f.User)
             .Where(e => e.StudentId == query.StudentId && e.CourseId == query.CourseId)
+            // .Where(e=>e.)
             .FirstOrDefaultAsync(cancellationToken);
         var studentName = student?.Name ?? "";
         var userId = student?.Student?.User?.Id;
