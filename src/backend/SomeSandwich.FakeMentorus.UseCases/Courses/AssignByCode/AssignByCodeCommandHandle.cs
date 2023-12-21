@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Saritasa.Tools.Domain.Exceptions;
 using Saritasa.Tools.EntityFrameworkCore;
 using SomeSandwich.FakeMentorus.Domain.Course;
+using SomeSandwich.FakeMentorus.Domain.Student;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 
@@ -41,9 +42,8 @@ internal class AssignByCodeCommandHandle : IRequestHandler<AssignByCodeCommand>
     public async Task Handle(AssignByCodeCommand request, CancellationToken cancellationToken)
     {
         var currentUserId = loggedUserAccessor.GetCurrentUserId();
-        var currentUser =
-            await dbContext.Users.GetAsync(u => u.Id == currentUserId, cancellationToken);
-        var userRole = (await userManager.GetRolesAsync(currentUser))
+        var user = await dbContext.Users.GetAsync(u => u.Id == currentUserId, cancellationToken);
+        var userRole = (await userManager.GetRolesAsync(user))
             .FirstOrDefault();
 
         var course = await dbContext.Courses
@@ -59,18 +59,6 @@ internal class AssignByCodeCommandHandle : IRequestHandler<AssignByCodeCommand>
         logger.LogInformation("Assigning user with id {CurrentUserId} to course with id {RequestCourseId}",
             currentUserId, course.Id);
 
-        // if (course is null)
-        // {
-        //     logger.LogWarning("Course with id {CourseId} not found", course!.Id);
-        //     throw new NotFoundException($"Course with id {course.Id} not found.");
-        // }
-
-        // if (course.InviteCode != request.InviteCode)
-        // {
-        //     logger.LogWarning("Course with id {CourseId} has a different invite code", request.CourseId);
-        //     throw new DomainException("The invite code is not valid.");
-        // }
-
         switch (userRole)
         {
             case "Student" when course.Students.Any(s => s.StudentId == currentUserId):
@@ -80,6 +68,15 @@ internal class AssignByCodeCommandHandle : IRequestHandler<AssignByCodeCommand>
                 throw new DomainException("You are already assigned to this course.");
             case "Student":
                 dbContext.CourseStudents.Add(new CourseStudent { CourseId = course.Id, StudentId = currentUserId });
+                if (user.StudentId is not null)
+                {
+                    await dbContext.StudentInfos.AddAsync(new StudentInfo
+                    {
+                        CourseId = course.Id,
+                        Name = user.FullName,
+                        StudentId = user.StudentId
+                    }, cancellationToken);
+                }
                 break;
             case "Teacher" when course.Teachers.Any(t => t.TeacherId == currentUserId):
                 logger.LogWarning(
