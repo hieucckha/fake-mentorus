@@ -33,33 +33,27 @@ public class GetGradeByUserIdQueryHandler : IRequestHandler<GetGradeByUserIdQuer
             .ThenBy(e => e.Id)
             .ToListAsync(cancellationToken);
 
-        var gradeCells = gradeComposites.Select(e =>
+        var gradeCells = new List<GradeCellDto>();
+        gradeComposites.ForEach(e =>
         {
-            var grade = e.Grades
-                .FirstOrDefault(g => g.GradeCompositionId == e.Id && g.StudentId == query.StudentId);
-            if (e.IsFinal == true)
+            var gradeCellDto = new GradeCellDto()
             {
-                return new GradeCellDto()
-                {
-                    Id = grade?.Id,
-                    GradeCompositionId = e.Id,
-                    GradeValue = grade?.GradeValue,
-                    IsRequested = grade?.IsRequested ?? false,
-                };
-            }
-            return new GradeCellDto()
-            {
-                Id = null,
-                GradeCompositionId = e.Id,
-                GradeValue = null,
-                IsRequested = false,
+                GradeCompositionId = e.Id, GradeValue = null, IsRequested = false, Id = null,
             };
-        }).ToList();
+            if (e.IsFinal.Equals(true))
+            {
+                var grade = e.Grades.FirstOrDefault(f => f.StudentId == query.StudentId);
+                gradeCellDto.GradeValue = grade?.GradeValue;
+                gradeCellDto.Id = grade?.Id;
+                gradeCellDto.IsRequested = grade?.IsRequested ?? false;
+            }
+
+            gradeCells.Add(gradeCellDto);
+        });
 
         var student = await appDbContext.StudentInfos
             .Include(e => e.Student).ThenInclude(f => f.User)
             .Where(e => e.StudentId == query.StudentId && e.CourseId == query.CourseId)
-            // .Where(e=>e.)
             .FirstOrDefaultAsync(cancellationToken);
         var studentName = student?.Name ?? "";
         var userId = student?.Student?.User?.Id;

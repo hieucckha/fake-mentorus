@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Saritasa.Tools.Domain.Exceptions;
 using Saritasa.Tools.EntityFrameworkCore;
 using SomeSandwich.FakeMentorus.Domain.Course;
+using SomeSandwich.FakeMentorus.Domain.Student;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 using SomeSandwich.FakeMentorus.UseCases.Courses.CreateInvitationLinkByEmail;
@@ -78,6 +79,15 @@ internal class AssignByEmailCommandHandle : IRequestHandler<AssignByEmailCommand
                 throw new DomainException("You are already assigned to this course.");
             case "Student":
                 dbContext.CourseStudents.Add(new CourseStudent { CourseId = course.Id, StudentId = currentUserId });
+                if (user.StudentId is not null)
+                {
+                    await dbContext.StudentInfos.AddAsync(new StudentInfo
+                    {
+                        CourseId = course.Id,
+                        Name = user.FullName,
+                        StudentId = user.StudentId
+                    }, cancellationToken);
+                }
                 break;
             case "Teacher" when course.Teachers.Any(t => t.TeacherId == currentUserId):
                 logger.LogWarning(
