@@ -133,7 +133,7 @@ public class GradeController
     }
 
     /// <summary>
-    /// Add grade to student(Input grade for a student at a specific assignment).
+    /// Add or update grade.(Input grade for a student at a specific assignment).
     /// </summary>
     /// <param name="command"></param>
     /// <param name="cancellationToken"></param>
