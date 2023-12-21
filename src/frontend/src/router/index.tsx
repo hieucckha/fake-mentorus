@@ -22,6 +22,7 @@ import JoinClassCode from "../pages/JoinClassCode";
 import AdminLayout from "../layout/Admin";
 import RoleLayout from "../layout/RoleLayout";
 import UnauthorizedPage from "../pages/errors/UnauthorizedPage";
+import ManagementClass from "../pages/admin/ManagementClass";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -129,6 +130,14 @@ const BrowserRouter = createBrowserRouter([
 									{
 										path: "dashboard",
 										element: <div>Admin Dashboard</div>,
+									},
+									{
+										path: "classes",
+										element: <ManagementClass />,
+									},
+									{
+										path: "users",
+										element: <div>Admin users</div>,
 									},
 								],
 							},

@@ -13,13 +13,16 @@ const AdminLayout: FC = () => {
 			<NavBarLogin />
 			<div className="bg-white w-full h-screen flex">
 				<div className="flex-none sm:w-64 h-full ...">
-					<Sidebar  />
+					<Sidebar />
 				</div>
 				<div className="grow h-full ...">
-					<Outlet/>
+					<div className="w-full h-full">
+						<div className="content-center dark:border-gray-700 mt-14"></div>
+						<Outlet />
+					</div>
 				</div>
 			</div>
-			
+
 		</div>
 	);
 };
