@@ -15,9 +15,9 @@ const useAuth = (): Omit<
 > => {
 	const location = useLocation();
 	const queryData = useAuthQuery();
+	const navigate = useNavigate();
 
 	if (queryData.isError && queryData.error) {
-		const navigate = useNavigate();
 		localStorageService.removeItem("auth");
 		navigate("/sign-in", {
 			replace: true,

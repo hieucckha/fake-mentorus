@@ -19,6 +19,9 @@ import GradeStructure from "../pages/class/components/GradeStructure";
 import Grade from "../pages/class/components/Grade";
 import JoinClassEmail from "../pages/JoinClassEmail";
 import JoinClassCode from "../pages/JoinClassCode";
+import AdminLayout from "../layout/Admin";
+import RoleLayout from "../layout/RoleLayout";
+import UnauthorizedPage from "../pages/errors/UnauthorizedPage";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -26,17 +29,23 @@ const BrowserRouter = createBrowserRouter([
 		errorElement: <NotFound />,
 		children: [
 			{
+				element: <UnauthorizeLayout authenticatedUrl="/admin/dashboard" />,
+				children: [
+					{
+						path: "/admin/sign-in",
+						element: <SignIn afterLoginUrl={"/admin/dashboard"} />,
+					},
+				],
+			},
+
+			{
 				element: <UnauthorizeLayout />,
 				children: [
 					{
 						path: "/",
 						element: <LandingPage />,
 					},
-				],
-			},
-			{
-				element: <UnauthorizeLayout />,
-				children: [
+
 					{
 						path: "/sign-in",
 						element: <SignIn />,
@@ -63,49 +72,73 @@ const BrowserRouter = createBrowserRouter([
 				element: <AuthLayout />,
 				children: [
 					{
-						path: "/course/invite-email/confirm/:token",
-						element: <JoinClassEmail />,
-					},
-					{
-						path: "/course/invite/:code",
-						element: <JoinClassCode />,
-					},
-					{
-						element: <AppLayout />,
+						element: <RoleLayout roles={["Teacher", "Student"]} />,
 						children: [
 							{
-								path: "/home",
-								element: <Dashboard />,
+								path: "/course/invite-email/confirm/:token",
+								element: <JoinClassEmail />,
 							},
 							{
-								path: "/class/:id/*",
-								element: <ClassLayout />,
+								path: "/course/invite/:code",
+								element: <JoinClassCode />,
+							},
+							{
+								element: <AppLayout />,
 								children: [
 									{
-										index: true,
-										element: <AppLayout />,
+										path: "/home",
+										element: <Dashboard />,
 									},
 									{
-										path: "overview",
-										element: <Overview />,
+										path: "/class/:id/*",
+										element: <ClassLayout />,
+										children: [
+											{
+												index: true,
+												element: <AppLayout />,
+											},
+											{
+												path: "overview",
+												element: <Overview />,
+											},
+											{
+												path: "work-class",
+												element: <ClassroomMember />,
+											},
+											{
+												path: "grade-structure",
+												element: <GradeStructure />,
+											},
+											{
+												path: "grade",
+												element: <Grade />,
+											},
+										],
 									},
+								],
+							},
+						],
+					},
+					{
+						element: <RoleLayout roles={["Admin"]} />,
+						children: [
+							{
+								path: "/admin",
+								element: <AdminLayout />,
+								children: [
 									{
-										path: "work-class",
-										element: <ClassroomMember />,
-									},
-									{
-										path: "grade-structure",
-										element: <GradeStructure />,
-									},
-									{
-										path: "grade",
-										element: <Grade />,
+										path: "dashboard",
+										element: <div>Admin Dashboard</div>,
 									},
 								],
 							},
 						],
 					},
 				],
+			},
+			{
+				path: "/403",
+				element: <UnauthorizedPage />,
 			},
 		],
 	},

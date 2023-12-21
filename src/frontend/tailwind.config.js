@@ -6,7 +6,11 @@ export default {
 		"node_modules/flowbite-react/lib/esm/**/*.js",
 	],
 	theme: {
-		extend: {},
+		extend: {
+			spacing: {
+				"screen-dvh": "100dvh",
+			},
+		},
 	},
 	plugins: [require("daisyui"), require("flowbite/plugin")],
 };

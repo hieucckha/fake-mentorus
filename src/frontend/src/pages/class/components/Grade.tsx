@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { FloatButton, Table } from "antd";
 import { useParams } from "react-router-dom";
 import { listGradeAllClassQuery, listGradeOneStudentQuery } from "../../../api/store/class/queries";
-import { PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import useAuth from "../../../hooks/auth";
 import AddGrade from "../../../modal/AddGrade";
 import CreateRequest from "../../../modal/CreateRequest";
@@ -68,14 +68,12 @@ const Grade: FC = () => {
 				user?.role === "Teacher" ? (
 					<FloatButton
 						onClick={handleOpenModalAddGrade}
-						shape="square"
 						type="primary"
 						style={{ right: 24 }}
-						icon={<PlusOutlined  />}
+						icon={<EditOutlined />}
 					/>)
 				:(<FloatButton
 						onClick={()=>setIsOpenModalRequestGrade(true)}
-						shape="square"
 						type="primary"
 						style={{ right: 24 }}
 						icon={<PlusOutlined  />}
