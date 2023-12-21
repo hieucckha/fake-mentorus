@@ -49,7 +49,7 @@ const SignIn: FC = (): JSX.Element => {
 		};
 		signInMutation.mutate(data, {
 			onSuccess() {
-				var origin = location.state.from.pathname || "/home";
+				var origin = location.state?.from?.pathname || "/home";
 
 				navigate(origin);
 			},
@@ -73,7 +73,7 @@ const SignIn: FC = (): JSX.Element => {
 
 			signInFacebookMutation.mutate(data, {
 				onSuccess() {
-					var origin = location.state.from.pathname || "/home";
+					var origin = location.state?.from?.pathname || "/home";
 
 					navigate(origin);
 				},
@@ -98,7 +98,7 @@ const SignIn: FC = (): JSX.Element => {
 
 		signInGoogleMutation.mutate(data, {
 			onSuccess() {
-				var origin = location.state.from.pathname || "/home";
+				var origin = location.state?.from?.pathname || "/home";
 
 				navigate(origin);
 			},

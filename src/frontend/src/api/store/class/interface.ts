@@ -34,6 +34,12 @@ export interface newGradeCompositions {
 	description: string;
 	gradeScale: number;
 }
+
+export enum RequestStatus {
+	Pending = "Pending",
+	Approved = "Approved",
+	Rejected = "Rejected",
+}
 export interface requests{
 	id: number;
 	studentId: number;
@@ -42,7 +48,7 @@ export interface requests{
 	reason: string;
 	createdAt: string;
 	updatedAt: string;
-
+	status: RequestStatus;
 }
 export interface ClassDetail {
 	id: number;
@@ -88,3 +94,8 @@ export interface gradeAll{
 	students: studentGradeDto[];
 }
 
+export interface EditGradeDto {
+  gradeCompositionId: number;
+  studentId: string;
+  gradeValue: number;
+}

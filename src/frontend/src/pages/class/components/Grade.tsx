@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { listGradeAllClassQuery, listGradeOneStudentQuery } from "../../../api/store/class/queries";
 import { PlusOutlined } from "@ant-design/icons";
 import useAuth from "../../../hooks/auth";
+import AddGrade from "../../../modal/AddGrade";
+import CreateRequest from "../../../modal/CreateRequest";
 
 const Grade: FC = () => {
 	const { id } = useParams();
@@ -12,7 +14,8 @@ const Grade: FC = () => {
 		{ title: "Name", dataIndex: "name", key: "name" },
 		{ title: "student ID", dataIndex: "studentID", key: "studentID" },
 	]);
-	
+	const [isOpenModalAddGrade, setIsOpenModalAddGrade] = useState(false);
+	const [isOpenModalRequestGrade, setIsOpenModalRequestGrade] = useState(false);
 	const {data: user} = useAuth();
 
 	const { data: gradeData } = user?.role==="Teacher" ? listGradeAllClassQuery(id as string) : listGradeOneStudentQuery(id as string, user?.studentId ?? "" );
@@ -53,7 +56,9 @@ const Grade: FC = () => {
 			});
 		}
 	}, [gradeData]);
-
+	const handleOpenModalAddGrade = () => {
+		setIsOpenModalAddGrade(true);
+	};
 	return (
 		<>
 			<div className="w-11/12">
@@ -62,20 +67,26 @@ const Grade: FC = () => {
 			{
 				user?.role === "Teacher" ? (
 					<FloatButton
-						// onClick={handleOpenModalAddGrade}
+						onClick={handleOpenModalAddGrade}
 						shape="square"
 						type="primary"
 						style={{ right: 24 }}
 						icon={<PlusOutlined  />}
 					/>)
 				:(<FloatButton
-						// onClick={handleOpenModalRequestGrade}
+						onClick={()=>setIsOpenModalRequestGrade(true)}
 						shape="square"
 						type="primary"
 						style={{ right: 24 }}
 						icon={<PlusOutlined  />}
 					/>)
 
+			}
+			{
+				isOpenModalAddGrade && (<AddGrade openModal={isOpenModalAddGrade} handleCloseModalAddGrade={() => setIsOpenModalAddGrade(false)} />)
+			}
+			{
+				isOpenModalRequestGrade && (<CreateRequest open={isOpenModalRequestGrade} handleClose={() => setIsOpenModalRequestGrade(false)} />)
 			}
 
 		</>
