@@ -46,25 +46,6 @@ public class CourseController
         return await mediator.Send(command, cancellationToken);
     }
 
-    // /// <summary>
-    // /// Search courses by user id.
-    // /// </summary>
-    // /// <param name="userId"></param>
-    // /// <param name="cancellationToken"></param>
-    // /// <returns></returns>
-    // [HttpGet("")]
-    // [Authorize]
-    // public async Task<IEnumerable<CourseDto>> GetCoursesByUserId(
-    //     [FromQuery] int userId,
-    //     CancellationToken cancellationToken)
-    // {
-    //     var result =
-    //         await mediator.Send(new GetCourseByUserIdQuery() { UserId = userId },
-    //             cancellationToken);
-    //
-    //     return result;
-    // }
-
     /// <summary>
     /// Search courses.
     /// </summary>
@@ -94,7 +75,7 @@ public class CourseController
         CancellationToken cancellationToken)
     {
         var result =
-            await mediator.Send(new GetCourseByIdQuery() { CourseId = courseId },
+            await mediator.Send(new GetCourseByIdQuery { CourseId = courseId },
                 cancellationToken);
 
         return result;
@@ -112,9 +93,11 @@ public class CourseController
         [FromBody] UpdateCourseRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateCourseCommand()
+        var command = new UpdateCourseCommand
         {
-            CourseId = courseId, Name = request.Name, Description = request.Description
+            CourseId = courseId,
+            Name = request.Name,
+            Description = request.Description
         };
         await mediator.Send(command, cancellationToken);
     }
@@ -132,7 +115,7 @@ public class CourseController
         [FromBody] InviteByEmailRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new CreateInvitationLinkByEmailCommand() { CourseId = courseId, Email = request.Email };
+        var command = new CreateInvitationLinkByEmailCommand { CourseId = courseId, Email = request.Email };
         await mediator.Send(command, cancellationToken);
     }
 
@@ -147,7 +130,7 @@ public class CourseController
         [FromBody] JoinCourseByEmailRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new AssignByEmailCommand() { Token = request.Token };
+        var command = new AssignByEmailCommand { Token = request.Token };
         await mediator.Send(command, cancellationToken);
     }
 
@@ -163,7 +146,7 @@ public class CourseController
         [FromBody] JoinCourseByCodeRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new AssignByCodeCommand() { InviteCode = request.InviteCode };
+        var command = new AssignByCodeCommand { InviteCode = request.InviteCode };
 
         await mediator.Send(command, cancellationToken);
     }
@@ -179,7 +162,7 @@ public class CourseController
         [FromRoute] int courseId,
         CancellationToken cancellationToken)
     {
-        var command = new ToggleActivatedCommand() { CourseId = courseId };
+        var command = new ToggleActivatedCommand { CourseId = courseId };
         await mediator.Send(command, cancellationToken);
     }
 }
