@@ -91,7 +91,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             {
                 var gradeStudent = gradeTable.GetValueOrDefault(grade.StudentId);
 
-                gradeStudent?.Append(mapper.Map<GradeCellDto>(grade));
+                gradeStudent?.Insert(index, mapper.Map<GradeCellDto>(grade));
             }
 
             foreach (var (key, value) in gradeTable.Where(pair => pair.Value.Count != index + 1))
