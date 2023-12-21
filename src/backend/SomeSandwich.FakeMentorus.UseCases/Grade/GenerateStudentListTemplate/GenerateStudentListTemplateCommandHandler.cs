@@ -30,6 +30,11 @@ internal class GenerateStudentListTemplateCommandHandler : IRequestHandler<Gener
     /// <inheritdoc />
     public async Task<GenerateStudentListTemplateResult> Handle(GenerateStudentListTemplateCommand command, CancellationToken cancellationToken)
     {
+        var studentInfos = await appDbContext.StudentInfos
+            .Where(e => e.CourseId == command.CourseId)
+            .OrderBy(e => e.StudentId)
+            .ToListAsync(cancellationToken);
+
         var workbook = new XSSFWorkbook();
         var gradeSheet = workbook.CreateSheet("Students");
 
@@ -39,6 +44,14 @@ internal class GenerateStudentListTemplateCommandHandler : IRequestHandler<Gener
         for (var i = 0; i < studentHeader.Length; ++i)
         {
             headerRow.CreateCell(i).SetCellValue(studentHeader[i]);
+        }
+
+        var rowIndex = 1;
+        foreach (var studentInfo in studentInfos)
+        {
+            var row = gradeSheet.CreateRow(rowIndex++);
+            row.CreateCell(0).SetCellValue(studentInfo.StudentId);
+            row.CreateCell(1).SetCellValue(studentInfo.Name);
         }
 
         var fileName = $"Student_Template_Class_{command.CourseId}.xlsx";
