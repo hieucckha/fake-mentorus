@@ -415,6 +415,7 @@ const GradeStructure: React.FC = () => {
 				>
 					<Form form={form} component={false}>
 						<Table
+							className="[&_tr]:!z-0"
 							components={{
 								body: {
 									cell: EditableCell,
