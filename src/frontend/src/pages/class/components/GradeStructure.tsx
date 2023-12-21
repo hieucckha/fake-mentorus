@@ -9,6 +9,7 @@ import {
 	Button,
 	App,
 	Space,
+	Spin,
 } from "antd";
 import type { DragEndEvent } from "@dnd-kit/core";
 import {
@@ -30,7 +31,6 @@ import {
 	gradeCompositions,
 	newGradeCompositions,
 } from "../../../api/store/class/interface";
-
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
@@ -132,7 +132,6 @@ const GradeStructure: React.FC = () => {
 	const mutationAddGradeColumn = useAddNewGradeComposit();
 	const mutationUpdateGradeColumn = useUpdateGradeColumn();
 	const mutationDeleteGradeColumn = useDeleteNewGradeComposit();
-	
 
 	const [form] = Form.useForm();
 	const [gradeCompositions, setGradeCompositions] = useState<
@@ -164,7 +163,7 @@ const GradeStructure: React.FC = () => {
 				order: idx + 1,
 			};
 		});
-		
+
 		mutation.mutate(array, {
 			onSuccess() {},
 			onError(error) {
@@ -174,7 +173,6 @@ const GradeStructure: React.FC = () => {
 		// setGradeCompositions(array)
 	};
 	useEffect(() => {
-		
 		if (gradeCompositions) {
 			reOrderArray();
 		}
@@ -186,13 +184,18 @@ const GradeStructure: React.FC = () => {
 	}, [data]);
 	useEffect(() => {
 		if (user) {
-			if(user.role == UserRole.Student){
-				navigate('/home')
+			if (user.role == UserRole.Student) {
+				navigate("/home");
 			}
 		}
 	}, [user]);
 
-	if (isLoading) return <div>Loading...</div>;
+	if (isLoading)
+		return (
+			<div>
+				<Spin fullscreen />
+			</div>
+		);
 
 	const onDragEnd = ({ active, over }: DragEndEvent) => {
 		if (active.id !== over?.id) {
@@ -228,7 +231,7 @@ const GradeStructure: React.FC = () => {
 			},
 		});
 	};
-	
+
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as gradeCompositions;
@@ -269,7 +272,6 @@ const GradeStructure: React.FC = () => {
 				setGradeCompositions(newData);
 				setEditingKey(0);
 			} else {
-
 				newData.push(row);
 				setGradeCompositions(newData);
 				setEditingKey(0);
@@ -279,11 +281,10 @@ const GradeStructure: React.FC = () => {
 		}
 	};
 
-	const handleDelete = async (gradeId : number)=>{
-		
-		mutationDeleteGradeColumn.mutate(gradeId)
+	const handleDelete = async (gradeId: number) => {
+		mutationDeleteGradeColumn.mutate(gradeId);
 		message.success("Delete Grade Composition successfully");
-	}
+	};
 	const columns = [
 		{
 			title: "Name",
@@ -328,7 +329,7 @@ const GradeStructure: React.FC = () => {
 						</Typography.Link>
 						<Popconfirm
 							title="Sure to delete?"
-							onConfirm={()=>handleDelete(record.id)}
+							onConfirm={() => handleDelete(record.id)}
 							okButtonProps={{ className: "bg-blue-500" }}
 						>
 							<a className="text-red-500 hover:text-red-600">Delete</a>

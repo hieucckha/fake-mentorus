@@ -1,3 +1,5 @@
+import { react } from '@vitejs/plugin-react-swc';
+import { classDetailQuery } from './../api/store/class/queries';
 import axios from "../api/AxiosClient";
 
 import type {
@@ -23,6 +25,14 @@ const classService = {
 	},
 	async getClassDetail(classId: String): Promise<ClassDetail> {
 		const response = await axios.get(`/api/course/${classId}`);
+
+		return response.data;
+	},
+	async editClass(classQuery: ClassQuery) {
+		const response = await axios.patch(`/api/course/${classQuery.id}`, {
+			name: classQuery.name,
+			description: classQuery.description
+		});
 
 		return response.data;
 	},

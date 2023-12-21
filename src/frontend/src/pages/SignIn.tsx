@@ -16,6 +16,8 @@ import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 // import { GoogleLogin } from "@react-oauth/google";
 import { useLogin } from "react-facebook";
 import Header from "./LandingPage/Header";
+import { Axios } from "axios";
+import { message } from "antd";
 
 /**
  * Sign-in page.
@@ -53,7 +55,8 @@ const SignIn: FC = (): JSX.Element => {
 
 				navigate(origin);
 			},
-			onError(error) {
+			onError(error: any) {
+				message.error(error?.response.data.title);
 				console.error(error);
 			},
 		});
