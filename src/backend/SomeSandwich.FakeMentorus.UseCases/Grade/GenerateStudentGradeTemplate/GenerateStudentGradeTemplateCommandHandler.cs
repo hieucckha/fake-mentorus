@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NPOI.XSSF.UserModel;
@@ -40,11 +39,6 @@ internal class GenerateStudentGradeTemplateCommandHandler : IRequestHandler<Gene
             throw new DomainException(
                 "No grade composite in this class. Please create few grade composite and try again.");
         }
-
-        var students = await appDbContext.CourseStudents
-            .Include(e => e.Student)
-            .Where(e => e.CourseId == command.CourseId)
-            .ToListAsync(cancellationToken);
 
         var studentInfos = await appDbContext.StudentInfos
             .Where(e => e.CourseId == command.CourseId)
