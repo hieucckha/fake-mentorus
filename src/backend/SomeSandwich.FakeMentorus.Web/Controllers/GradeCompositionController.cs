@@ -6,6 +6,7 @@ using SomeSandwich.FakeMentorus.UseCases.GradeComposition.CreateGradeComposition
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.DeleteGradeComposition;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.GetGradeCompositionById;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.SortGradeComposition;
+using SomeSandwich.FakeMentorus.UseCases.GradeComposition.ToggleIsFinished;
 using SomeSandwich.FakeMentorus.UseCases.GradeComposition.UpdateGradeComposition;
 using SomeSandwich.FakeMentorus.Web.Requests;
 
@@ -120,5 +121,17 @@ public class GradeCompositionController
     public async Task Delete([FromRoute] int id, CancellationToken cancellationToken)
     {
         await mediator.Send(new DeleteGradeCompositionCommand() { GradeCompositionId = id }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Toggle is final.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    [HttpPut("{id:int}/final")]
+    [Authorize]
+    public async Task ToggleIsFinal([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new ToggleIsFinishedCommand() { Id = id }, cancellationToken);
     }
 }
