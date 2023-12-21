@@ -31,7 +31,6 @@ import {
 	newGradeCompositions,
 } from "../../../api/store/class/interface";
 
-
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
 	dataIndex: string;
@@ -116,6 +115,11 @@ import {
 } from "../../../api/store/gradeComposits/mutation";
 import { UserRole } from "../../../api/store/auth/interface";
 import useAuth from "../../../hooks/auth";
+import {
+	CheckCircleOutlined,
+	DeleteOutlined,
+	EditOutlined,
+} from "@ant-design/icons";
 
 const addKeyWithId = (array: any) => {
 	let arrClone = array?.map((item: any) => ({ ...item, key: item.id }));
@@ -132,7 +136,7 @@ const GradeStructure: React.FC = () => {
 	const mutationAddGradeColumn = useAddNewGradeComposit();
 	const mutationUpdateGradeColumn = useUpdateGradeColumn();
 	const mutationDeleteGradeColumn = useDeleteNewGradeComposit();
-	
+	const mutationApproveGradeColumn = useDeleteNewGradeComposit();
 
 	const [form] = Form.useForm();
 	const [gradeCompositions, setGradeCompositions] = useState<
@@ -164,7 +168,7 @@ const GradeStructure: React.FC = () => {
 				order: idx + 1,
 			};
 		});
-		
+
 		mutation.mutate(array, {
 			onSuccess() {},
 			onError(error) {
@@ -174,7 +178,8 @@ const GradeStructure: React.FC = () => {
 		// setGradeCompositions(array)
 	};
 	useEffect(() => {
-		
+		console.log("gradeCompositions")
+		console.log(gradeCompositions)
 		if (gradeCompositions) {
 			reOrderArray();
 		}
@@ -186,8 +191,8 @@ const GradeStructure: React.FC = () => {
 	}, [data]);
 	useEffect(() => {
 		if (user) {
-			if(user.role == UserRole.Student){
-				navigate('/home')
+			if (user.role == UserRole.Student) {
+				navigate("/home");
 			}
 		}
 	}, [user]);
@@ -228,7 +233,7 @@ const GradeStructure: React.FC = () => {
 			},
 		});
 	};
-	
+
 	const save = async (key: React.Key) => {
 		try {
 			const row = (await form.validateFields()) as gradeCompositions;
@@ -269,7 +274,6 @@ const GradeStructure: React.FC = () => {
 				setGradeCompositions(newData);
 				setEditingKey(0);
 			} else {
-
 				newData.push(row);
 				setGradeCompositions(newData);
 				setEditingKey(0);
@@ -279,11 +283,14 @@ const GradeStructure: React.FC = () => {
 		}
 	};
 
-	const handleDelete = async (gradeId : number)=>{
-		
-		mutationDeleteGradeColumn.mutate(gradeId)
+	const handleDelete = async (gradeId: number) => {
+		mutationDeleteGradeColumn.mutate(gradeId);
 		message.success("Delete Grade Composition successfully");
-	}
+	};
+	const handleConfirm = async (gradeId: number) => {
+		mutationDeleteGradeColumn.mutate(gradeId);
+		message.success("Delete Grade Composition successfully");
+	};
 	const columns = [
 		{
 			title: "Name",
@@ -298,7 +305,9 @@ const GradeStructure: React.FC = () => {
 			editable: true,
 		},
 		{
-			title: "Operation",
+			title: "",
+			width:"15%",
+			align:"center",
 			dataIndex: "operation",
 			render: (_: any, record: gradeCompositions) => {
 				const editable = isEditing(record);
@@ -319,20 +328,37 @@ const GradeStructure: React.FC = () => {
 						</Popconfirm>
 					</span>
 				) : (
-					<Space>
+					<Space className="gap-x-5">
 						<Typography.Link
 							disabled={editingKey !== 0}
 							onClick={() => edit(record)}
 						>
-							Edit
+							<EditOutlined className="text-xl" />
 						</Typography.Link>
 						<Popconfirm
 							title="Sure to delete?"
-							onConfirm={()=>handleDelete(record.id)}
+							onConfirm={() => handleDelete(record.id)}
 							okButtonProps={{ className: "bg-blue-500" }}
 						>
-							<a className="text-red-500 hover:text-red-600">Delete</a>
+							<a className="text-red-500 hover:text-red-600">
+								<DeleteOutlined className="text-xl" />
+							</a>
 						</Popconfirm>
+						{
+							record && record.isFinal == false ?
+							<Popconfirm
+								title="Sure to confirm?"
+								onConfirm={() => handleConfirm(record.id)}
+								okButtonProps={{ className: "bg-blue-500" }}
+							>
+								<a className="text-green-500 hover:text-green-600">
+									<CheckCircleOutlined className="text-xl" />
+								</a>
+							</Popconfirm>
+							: <div style={{width: "20px"}} >
+
+							</div>
+						}
 					</Space>
 				);
 			},
@@ -389,7 +415,7 @@ const GradeStructure: React.FC = () => {
 							}}
 							bordered
 							dataSource={gradeCompositions}
-							columns={mergedColumns}
+							columns={mergedColumns as any}
 							rowClassName="editable-row"
 							pagination={false}
 						/>

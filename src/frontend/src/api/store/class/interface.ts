@@ -25,6 +25,7 @@ export interface gradeCompositions {
 	description: string;
 	gradeScale: number;
 	order: number;
+	isFinal ?: boolean;
 	createdAt: string;
 	updatedAt: string;
 }
