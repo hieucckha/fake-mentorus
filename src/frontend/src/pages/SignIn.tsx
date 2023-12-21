@@ -19,10 +19,14 @@ import Header from "./LandingPage/Header";
 import { Axios } from "axios";
 import { message } from "antd";
 
+interface SignInProps {
+	afterLoginUrl?: string;
+}
+
 /**
  * Sign-in page.
  */
-const SignIn: FC = (): JSX.Element => {
+const SignIn: FC<SignInProps> = ({ afterLoginUrl= "/home" }: SignInProps): JSX.Element => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [email, setEmail] = useState("");
@@ -51,7 +55,7 @@ const SignIn: FC = (): JSX.Element => {
 		};
 		signInMutation.mutate(data, {
 			onSuccess() {
-				var origin = location.state?.from?.pathname || "/home";
+				var origin = location.state?.from?.pathname || afterLoginUrl;
 
 				navigate(origin);
 			},
@@ -76,7 +80,7 @@ const SignIn: FC = (): JSX.Element => {
 
 			signInFacebookMutation.mutate(data, {
 				onSuccess() {
-					var origin = location.state?.from?.pathname || "/home";
+					var origin = location.state?.from?.pathname || afterLoginUrl;
 
 					navigate(origin);
 				},
@@ -101,7 +105,7 @@ const SignIn: FC = (): JSX.Element => {
 
 		signInGoogleMutation.mutate(data, {
 			onSuccess() {
-				var origin = location.state?.from?.pathname || "/home";
+				var origin = location.state?.from?.pathname || afterLoginUrl;
 
 				navigate(origin);
 			},

@@ -93,5 +93,6 @@ export interface editUserDto{
 
 export enum UserRole {
 	Teacher = "Teacher",
-	Student = "Student"
+	Student = "Student",
+	Admin = "Admin"
 }
