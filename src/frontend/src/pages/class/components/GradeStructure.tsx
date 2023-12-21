@@ -9,6 +9,7 @@ import {
 	Button,
 	App,
 	Space,
+	Spin,
 } from "antd";
 import type { DragEndEvent } from "@dnd-kit/core";
 import {
@@ -179,8 +180,6 @@ const GradeStructure: React.FC = () => {
 		// setGradeCompositions(array)
 	};
 	useEffect(() => {
-		console.log("gradeCompositions")
-		console.log(gradeCompositions)
 		if (gradeCompositions) {
 			reOrderArray();
 		}
@@ -198,7 +197,12 @@ const GradeStructure: React.FC = () => {
 		}
 	}, [user]);
 
-	if (isLoading) return <div>Loading...</div>;
+	if (isLoading)
+		return (
+			<div>
+				<Spin fullscreen />
+			</div>
+		);
 
 	const onDragEnd = ({ active, over }: DragEndEvent) => {
 		if (active.id !== over?.id) {
@@ -292,6 +296,7 @@ const GradeStructure: React.FC = () => {
 		mutationApproveGradeColumn.mutate(gradeId);
 		message.success("Delete Grade Composition successfully");
 	};
+
 	const columns = [
 		{
 			title: "Name",

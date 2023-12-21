@@ -3,7 +3,7 @@ import {
 	PieChartOutlined,
 	UploadOutlined,
 } from "@ant-design/icons";
-import {  Dropdown, MenuProps,   message } from "antd";
+import { Dropdown, MenuProps, message } from "antd";
 import React, { useState } from "react";
 import { useLocation, Link, useParams, Outlet } from "react-router-dom";
 import classService from "../services/class.service";
@@ -11,6 +11,7 @@ import { AxiosError } from "axios";
 import useAuth from "../hooks/auth";
 import { UserRole } from "../api/store/auth/interface";
 import UploadModal from "../modal/UploadModal";
+import EditClass from "../modal/EditClassModal";
 
 const ClassLayout: React.FC = (): JSX.Element => {
 	const location = useLocation();
@@ -23,6 +24,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
 	const gradeUrl = `/class/${id}/grade`;
 
 	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [isModalEditVisible, setIsModalEditVisible] = useState(false);
 
 	const chooseFile = () => {
 		document.getElementById("importInput")?.click();
@@ -31,20 +33,23 @@ const ClassLayout: React.FC = (): JSX.Element => {
 	const handleCloseModal = () => {
 		setIsModalVisible(false);
 	};
-	const handleSubmit = (e: any) => {
-		classService.importStudent(id ?? "", e.target.files[0]).then(
-			() => {
-				message.success("Import success");
-			}
-		).catch((err: AxiosError) => {
-			console.log(err.response?.data);
-			const mess = (err.response?.data as any ).title ?? "Import failed";
-			message.error(mess);
-		}
-		);
+
+	const handleCloseEditModal = () => {
+		setIsModalEditVisible(false);
 	};
-	
-	
+	const handleSubmit = (e: any) => {
+		classService
+			.importStudent(id ?? "", e.target.files[0])
+			.then(() => {
+				message.success("Import success");
+			})
+			.catch((err: AxiosError) => {
+				console.log(err.response?.data);
+				const mess = (err.response?.data as any).title ?? "Import failed";
+				message.error(mess);
+			});
+	};
+
 	const items: MenuProps["items"] = [
 		{
 			key: "1",
@@ -88,6 +93,22 @@ const ClassLayout: React.FC = (): JSX.Element => {
 		// 		</>
 		// 	),
 		// },
+	];
+
+	const itemOverviews: MenuProps["items"] = [
+		{
+			key: "1",
+			label: (
+				<a
+					onClick={() => {
+						setIsModalEditVisible(true);
+					}}
+				>
+					{/* <UploadOutlined className="pr-3" /> */}
+					Edit
+				</a>
+			),
+		},
 	];
 
 	return (
@@ -192,6 +213,16 @@ const ClassLayout: React.FC = (): JSX.Element => {
 									</Dropdown>
 								</div>
 							)}
+							{location.pathname === overviewUrl && (
+								<div className="me-2 right-0 text-2xl inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg group ">
+									<Dropdown
+										menu={{ items: itemOverviews }}
+										placement="bottomRight"
+									>
+										<MoreOutlined />
+									</Dropdown>
+								</div>
+							)}
 						</div>
 					</div>
 					<div className="h-full w-full flex justify-center bg-slate-50 pt-6">
@@ -201,6 +232,12 @@ const ClassLayout: React.FC = (): JSX.Element => {
 						<UploadModal
 							openModal={isModalVisible}
 							handleCloseModalUpload={handleCloseModal}
+						/>
+					)}
+					{isModalEditVisible && (
+						<EditClass
+							openModal={isModalEditVisible}
+							handleCloseModalEditClass={handleCloseEditModal}
 						/>
 					)}
 				</section>
