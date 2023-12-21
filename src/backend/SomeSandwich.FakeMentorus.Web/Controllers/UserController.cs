@@ -1,10 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Saritasa.Tools.Common.Pagination;
+using SomeSandwich.FakeMentorus.UseCases.Users.Common.Dtos;
 using SomeSandwich.FakeMentorus.UseCases.Users.CreateUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.LockoutUser.LockUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.LockoutUser.UnlockUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.MappingStudentId;
+using SomeSandwich.FakeMentorus.UseCases.Users.SearchUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.UpdateUser;
 using SomeSandwich.FakeMentorus.Web.Requests;
 
@@ -91,5 +94,20 @@ public class UserController : ControllerBase
     {
         await mediator.Send(new MappingStudentIdCommand() { UserId = id, StudentId = studentId },
             cancellationToken);
+    }
+
+    /// <summary>
+    /// Get users.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("search")]
+    [Authorize]
+    public async Task<PagedListMetadataDto<UserDto>> GetUsers([FromQuery] SearchUserQuery request,
+        CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(request, cancellationToken);
+        return result.ToMetadataObject();
     }
 }
