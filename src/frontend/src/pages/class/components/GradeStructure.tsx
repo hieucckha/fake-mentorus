@@ -109,6 +109,7 @@ const RowDragable = (props: RowProps) => {
 import useClassDetail from "../../../hooks/useClassDetail";
 import {
 	useAddNewGradeComposit,
+	useApproveGradeComposit,
 	useDeleteNewGradeComposit,
 	useUpdateGradeColumn,
 	useUpdateOrderGradeComposit,
@@ -136,7 +137,7 @@ const GradeStructure: React.FC = () => {
 	const mutationAddGradeColumn = useAddNewGradeComposit();
 	const mutationUpdateGradeColumn = useUpdateGradeColumn();
 	const mutationDeleteGradeColumn = useDeleteNewGradeComposit();
-	const mutationApproveGradeColumn = useDeleteNewGradeComposit();
+	const mutationApproveGradeColumn = useApproveGradeComposit();
 
 	const [form] = Form.useForm();
 	const [gradeCompositions, setGradeCompositions] = useState<
@@ -162,7 +163,7 @@ const GradeStructure: React.FC = () => {
 	);
 	const reOrderArray = () => {
 		if (!Array.isArray(gradeCompositions)) return;
-		const array = gradeCompositions.map((item, idx) => {
+		const array = gradeCompositions?.map((item, idx) => {
 			return {
 				...item,
 				order: idx + 1,
@@ -288,7 +289,7 @@ const GradeStructure: React.FC = () => {
 		message.success("Delete Grade Composition successfully");
 	};
 	const handleConfirm = async (gradeId: number) => {
-		mutationDeleteGradeColumn.mutate(gradeId);
+		mutationApproveGradeColumn.mutate(gradeId);
 		message.success("Delete Grade Composition successfully");
 	};
 	const columns = [
@@ -355,9 +356,16 @@ const GradeStructure: React.FC = () => {
 									<CheckCircleOutlined className="text-xl" />
 								</a>
 							</Popconfirm>
-							: <div style={{width: "20px"}} >
+							: <Popconfirm
+								title="Sure no confirm?"
+								onConfirm={() => handleConfirm(record.id)}
+								okButtonProps={{ className: "bg-blue-500" }}
+							>
+								<a className="text-red-500 hover:text-red-600">
+									<CheckCircleOutlined className="text-xl" />
+								</a>
+							</Popconfirm>
 
-							</div>
 						}
 					</Space>
 				);
@@ -365,7 +373,7 @@ const GradeStructure: React.FC = () => {
 		},
 	];
 
-	const mergedColumns = columns.map((col) => {
+	const mergedColumns = columns?.map((col) => {
 		if (!col.editable) {
 			return col;
 		}
@@ -402,7 +410,7 @@ const GradeStructure: React.FC = () => {
 			>
 				<SortableContext
 					// rowKey array
-					items={gradeCompositions?.map((i) => i.id)}
+					items={gradeCompositions?.map((i) => i.id) ?? []}
 					strategy={verticalListSortingStrategy}
 				>
 					<Form form={form} component={false}>
