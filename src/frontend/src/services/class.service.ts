@@ -4,6 +4,7 @@ import type {
 	ClassDetail,
 	ClassDto,
 	ClassQuery,
+	EditGradeDto,
 	gradeCompositions,
 	newGradeCompositions,
 } from "../api/store/class/interface";
@@ -56,6 +57,12 @@ const classService = {
 		);
 		return response.data;
 	},
+
+	async editGradeStudent(body: EditGradeDto) {
+		const response = await axios.post("/api/grade", body);
+		return response.data;
+	},
+
 	async addNewGradeComposit(composition: newGradeCompositions) {
 		const response = await axios.post("/api/grade-composition", {
 			gradeScale: composition.gradeScale,
