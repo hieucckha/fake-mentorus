@@ -1,6 +1,6 @@
 import { FC } from "react";
 import moment from "moment";
-import { App, Badge } from "antd";
+import { App, Badge, Spin } from "antd";
 import useClassDetail from "../../hooks/useClassDetail";
 import { BellOutlined, BellTwoTone } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,7 +22,9 @@ const Overview: FC = () => {
 		message.success("Copied code to clipboard");
 	};
 	return isLoading ? (
-		<div>Loading...</div>
+		<div>
+			<Spin fullscreen />
+		</div>
 	) : (
 		<div className="h-screen w-full flex justify-center bg-slate-50 pt-6">
 			<div className="w-4/5">

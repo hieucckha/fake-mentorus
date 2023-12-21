@@ -6,7 +6,7 @@ import { ClassQuery } from "../api/store/class/interface";
 import CreateClass from "../modal/CreateClass";
 import JoinClass from "../modal/JoinClass";
 import { useLocation } from "react-router-dom";
-import { App } from "antd";
+import { App, Spin } from "antd";
 
 const Dashboard: FC = (): JSX.Element => {
 	const location = useLocation();
@@ -50,7 +50,9 @@ const Dashboard: FC = (): JSX.Element => {
 			<div className=" content-center dark:border-gray-700 mt-14">
 				<section className="bg-white dark:bg-gray-900 h-screen content-center p-5">
 					{isLoading ? (
-						<div>Loading...</div>
+						<div>
+							<Spin fullscreen />
+						</div>
 					) : data?.length === 0 ? (
 						<div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
 							<div className="content-center justify-between">
