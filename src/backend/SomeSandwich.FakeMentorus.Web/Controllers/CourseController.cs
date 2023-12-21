@@ -9,6 +9,7 @@ using SomeSandwich.FakeMentorus.UseCases.Courses.CreateCourse;
 using SomeSandwich.FakeMentorus.UseCases.Courses.CreateInvitationLinkByEmail;
 using SomeSandwich.FakeMentorus.UseCases.Courses.GetCourseById;
 using SomeSandwich.FakeMentorus.UseCases.Courses.SearchCourse;
+using SomeSandwich.FakeMentorus.UseCases.Courses.ToggleActivated;
 using SomeSandwich.FakeMentorus.UseCases.Courses.UpdateCourse;
 using SomeSandwich.FakeMentorus.Web.Requests;
 
@@ -153,7 +154,6 @@ public class CourseController
     /// <summary>
     /// Join course by invite code (for anonymous users).
     /// </summary>
-    /// <param name="courseId"></param>
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -165,6 +165,21 @@ public class CourseController
     {
         var command = new AssignByCodeCommand() { InviteCode = request.InviteCode };
 
+        await mediator.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// Toggle activate course.
+    /// </summary>
+    /// <param name="courseId"></param>
+    /// <param name="cancellationToken"></param>
+    [HttpPost("{courseId:int}/activate")]
+    [Authorize]
+    public async Task ActivateCourse(
+        [FromRoute] int courseId,
+        CancellationToken cancellationToken)
+    {
+        var command = new ToggleActivatedCommand() { CourseId = courseId };
         await mediator.Send(command, cancellationToken);
     }
 }
