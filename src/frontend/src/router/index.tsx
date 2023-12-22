@@ -23,6 +23,7 @@ import AdminLayout from "../layout/Admin";
 import RoleLayout from "../layout/RoleLayout";
 import UnauthorizedPage from "../pages/errors/UnauthorizedPage";
 import ManagementClass from "../pages/admin/ManagementClass";
+import RequestsPage from "../pages/RequestsPage";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -113,6 +114,10 @@ const BrowserRouter = createBrowserRouter([
 											{
 												path: "grade",
 												element: <Grade />,
+											},
+											{
+												path: "requests",
+												element: <RequestsPage />,
 											},
 										],
 									},
