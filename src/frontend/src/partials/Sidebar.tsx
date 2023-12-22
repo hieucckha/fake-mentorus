@@ -1,13 +1,16 @@
 import React from "react";
 import {
 	BookOutlined,
+	ControlOutlined,
 	HomeOutlined,
+	UsergroupAddOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import {  Menu, Skeleton } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import classQuery from "../api/store/class/queries";
 import useAuth from "../hooks/auth";
+import { UserRole } from "../api/store/auth/interface";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -70,6 +73,12 @@ const Sidebar: React.FC = () => {
 				)
 			),
 		]
+	}
+	if(user?.role === UserRole.Admin){
+		itemsMenu = [];
+		itemsMenu.push(getItem(<NavLink style={{ fontSize: fontSizeMenu}} to={"/admin/classes"}>Management class</NavLink>, "Management class", <ControlOutlined style={{ fontSize: fontSizeIcon}}/>))
+		itemsMenu.push(getItem(<NavLink style={{ fontSize: fontSizeMenu}} to={"/admin/users"}>Management user</NavLink>, "Management user", <UsergroupAddOutlined style={{ fontSize: fontSizeIcon}}/>))
+
 	}
 	
 

@@ -31,7 +31,6 @@ const Dashboard: FC = (): JSX.Element => {
 	};
 
 	useEffect(() => {
-		console.log(`Is state - ${JSON.stringify(location.state)}`);
 		if (location.state?.showToast) {
 			if (location.state.type == "success") {
 				notification.success({
@@ -113,12 +112,14 @@ const Dashboard: FC = (): JSX.Element => {
 					) : (
 						<div className="flex flex-wrap gap-16">
 							{data?.map((item: ClassQuery) => (
+								item.isActivated && (
 								<CardClass
 									key={item.id}
 									id={item.id} // Assuming there's an ID property in your ClassDto
 									name={item.name}
 									description={item.description}
 								/>
+								)
 							))}
 						</div>
 					)}

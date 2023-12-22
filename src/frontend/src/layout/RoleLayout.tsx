@@ -18,8 +18,6 @@ const RoleLayout: FC<RoleLayoutProps> = ({roles} ): JSX.Element => {
 	
 	
 	if (isLoading) return null; 
-	console.log(localStorageService.getItem("auth"));
-	console.log(userData);
 
 	const userHasRequiredRole = !!(userData && roles.includes(userData.role));
 	if (!userHasRequiredRole) {

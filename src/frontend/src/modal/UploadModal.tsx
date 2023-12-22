@@ -29,8 +29,6 @@ const Upload: FC<UploadProps> = ({
 		setIsPreview(true);
 		readXlsxFile(file).then((rows) => {
 			rows.map((item, index) => {
-				console.log(item);
-				console.log(index);
 				if (index == 0) {
 					item.map((grade, index) => {
 						setGradeColumn((prev) => [
@@ -42,7 +40,6 @@ const Upload: FC<UploadProps> = ({
 							},
 						]);
 					});
-					console.log("gradeColumn");
 				} else {
 					let temp = {
 						0: item[0],
@@ -50,7 +47,6 @@ const Upload: FC<UploadProps> = ({
 					};
 					item.map((grade, index) => {
 						if (index > 1) {
-							console.log(grade);
 							temp = {
 								...temp,
 								[index]: grade,

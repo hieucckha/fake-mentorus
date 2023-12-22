@@ -19,7 +19,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
 	const { data: user } = useAuth();
 
 	const overviewUrl = `/class/${id}/overview`;
-	const classworkUrl = `/class/${id}/work-class`;
+	const classworkUrl = `/class/${id}/work-class`; 
 	const gradeStructureUrl = `/class/${id}/grade-structure`;
 	const gradeUrl = `/class/${id}/grade`;
 
@@ -44,7 +44,6 @@ const ClassLayout: React.FC = (): JSX.Element => {
 				message.success("Import success");
 			})
 			.catch((err: AxiosError) => {
-				console.log(err.response?.data);
 				const mess = (err.response?.data as any).title ?? "Import failed";
 				message.error(mess);
 			});
@@ -112,7 +111,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
 	];
 
 	return (
-		<div className="w-full h-full">
+		<div className="w-full h-screen-dvh">
 			<div className="content-center dark:border-gray-700 mt-14">
 				<section className="bg-white dark:bg-gray-900 h-screen content-center">
 					<div className="border-b border-gray-200 dark:border-gray-700">
@@ -237,8 +236,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
 					{isModalEditVisible && (
 						<EditClass
 							openModal={isModalEditVisible}
-							handleCloseModalEditClass={handleCloseEditModal}
-						/>
+							handleCloseModalEditClass={handleCloseEditModal} classId={""}						/>
 					)}
 				</section>
 			</div>

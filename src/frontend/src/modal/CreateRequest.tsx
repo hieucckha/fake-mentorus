@@ -26,7 +26,6 @@ const CreateRequest: FC<CreateRequestProps> = ({
 	const { mutate: createGradeMutate, isPending } = useCreateGradeRequest();
 
 	const handleFinishForm = (values: any) => {
-		console.log(values);
 		createGradeMutate(values, {
 			onSuccess: () => {
 				message.success("Create request successfully");
