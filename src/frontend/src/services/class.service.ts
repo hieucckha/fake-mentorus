@@ -1,5 +1,3 @@
-import { react } from '@vitejs/plugin-react-swc';
-import { classDetailQuery } from './../api/store/class/queries';
 import axios from "../api/AxiosClient";
 
 import type {
