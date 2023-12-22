@@ -24,7 +24,6 @@ const AddGrade: FC<AddGradeProps> = ({
 	const {mutate: editGradeMutate, isPending} = useEditGradeMutation();
 
     const handleFinishForm = (values: any) => {
-        console.log(values);
         editGradeMutate(values, {
             onSuccess: () => {
                 message.success("Edit grade successfully");
