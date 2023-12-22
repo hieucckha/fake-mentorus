@@ -22,7 +22,6 @@ const Grade: FC = () => {
 	const [student, setStudent] = useState<any[]>([]);
 	useEffect(() => {
 		if (gradeData) {
-			console.log(gradeData);
 			setStudent([]);
 			setGradeColumn([
 				{ title: "Name", dataIndex: "name", key: "name" },

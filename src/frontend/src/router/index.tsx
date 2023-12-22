@@ -30,11 +30,11 @@ const BrowserRouter = createBrowserRouter([
 		errorElement: <NotFound />,
 		children: [
 			{
-				element: <UnauthorizeLayout authenticatedUrl="/admin/dashboard" />,
+				element: <UnauthorizeLayout authenticatedUrl="/admin/classes" />,
 				children: [
 					{
 						path: "/admin/sign-in",
-						element: <SignIn afterLoginUrl={"/admin/dashboard"} />,
+						element: <SignIn afterLoginUrl={"/admin/classes"} />,
 					},
 				],
 			},

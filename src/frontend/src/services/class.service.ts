@@ -1,4 +1,5 @@
 import axios from "../api/AxiosClient";
+import { ClassListQuery } from "../api/store/admin/interface";
 
 import type {
 	ClassDetail,
@@ -18,6 +19,11 @@ const classService = {
 		const response = await axios.get("/api/course/query", {
 			params: { userId: userId },
 		});
+
+		return response.data.items;
+	},
+	async getAllClassWithoutParams(): Promise<Array<ClassListQuery>> {
+		const response = await axios.get("/api/course/query");
 
 		return response.data.items;
 	},
@@ -135,6 +141,11 @@ const classService = {
 	async approveGradeComposition(id: Number)
 	{
 		const response = await axios.put(`/api/grade-composition/${id}/final`);
+		return response.data;
+	},
+	async toggleActivateClass(classId: string) {
+		if (!classId || classId === "") throw new Error("classId is required");
+		const response = await axios.put(`/api/course/${classId}/activate`);
 		return response.data;
 	}
 };
