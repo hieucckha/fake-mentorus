@@ -1,13 +1,14 @@
 import axios from "../api/AxiosClient";
 import { ClassListQuery } from "../api/store/admin/interface";
 
-import type {
-	ClassDetail,
-	ClassDto,
-	ClassQuery,
-	EditGradeDto,
-	gradeCompositions,
-	newGradeCompositions,
+import {
+	RequestStatus,
+	type ClassDetail,
+	type ClassDto,
+	type ClassQuery,
+	type EditGradeDto,
+	type gradeCompositions,
+	type newGradeCompositions,
 } from "../api/store/class/interface";
 
 const classService = {
@@ -30,7 +31,7 @@ const classService = {
 	async getClassDetail(classId: String): Promise<ClassDetail> {
 		const response = await axios.get(`/api/course/${classId}`);
 
-		return response.data;
+		return {...response.data, requests: genArrayData(5)};
 	},
 	async editClass(classQuery: ClassQuery) {
 		const response = await axios.patch(`/api/course/${classQuery.id}`, {
@@ -168,3 +169,39 @@ export default classService;
 
 //     return result;
 // }
+
+// Function to generate an array of data
+function genArrayData(count) {
+	const dataArray = [];
+  
+	for (let i = 1; i <= count; i++) {
+	  const data = {
+		id: i,
+		studentId: i + 1000,
+		gradeId: i % 3 + 1,
+		studentName: `Student ${i}`,
+		currentGrade: Math.floor(Math.random() * 100) + 1,
+		expectedGrade: Math.floor(Math.random() * 100) + 1,
+		classId: i % 5 + 1,
+		reason: `Reason for request ${i}`,
+		createdAt: getCurrentDayFormatted(),
+		updatedAt: getCurrentDayFormatted(),
+		status: RequestStatus.Rejected
+	  };
+  
+	  dataArray.push(data);
+	}
+  
+	return dataArray;
+  }
+export const getCurrentDayFormatted = ()=>{
+	const today = new Date();
+	const yyyy = today.getFullYear();
+	let mm = today.getMonth() + 1; // Months start at 0!
+	let dd = today.getDate();
+	
+	var day = (dd >= 10)? dd.toString() : '0' + dd
+	var month = (mm >= 10)? mm.toString() : '0' + mm
+	const formattedToday = day + '/' + month + '/' + yyyy;
+	return formattedToday;
+  }

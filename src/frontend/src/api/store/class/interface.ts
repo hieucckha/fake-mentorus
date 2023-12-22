@@ -45,7 +45,10 @@ export enum RequestStatus {
 export interface requests{
 	id: number;
 	studentId: number;
+	gradeId: number;
 	studentName: string;
+	currentGrade: number;
+	expectedGrade: number;
 	classId: number;
 	reason: string;
 	createdAt: string;
