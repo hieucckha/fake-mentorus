@@ -6,6 +6,7 @@ export interface ClassQuery {
 	id: number;
 	name: string;
 	description: string;
+	isActivated ?:	boolean;
 }
 export interface Teacher{
 	id: number;
@@ -57,6 +58,7 @@ export interface ClassDetail {
 	description: string;
 	inviteCode: string;
 	inviteLink: string;
+	isActivated ?: boolean;
 	numberOfStudents: number;
 	numberTeacher: number;
 	teachers: Teacher[];
