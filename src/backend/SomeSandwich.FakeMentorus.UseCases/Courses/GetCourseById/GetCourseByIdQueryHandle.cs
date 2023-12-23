@@ -104,6 +104,8 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
                 .FirstOrDefault() ?? "";
         }
 
+        result.CreatorFullName = course.Creator.FullName;
+
         // TODO: Need url from frontend
         result.InviteLink = $"{appSettings.FrontendUrl}/course/invite/{course.InviteCode}";
 
