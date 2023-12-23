@@ -67,7 +67,7 @@ public class SearchUserQueryHandle : IRequestHandler<SearchUserQuery, PagedList<
             var lockoutEnabled = queryResult.FirstOrDefault(e => e.Id == userDto.Id)?.LockoutEnabled;
             if (lockoutEnabled is true)
             {
-                userDto.Status = lockoutEnd == null ? UserStatus.Baned : UserStatus.Locked;
+                userDto.Status = lockoutEnd == null ? UserStatus.Banned : UserStatus.Locked;
             }
             else
             {

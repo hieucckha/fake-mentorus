@@ -35,7 +35,7 @@ public enum UserStatus
 {
     Active,
     Locked,
-    Baned
+    Banned
 }
 
 public class UserCourseDto
