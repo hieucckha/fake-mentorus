@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Saritasa.Tools.Common.Pagination;
 using SomeSandwich.FakeMentorus.UseCases.Users.Common.Dtos;
 using SomeSandwich.FakeMentorus.UseCases.Users.CreateUser;
+using SomeSandwich.FakeMentorus.UseCases.Users.ImportStudentIdTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Users.LockoutUser.LockUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.LockoutUser.UnlockUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.MappingStudentId;
@@ -109,5 +110,20 @@ public class UserController : ControllerBase
     {
         var result = await mediator.Send(request, cancellationToken);
         return result.ToMetadataObject();
+    }
+
+    /// <summary>
+    /// Import student id map with email by template.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    [HttpPost("student")]
+    public async Task ImportStudentIdFromTemplate([FromForm] ImportStudentIdTemplateRequest request,
+        CancellationToken cancellationToken)
+    {
+        await mediator.Send(new ImportStudentIdTemplateCommand
+        {
+            FileContent = request.File.OpenReadStream()
+        }, cancellationToken);
     }
 }
