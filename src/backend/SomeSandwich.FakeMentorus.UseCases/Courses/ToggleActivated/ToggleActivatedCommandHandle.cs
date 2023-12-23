@@ -42,9 +42,9 @@ public class ToggleActivatedCommandHandle : IRequestHandler<ToggleActivatedComma
         }
 
         var role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
-        if (role is not "Teacher")
+        if (role is not "Teacher" && role is not "Admin")
         {
-            throw new ForbiddenException("Only teachers can toggle course activation");
+            throw new ForbiddenException("Only teacher or admin can toggle course activation");
         }
 
         var course = await dbContext.Courses
