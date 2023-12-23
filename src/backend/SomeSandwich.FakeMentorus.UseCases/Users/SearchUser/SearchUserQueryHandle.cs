@@ -73,6 +73,10 @@ public class SearchUserQueryHandle : IRequestHandler<SearchUserQuery, PagedList<
             {
                 userDto.Status = UserStatus.Active;
             }
+
+            var userResult = queryResult.FirstOrDefault(e => e.Id == userDto.Id);
+
+            userDto.Role = userResult != null ? (await userManager.GetRolesAsync(userResult)).FirstOrDefault() : "Student";
         }
 
         return result;
