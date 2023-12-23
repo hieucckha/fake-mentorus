@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -44,14 +45,13 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
     }
 
     /// <inheritdoc />
-    public async Task<CourseDetailDto> Handle(GetCourseByIdQuery request,
-        CancellationToken cancellationToken)
+    public async Task<CourseDetailDto> Handle(GetCourseByIdQuery query, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Try to get course with id {CourseId}", request.CourseId);
-        if (!await accessService.HasAccessToCourse(request.CourseId, cancellationToken))
+        logger.LogInformation("Try to get course with id {CourseId}", query.CourseId);
+        if (!await accessService.HasAccessToCourse(query.CourseId, cancellationToken))
         {
             logger.LogWarning("User don't have access to course with id {CourseId}",
-                request.CourseId);
+                query.CourseId);
             throw new ForbiddenException("You don't have access to this course.");
         }
 
@@ -66,9 +66,9 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
                 .ThenInclude(s => s.User)
                 .Include(c => c.Students).ThenInclude(cs => cs.Student)
                 .Include(c => c.Teachers).ThenInclude(ct => ct.Teacher)
-                .GetAsync(c => c.Id == request.CourseId, cancellationToken);
+                .GetAsync(c => c.Id == query.CourseId, cancellationToken);
 
-        logger.LogInformation("Course with id {CourseId} was found", request.CourseId);
+        logger.LogInformation("Course with id {CourseId} was found", query.CourseId);
         var result = mapper.Map<CourseDetailDto>(course);
 
         var requests = course.GradeCompositions
@@ -76,11 +76,24 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
             .Select(g => g.Request)
             .Where(r => r != null)
             .ToList();
-        result.Requests = mapper.Map<List<RequestDto>>(requests);
-    
+        result.Requests = requests.Select(e =>
+        {
+            return mapper.Map<Domain.Request.Request, RequestDto>(e, opt =>
+             {
+                 opt.AfterMap((src, des) =>
+                 {
+                     des.GradeName = course.GradeCompositions
+                         .FirstOrDefault(gc => gc.Grades.Any(g => g.Id == src.GradeId))
+                         ?.Name ?? string.Empty;
+                 });
+             });
+        }).ToList();
+
         var listStudent = course.StudentInfos.Select(e => new
         {
-            e.StudentId, UserId = e.Student.User?.Id ?? null, e.Name
+            e.StudentId,
+            UserId = e.Student.User?.Id ?? null,
+            e.Name
         }).ToList();
 
         foreach (var resultRequest in result.Requests)
