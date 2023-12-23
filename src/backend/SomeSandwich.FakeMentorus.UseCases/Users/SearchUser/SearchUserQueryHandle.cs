@@ -52,13 +52,29 @@ public class SearchUserQueryHandle : IRequestHandler<SearchUserQuery, PagedList<
         {
             // throw new ForbiddenException("Only admin can search users");
         }
+
         var query = dbContext.Users
             .Include(e => e.Student)
             .AsQueryable();
 
         var pagedList =
             await EFPagedListFactory.FromSourceAsync(query, request.Page, request.PageSize, cancellationToken);
+        var result = pagedList.Convert(c => mapper.Map<UserDto>(c));
+        var queryResult = query.ToList();
+        foreach (var userDto in result)
+        {
+            var lockoutEnd = queryResult.FirstOrDefault(e => e.Id == userDto.Id)?.LockoutEnd;
+            var lockoutEnabled = queryResult.FirstOrDefault(e => e.Id == userDto.Id)?.LockoutEnabled;
+            if (lockoutEnabled is true)
+            {
+                userDto.Status = lockoutEnd == null ? UserStatus.Baned : UserStatus.Locked;
+            }
+            else
+            {
+                userDto.Status = UserStatus.Active;
+            }
+        }
 
-        return pagedList.Convert(c => mapper.Map<UserDto>(c));
+        return result;
     }
 }
