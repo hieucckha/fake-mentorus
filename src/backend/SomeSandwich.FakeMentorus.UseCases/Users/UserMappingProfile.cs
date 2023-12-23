@@ -15,7 +15,8 @@ public class UserMappingProfile : Profile
     /// </summary>
     public UserMappingProfile()
     {
-        CreateMap<User, UserDto>();
+        CreateMap<User, UserDto>().ForMember(e => e.LockoutEnd, e
+            => e.MapFrom(f => f.LockoutEnd != null ? f.LockoutEnd.Value.UtcDateTime : (DateTime?)null));
         CreateMap<User, UserDetailsDto>();
     }
 }
