@@ -6,14 +6,14 @@ export interface ClassQuery {
 	id: number;
 	name: string;
 	description: string;
-	isActivated ?:	boolean;
+	isActivated?: boolean;
 }
-export interface Teacher{
+export interface Teacher {
 	id: number;
 	fullName: string;
 	role: string;
 }
-export interface Student  {
+export interface Student {
 	id: number;
 	fullName: string;
 	role: string;
@@ -26,7 +26,7 @@ export interface gradeCompositions {
 	description: string;
 	gradeScale: number;
 	order: number;
-	isFinal ?: boolean;
+	isFinal?: boolean;
 	createdAt: string;
 	updatedAt: string;
 }
@@ -42,33 +42,33 @@ export enum RequestStatus {
 	Approved = "Approved",
 	Rejected = "Rejected",
 }
-export interface requests{
+export interface RequestDto {
 	id: number;
 	studentId: number;
+	studentName?: string;
 	gradeId: number;
-	studentName: string;
+	gradeName?: string;
 	currentGrade: number;
 	expectedGrade: number;
-	classId: number;
-	reason: string;
+	reason?: string;
+	status: RequestStatus;
 	createdAt: string;
 	updatedAt: string;
-	status: RequestStatus;
 }
+
 export interface ClassDetail {
 	id: number;
 	name: string;
 	description: string;
 	inviteCode: string;
 	inviteLink: string;
-	isActivated ?: boolean;
+	isActivated?: boolean;
 	numberOfStudents: number;
 	numberTeacher: number;
 	teachers: Teacher[];
 	students: Student[];
 	gradeCompositions: gradeCompositions[];
-	requests: requests[];
-
+	requests: RequestDto[];
 }
 export interface gradeCompositionsDto {
 	id: number;
@@ -83,25 +83,25 @@ export interface gradeCompositionsDto {
 	updatedAt: string;
 }
 export interface GradeDTO {
-	id:number;
+	id: number;
 	gradeCompositionId: number;
 	gradeValue: number;
 	isRequest: boolean;
 }
-export interface studentGradeDto{
+export interface studentGradeDto {
 	studentId: number;
 	studentName: string;
 	userId: number;
 	gradeDto: GradeDTO[];
 }
-export interface gradeAll{
+export interface gradeAll {
 	courseId: number;
 	gradeCompositionDtos: gradeCompositionsDto[];
 	students: studentGradeDto[];
 }
 
 export interface EditGradeDto {
-  gradeCompositionId: number;
-  studentId: string;
-  gradeValue: number;
+	gradeCompositionId: number;
+	studentId: string;
+	gradeValue: number;
 }

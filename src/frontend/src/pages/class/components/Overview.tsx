@@ -1,10 +1,10 @@
 import { FC } from "react";
 import moment from "moment";
 import { App, Badge, Spin } from "antd";
-import useClassDetail from "../../hooks/useClassDetail";
+import useClassDetail from "../../../hooks/useClassDetail";
 import { BellOutlined, BellTwoTone } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
-import { RequestStatus } from "../../api/store/class/interface";
+import { RequestStatus } from "../../../api/store/class/interface";
 
 const Overview: FC = () => {
 	const { message } = App.useApp();
@@ -112,13 +112,13 @@ const Overview: FC = () => {
 													  : "red"
 											}
 										>
-											<div className="p-6 w-full bg-white border mb-3 border-gray-200 rounded-lg shadow hover:drop-shadow-md dark:bg-gray-800 dark:border-gray-700">
-												<button
-													onClick={() =>
-														navigate(`/class/${classId}/grade-review`)
-													}
-													className="flex items-center flex-row gap-x-3 "
-												>
+											<div
+												className="p-6 hover:cursor-pointer w-full bg-white border mb-3 border-gray-200 rounded-lg shadow hover:drop-shadow-md dark:bg-gray-800 dark:border-gray-700"
+												onClick={() =>
+													navigate(`/class/${classId}/requests#${request.id}`)
+												}
+											>
+												<button className="w-full flex items-center flex-row gap-x-3 ">
 													<BellTwoTone className="text-2xl" />
 													<div className="flex flex-col justify-between leading-normal gap-y-1 text-left">
 														<span className="font-bold tracking-tight text-gray-900 dark:text-white">
