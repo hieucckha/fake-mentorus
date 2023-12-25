@@ -35,6 +35,7 @@ const EditClass: FC<EditClassProps> = ({
 		id: 0,
 		description: "",
 	});
+
 	// const { data: user, isLoading } = useAuth();
 	const { data, isLoading } = useClassDetail(classId);
 	const app = App.useApp();
@@ -63,8 +64,7 @@ const EditClass: FC<EditClassProps> = ({
 		}));
 	};
 
-	// const updateProfile = userUpdateProfileMutation();
-	const editClass = useEditClassMutation();
+	const editClass = useEditClassMutation(classId);
 
 	const handleSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
@@ -98,25 +98,27 @@ const EditClass: FC<EditClassProps> = ({
 			})
 			.catch((err: AxiosError) => {
 				const mess = (err.response?.data as any).title ?? "Change status of class failed";
+
 				message.error(mess);
 			});
 	};
+
 	if (isLoading) {
 		return null;
 	}
 
 	return (
 		<Modal show={openModal} size="md" onClose={handleCloseModal} popup>
-			<Modal.Header />
+			<Modal.Header></Modal.Header>
 			<Modal.Body>
-				<div className="space-y-6">
+				<div className="space-y-2">
 					<h3 className="text-xl font-medium text-gray-900 dark:text-white">
-						Edit profile{" "}
+						Class Setting
 					</h3>
 					<form onSubmit={handleSubmit}>
 						<div>
 							<div className="mb-2 block">
-								<Label htmlFor="name" value="First Name" />
+								<Label htmlFor="name" value="Class name" />
 							</div>
 							<TextInput
 								id="name"
@@ -130,7 +132,7 @@ const EditClass: FC<EditClassProps> = ({
 
 						<div>
 							<div className="mb-2 block">
-								<Label htmlFor="name" value="Last Name" />
+								<Label htmlFor="description" value="Description" />
 							</div>
 							<TextInput
 								id="description"
@@ -144,9 +146,10 @@ const EditClass: FC<EditClassProps> = ({
 						{classId !== "" && (
 							<div>
 								<div className="mb-2 block">
-									<Label htmlFor="name" value="Active" />
+									<Label htmlFor="active" value="Active" />
 								</div>
 								<ToggleSwitch
+									id="active"
 									checked={switch1}
 									label="Toggle active"
 									onChange={handleToggle}

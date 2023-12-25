@@ -73,12 +73,12 @@ public class CourseDetailDto
     /// <summary>
     ///   List of student in the course.
     /// </summary>
-    public ICollection<UserDto> Students { get; set; } = null!;
+    public ICollection<UserCourseDto> Students { get; set; } = null!;
 
     /// <summary>
     ///  List of teachers in the course.
     /// </summary>
-    public ICollection<UserDto> Teachers { get; set; } = null!;
+    public ICollection<UserCourseDto> Teachers { get; set; } = null!;
 
     /// <summary>
     /// List of grade compositions in the course.

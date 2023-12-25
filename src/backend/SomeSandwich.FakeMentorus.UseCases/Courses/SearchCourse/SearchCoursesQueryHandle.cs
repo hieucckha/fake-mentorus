@@ -68,6 +68,13 @@ internal class SearchCoursesQueryHandle : IRequestHandler<SearchCoursesQuery, Pa
 
         var pagedList =
             await EFPagedListFactory.FromSourceAsync(query, request.Page, request.PageSize, cancellationToken);
-        return pagedList.Convert(c => mapper.Map<CourseDto>(c));
+
+        var result = pagedList.Convert(c => mapper.Map<CourseDto>(c));
+        var queryResult = await query.ToListAsync(cancellationToken);
+        foreach (var courseDto in result)
+        {
+            courseDto.CreatorName = queryResult.FirstOrDefault(c => c.Id == courseDto.Id)?.Creator?.FullName ?? "";
+        }
+        return result;
     }
 }

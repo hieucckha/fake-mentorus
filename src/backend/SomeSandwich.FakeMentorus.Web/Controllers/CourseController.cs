@@ -74,9 +74,7 @@ public class CourseController
         [FromRoute] int courseId,
         CancellationToken cancellationToken)
     {
-        var result =
-            await mediator.Send(new GetCourseByIdQuery { CourseId = courseId },
-                cancellationToken);
+        var result = await mediator.Send(new GetCourseByIdQuery { CourseId = courseId }, cancellationToken);
 
         return result;
     }

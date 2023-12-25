@@ -30,13 +30,13 @@ const classService = {
 	},
 	async getClassDetail(classId: String): Promise<ClassDetail> {
 		const response = await axios.get(`/api/course/${classId}`);
-
-		return {...response.data, requests: genArrayData(5)};
+		return response.data;
 	},
+
 	async editClass(classQuery: ClassQuery) {
 		const response = await axios.patch(`/api/course/${classQuery.id}`, {
 			name: classQuery.name,
-			description: classQuery.description
+			description: classQuery.description,
 		});
 
 		return response.data;
@@ -48,7 +48,9 @@ const classService = {
 		return response.data;
 	},
 	async joinCourseByInvitationLink(token: string) {
-		const response = await axios.post("/api/course/invite-email/confirm", { token: token });
+		const response = await axios.post("/api/course/invite-email/confirm", {
+			token: token,
+		});
 		return response;
 	},
 	async joinCourseByCode(code: string) {
@@ -98,7 +100,8 @@ const classService = {
 		);
 		return response.data;
 	},
-	async downloadTemplate(classId: string) {
+
+	async downloadGradeTemplate(classId: string) {
 		if (!classId || classId === "") throw new Error("classId is required");
 		const response = await axios.get(`/api/grade/template`, {
 			params: { courseId: classId },
@@ -119,8 +122,10 @@ const classService = {
 	},
 	async getAllGrade(classId: string) {
 		if (!classId || classId === "") throw new Error("classId is required");
-		const response = await axios.get(`/api/grade/all`, { params: { courseId: classId } });
-	
+		const response = await axios.get(`/api/grade/all`, {
+			params: { courseId: classId },
+		});
+
 		return response.data;
 	},
 	async importStudent(classId: string, file: File) {
@@ -134,16 +139,27 @@ const classService = {
 		);
 		return response.data;
 	},
+
+	async downloadTemplateImportStudent(classId: string) {
+		return axios.get(`/api/grade/student/tempalte`, {
+			params: { CourseId: classId },
+			responseType: "blob",
+		});
+	},
+
 	async getOneGradeStudent(classId: string, studentId: string) {
 		if (!classId || classId === "") throw new Error("classId is required");
-		const response = await axios.get(`/api/grade/course/${classId}/student/${studentId}`);
+		const response = await axios.get(
+			`/api/grade/course/${classId}/student/${studentId}`
+		);
 		return response.data;
 	},
-	async approveGradeComposition(id: Number)
-	{
+
+	async approveGradeComposition(id: Number) {
 		const response = await axios.put(`/api/grade-composition/${id}/final`);
 		return response.data;
 	},
+
 	async toggleActivateClass(classId: string) {
 		if (!classId || classId === "") throw new Error("classId is required");
 		const response = await axios.post(`/api/course/${classId}/activate`);
@@ -178,35 +194,35 @@ export default classService;
 // Function to generate an array of data
 function genArrayData(count) {
 	const dataArray = [];
-  
+
 	for (let i = 1; i <= count; i++) {
-	  const data = {
-		id: i,
-		studentId: i + 1000,
-		gradeId: i % 3 + 1,
-		studentName: `Student ${i}`,
-		currentGrade: Math.floor(Math.random() * 100) + 1,
-		expectedGrade: Math.floor(Math.random() * 100) + 1,
-		classId: i % 5 + 1,
-		reason: `Reason for request ${i}`,
-		createdAt: getCurrentDayFormatted(),
-		updatedAt: getCurrentDayFormatted(),
-		status: RequestStatus.Rejected
-	  };
-  
-	  dataArray.push(data);
+		const data = {
+			id: i,
+			studentId: i + 1000,
+			gradeId: (i % 3) + 1,
+			studentName: `Student ${i}`,
+			currentGrade: Math.floor(Math.random() * 100) + 1,
+			expectedGrade: Math.floor(Math.random() * 100) + 1,
+			classId: (i % 5) + 1,
+			reason: `Reason for request ${i}`,
+			createdAt: getCurrentDayFormatted(),
+			updatedAt: getCurrentDayFormatted(),
+			status: RequestStatus.Rejected,
+		};
+
+		dataArray.push(data);
 	}
-  
+
 	return dataArray;
-  }
-export const getCurrentDayFormatted = ()=>{
+}
+export const getCurrentDayFormatted = () => {
 	const today = new Date();
 	const yyyy = today.getFullYear();
 	let mm = today.getMonth() + 1; // Months start at 0!
 	let dd = today.getDate();
-	
-	var day = (dd >= 10)? dd.toString() : '0' + dd
-	var month = (mm >= 10)? mm.toString() : '0' + mm
-	const formattedToday = day + '/' + month + '/' + yyyy;
+
+	var day = dd >= 10 ? dd.toString() : "0" + dd;
+	var month = mm >= 10 ? mm.toString() : "0" + mm;
+	const formattedToday = day + "/" + month + "/" + yyyy;
 	return formattedToday;
-  }
+};

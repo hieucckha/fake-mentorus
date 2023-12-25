@@ -18,6 +18,11 @@ public class RequestDto
     public int GradeId { get; set; }
 
     /// <summary>
+    /// The name of grade.
+    /// </summary>
+    public string GradeName { get; set; } = string.Empty;
+
+    /// <summary>
     /// Current grade.
     /// </summary>
     public float CurrentGrade { get; set; }
