@@ -132,24 +132,30 @@ function RequestCard({
 									</div>
 								</Tooltip>
 								<Tooltip title="Reject Request" placement="bottomRight">
-									<Popconfirm
-										title="Reject request"
-										description="Are you sure to reject this request?"
-										okText="Yes"
-										cancelText="No"
-										okType="danger"
-										placement="bottomRight"
-										onConfirm={handleRejectRequest}
-										icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+									<div
+										onClick={(e) => {
+											e.stopPropagation();
+										}}
 									>
-										<Button
-											className="bg-red-500 hover:!bg-red-600"
-											type="primary"
-											shape="circle"
-											size="small"
-											icon={<CloseOutlined />}
-										/>
-									</Popconfirm>
+										<Popconfirm
+											title="Reject request"
+											description="Are you sure to reject this request?"
+											okText="Yes"
+											cancelText="No"
+											okType="danger"
+											placement="bottomRight"
+											onConfirm={handleRejectRequest}
+											icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+										>
+											<Button
+												className="bg-red-500 hover:!bg-red-600"
+												type="primary"
+												shape="circle"
+												size="small"
+												icon={<CloseOutlined />}
+											/>
+										</Popconfirm>
+									</div>
 								</Tooltip>
 							</Space>
 						</div>

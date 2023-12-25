@@ -125,12 +125,13 @@ const ClassLayout: React.FC = (): JSX.Element => {
 			icon: <TeamOutlined />,
 			children,
 		},
-		{
-			key: gradeStructureUrl,
-			label: "Grade Structure",
-			icon: <Icon component={GradeStructureIcon} />,
-			children,
-		},
+		user &&
+			user.role === UserRole.Teacher && {
+				key: gradeStructureUrl,
+				label: "Grade Structure",
+				icon: <Icon component={GradeStructureIcon} />,
+				children,
+			},
 		{
 			key: gradeUrl,
 			label: "Grade Board",
