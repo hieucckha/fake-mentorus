@@ -94,11 +94,11 @@ const EditClass: FC<EditClassProps> = ({
 		classService
 			.toggleActivateClass(classId)
 			.then(() => {
-				message.success("Active class success");
+				message.success("Change status of class success");
 			})
 			.catch((err: AxiosError) => {
-				console.log(err.response?.data);
-				const mess = (err.response?.data as any).title ?? "Active class failed";
+				const mess = (err.response?.data as any).title ?? "Change status of class failed";
+
 				message.error(mess);
 			});
 	};
