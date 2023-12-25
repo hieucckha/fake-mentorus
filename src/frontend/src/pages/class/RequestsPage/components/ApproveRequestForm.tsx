@@ -1,5 +1,6 @@
 import { App, Button, Form, InputNumber, Space } from "antd";
 import { useApproveRequest } from "../../../../api/store/request/mutation";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ApproveRequestForm {
 	classId: string;
@@ -14,6 +15,7 @@ function ApproveRequestForm({
 	classId,
 	reqId,
 }: ApproveRequestForm) {
+	const queryClient = useQueryClient();
 	const [form] = Form.useForm();
 	const { message } = App.useApp();
 	const { mutate: approveReqMutate, isPending: isApprovePending } =
@@ -28,6 +30,7 @@ function ApproveRequestForm({
 			{
 				onSuccess() {
 					message.success("Approved successfully");
+					queryClient.invalidateQueries({ queryKey: ["request", reqId] });
 				},
 				onError() {
 					message.error("Approved failed");

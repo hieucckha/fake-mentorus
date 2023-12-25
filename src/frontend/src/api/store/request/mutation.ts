@@ -8,6 +8,18 @@ export const useCreateGradeRequest = () => {
 	});
 };
 
+export const useAddRequestComment = (reqId?: string) => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: RequestService.createCommentRequest,
+		onSuccess: () =>
+			queryClient.invalidateQueries({
+				queryKey: ["request", reqId],
+				exact: true,
+			}),
+	});
+};
+
 export const useApproveRequest = (classId?: string) => {
 	const queryClient = useQueryClient();
 	return useMutation({

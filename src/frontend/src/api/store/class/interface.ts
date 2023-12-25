@@ -42,6 +42,18 @@ export enum RequestStatus {
 	Approved = "Approved",
 	Rejected = "Rejected",
 }
+
+export interface CommentDto {
+	id: number;
+	requestId: number;
+	userId: string;
+	name?: string;
+	comment?: string;
+	isTeacher: boolean;
+	createdAt: string;
+	updatedAt: string;
+}
+
 export interface RequestDto {
 	id: number;
 	studentId: number;
@@ -52,6 +64,7 @@ export interface RequestDto {
 	expectedGrade: number;
 	reason?: string;
 	status: RequestStatus;
+	comments?: CommentDto[];
 	createdAt: string;
 	updatedAt: string;
 }
