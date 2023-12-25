@@ -104,7 +104,7 @@ const BrowserRouter = createBrowserRouter([
 												element: <Overview />,
 											},
 											{
-												path: "work-class",
+												path: "people",
 												element: <ClassroomMember />,
 											},
 											{

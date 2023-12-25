@@ -84,9 +84,8 @@ const Upload: FC<UploadProps> = ({
 			});
 	};
 	const handleDownloadTemplate = async () => {
-		
 		classService
-			.downloadTemplate(id ?? "")
+			.downloadGradeTemplate(id ?? "")
 			.then((res) => {
 				fileDownload(res.data, "template.xlsx");
 			})
@@ -100,9 +99,9 @@ const Upload: FC<UploadProps> = ({
 					return;
 				}
 				notification.error({
-						message: "Error",
-						description: "Something went wrong",
-					});
+					message: "Error",
+					description: "Something went wrong",
+				});
 			});
 	};
 
@@ -146,7 +145,6 @@ const Upload: FC<UploadProps> = ({
 											{file?.name}
 										</p>
 									)}
-									
 								</div>
 								<input
 									id="dropzone-file"
@@ -178,8 +176,7 @@ const Upload: FC<UploadProps> = ({
 								Upload
 							</Button>
 						</div>
-					):
-					(
+					) : (
 						<div className="flex flex-row justify-center">
 							<Button
 								onClick={handleDownloadTemplate}
@@ -188,9 +185,7 @@ const Upload: FC<UploadProps> = ({
 								Download template
 							</Button>
 						</div>
-					)
-
-				}
+					)}
 				</Modal.Body>
 			</Modal>
 		</>

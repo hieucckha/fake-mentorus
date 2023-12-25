@@ -100,7 +100,8 @@ const classService = {
 		);
 		return response.data;
 	},
-	async downloadTemplate(classId: string) {
+
+	async downloadGradeTemplate(classId: string) {
 		if (!classId || classId === "") throw new Error("classId is required");
 		const response = await axios.get(`/api/grade/template`, {
 			params: { courseId: classId },
@@ -137,6 +138,13 @@ const classService = {
 			{ headers: { "Content-Type": "multipart/form-data" } }
 		);
 		return response.data;
+	},
+
+	async downloadTemplateImportStudent(classId: string) {
+		return axios.get(`/api/grade/student/tempalte`, {
+			params: { CourseId: classId },
+			responseType: "blob",
+		});
 	},
 
 	async getOneGradeStudent(classId: string, studentId: string) {
