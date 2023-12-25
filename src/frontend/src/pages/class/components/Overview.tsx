@@ -103,6 +103,7 @@ const Overview: FC = () => {
 									</span>
 									{data.requests.map((request) => (
 										<Badge.Ribbon
+											key={request.id}
 											text={request.status}
 											color={
 												request.status === RequestStatus.Pending

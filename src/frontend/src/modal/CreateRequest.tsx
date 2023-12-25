@@ -1,15 +1,12 @@
-import { useState, type FC, useEffect } from "react";
-import { Label, Modal, TextInput, Textarea } from "flowbite-react";
+import { type FC } from "react";
+import { Modal } from "flowbite-react";
 // import { useAddGradeMutation } from "../api/store/class/mutation";
 import { App, Form, Input, InputNumber, Select, Button, Space } from "antd";
 import { useParams } from "react-router-dom";
-import {
-	listGradeAllClassQuery,
-	listGradeOneStudentQuery,
-} from "../api/store/class/queries";
-import { useEditGradeMutation } from "../api/store/class/mutation";
+import { listGradeAllClassQuery } from "../api/store/class/queries";
 import { useCreateGradeRequest } from "../api/store/request/mutation";
 import { AxiosError } from "axios";
+import { useMemo } from "react";
 interface CreateRequestProps {
 	handleClose: () => void;
 	open: boolean;
@@ -25,6 +22,18 @@ const CreateRequest: FC<CreateRequestProps> = ({
 	const { data: listDataDetail } = listGradeAllClassQuery(id as string);
 	const { mutate: createGradeMutate, isPending } = useCreateGradeRequest();
 
+	const colOptions = useMemo(() => {
+		const gradeCol = listDataDetail?.gradeCompositionDtos?.filter(
+			(item) => item.isFinal
+		);
+		return gradeCol?.map((col) => {
+			return {
+				label: col.name.toString(),
+				value: col.id,
+			};
+		});
+	}, [listDataDetail?.gradeCompositionDtos]);
+
 	const handleFinishForm = (values: any) => {
 		createGradeMutate(values, {
 			onSuccess: () => {
@@ -32,9 +41,9 @@ const CreateRequest: FC<CreateRequestProps> = ({
 				handleClose();
 			},
 			onError: (error) => {
-                if (error instanceof AxiosError) {
-                    return message.error(error.response?.data.title ?? error.message);
-                }
+				if (error instanceof AxiosError) {
+					return message.error(error.response?.data.title ?? error.message);
+				}
 				message.error(error.message);
 			},
 		});
@@ -54,8 +63,6 @@ const CreateRequest: FC<CreateRequestProps> = ({
 						Create request
 					</h3>
 					<Form form={form} layout="vertical" onFinish={handleFinishForm}>
-						
-
 						<Form.Item
 							name="gradeCompositionId"
 							label="Grade Composition"
@@ -70,20 +77,12 @@ const CreateRequest: FC<CreateRequestProps> = ({
 								showSearch
 								placeholder="Select column"
 								optionFilterProp="children"
-								onChange={(value) => {
-									console.log(value);
-								}}
 								filterOption={filterOption}
-								options={listDataDetail?.gradeCompositionDtos?.map((col) => {
-									return {
-										label: col.name.toString(),
-										value: col.id,
-									};
-								})}
+								options={colOptions}
 							/>
 						</Form.Item>
 
-                        <Form.Item
+						<Form.Item
 							name="exceptedGrade"
 							label="Grade"
 							rules={[
@@ -101,7 +100,7 @@ const CreateRequest: FC<CreateRequestProps> = ({
 							/>
 						</Form.Item>
 
-                        <Form.Item
+						<Form.Item
 							name="reason"
 							label="Reason"
 							rules={[
@@ -111,7 +110,13 @@ const CreateRequest: FC<CreateRequestProps> = ({
 								},
 							]}
 						>
-							<Input.TextArea className="w-full" placeholder="Input your reason" showCount maxLength={500} rows={3}/>
+							<Input.TextArea
+								className="w-full"
+								placeholder="Input your reason"
+								showCount
+								maxLength={500}
+								rows={3}
+							/>
 						</Form.Item>
 					</Form>
 					<Space className="w-full flex justify-end">
