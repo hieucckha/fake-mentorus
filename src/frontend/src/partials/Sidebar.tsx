@@ -8,7 +8,7 @@ import {
 import type { MenuProps } from "antd";
 import { Menu, Skeleton } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
-import classQuery from "../api/store/class/queries";
+import { useGetAllClassesQuery } from "../api/store/class/queries";
 import useAuth from "../hooks/auth";
 import { UserRole } from "../api/store/auth/interface";
 
@@ -35,7 +35,7 @@ const fontSizeMenu = "16px";
 
 const Sidebar: React.FC = () => {
 	const { data: user, isLoading: isProfileLoading } = useAuth();
-	const { data, isLoading } = classQuery(user?.id ?? -1);
+	const { data, isLoading } = useGetAllClassesQuery(user?.id);
 	const { pathname } = useLocation();
 
 	const getSelectedKey = (pathname: string): string[] => {
@@ -56,6 +56,8 @@ const Sidebar: React.FC = () => {
 		if (splitPath.includes("class")) {
 			return ["classes"];
 		}
+
+		return [];
 	};
 
 	const menuBuilder = (): MenuProps["items"] => {

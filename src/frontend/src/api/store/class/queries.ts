@@ -2,11 +2,13 @@ import classService from "../../../services/class.service";
 import type { ClassDetail, ClassQuery, gradeAll } from "./interface";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 
-const classQuery = (user_id: number): UseQueryResult<ClassQuery[]> => {
+export const useGetAllClassesQuery = (
+	user_id?: number
+): UseQueryResult<ClassQuery[]> => {
 	const queryData = useQuery({
 		queryKey: ["classes"],
 		queryFn: () => classService.getAllClass(user_id),
-		enabled: user_id !== -1,
+		enabled: !!user_id,
 	});
 	return queryData;
 };
@@ -39,5 +41,3 @@ export const listGradeOneStudentQuery = (
 	});
 	return queryData;
 };
-
-export default classQuery;
