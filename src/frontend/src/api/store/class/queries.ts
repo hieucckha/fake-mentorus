@@ -1,8 +1,8 @@
-import classService from '../../../services/class.service';
-import type { ClassDetail, ClassQuery, gradeAll } from './interface';
+import classService from "../../../services/class.service";
+import type { ClassDetail, ClassQuery, gradeAll } from "./interface";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 
-const classQuery = (user_id:number): UseQueryResult<ClassQuery[]> => {
+const classQuery = (user_id: number): UseQueryResult<ClassQuery[]> => {
 	const queryData = useQuery({
 		queryKey: ["classes"],
 		queryFn: () => classService.getAllClass(user_id),
@@ -10,7 +10,7 @@ const classQuery = (user_id:number): UseQueryResult<ClassQuery[]> => {
 	});
 	return queryData;
 };
-export const classDetailQuery = (id:string): UseQueryResult<ClassDetail> => {
+export const classDetailQuery = (id: string): UseQueryResult<ClassDetail> => {
 	const queryData = useQuery({
 		queryKey: ["class", id],
 		queryFn: () => classService.getClassDetail(id),
@@ -18,21 +18,26 @@ export const classDetailQuery = (id:string): UseQueryResult<ClassDetail> => {
 	});
 	return queryData;
 };
-export const listGradeAllClassQuery = (id:string): UseQueryResult<gradeAll> => {
+export const listGradeAllClassQuery = (
+	id: string
+): UseQueryResult<gradeAll> => {
 	const queryData = useQuery({
-		queryKey: ["classes", id],
+		queryKey: ["class-grade", id],
 		queryFn: () => classService.getAllGrade(id),
 		enabled: !!id,
 	});
 	return queryData;
-}
-export const listGradeOneStudentQuery = (id:string,studentId: string): UseQueryResult<gradeAll> => {
+};
+export const listGradeOneStudentQuery = (
+	id: string,
+	studentId: string
+): UseQueryResult<gradeAll> => {
 	const queryData = useQuery({
-		queryKey: ["classes", id],
-		queryFn: () => classService.getOneGradeStudent(id,studentId),
+		queryKey: ["class-grade", { id, studentId }],
+		queryFn: () => classService.getOneGradeStudent(id, studentId),
 		enabled: !!id && !!studentId && studentId !== "",
 	});
 	return queryData;
-}
+};
 
 export default classQuery;

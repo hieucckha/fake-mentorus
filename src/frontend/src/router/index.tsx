@@ -11,7 +11,7 @@ import NotFound from "../pages/NotFound";
 import ResetPassword from "../pages/ResetPassword";
 import ConfirmEmail from "../pages/ConfirmEmail";
 import ConfirmResetPassword from "../pages/ConfirmResetPassword";
-import Overview from "../component/card/Overview";
+import Overview from "../pages/class/components/Overview";
 import Dashboard from "../layout/Dashboard";
 import ClassLayout from "../layout/ClassLayout";
 import ClassroomMember from "../pages/class/components/ClassroomMember";
@@ -23,7 +23,7 @@ import AdminLayout from "../layout/Admin";
 import RoleLayout from "../layout/RoleLayout";
 import UnauthorizedPage from "../pages/errors/UnauthorizedPage";
 import ManagementClass from "../pages/admin/ManagementClass";
-import RequestsPage from "../pages/RequestsPage";
+import RequestsPage from "../pages/class/RequestsPage/RequestsPage";
 
 const BrowserRouter = createBrowserRouter([
 	{
