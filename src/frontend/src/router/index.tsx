@@ -24,6 +24,7 @@ import RoleLayout from "../layout/RoleLayout";
 import UnauthorizedPage from "../pages/errors/UnauthorizedPage";
 import ManagementClass from "../pages/admin/ManagementClass";
 import RequestsPage from "../pages/RequestsPage";
+import ManagementUser from "../pages/admin/ManagementUser";
 
 const BrowserRouter = createBrowserRouter([
 	{
@@ -142,7 +143,7 @@ const BrowserRouter = createBrowserRouter([
 									},
 									{
 										path: "users",
-										element: <div>Admin users</div>,
+										element: <ManagementUser />,
 									},
 								],
 							},

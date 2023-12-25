@@ -10,3 +10,10 @@ export interface ClassListQuery {
     numberOfStudents: number;
     numberOfTeachers: number;
 }
+export interface userListQuery {
+    id: number;
+    fullName: string;
+    role: string;
+    status: string;
+    lockoutEnd:string;
+}

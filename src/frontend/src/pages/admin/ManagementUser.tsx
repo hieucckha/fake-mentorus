@@ -1,34 +1,44 @@
-import { SearchOutlined } from "@ant-design/icons";
+import {
+	GroupOutlined,
+	LockOutlined,
+	MoreOutlined,
+	SearchOutlined,
+	UnlockOutlined,
+	UploadOutlined,
+} from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
-import type { InputRef } from "antd";
-import { Button, Input, Space, Table } from "antd";
+import type { InputRef, MenuProps } from "antd";
+import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
 import type { ColumnType, ColumnsType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
-import { classQueryWithoutParams } from "../../api/store/admin/queries";
+import {
+	classQueryWithoutParams,
+	userQueryResult,
+} from "../../api/store/admin/queries";
 import { Link } from "react-router-dom";
 import EditClass from "../../modal/EditClassModal";
+import EditUser from "../../modal/EditUser";
+import AdminEditUser from "../../modal/admin/AdminEditUser";
+import moment from "moment";
 
 interface DataType {
 	key: number;
-	name: string;
-	creatorName: string;
-	isActivated: string;
-	numberOfStudents: number;
-	numberOfTeachers: number;
+	fullName: string;
+	role: string;
+	status: string;
+	lockoutEnd: string;
 }
 
 type DataIndex = keyof DataType;
 
-const ManagementClass: React.FC = () => {
+const ManagementUser: React.FC = () => {
 	const [searchText, setSearchText] = useState("");
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [classId, setClassId] = useState("");
 	const searchInput = useRef<InputRef>(null);
-	const { data: listData, isLoading } = classQueryWithoutParams();
-	console.log(listData);
-	console.log("43432");
+	const { data: listData, isLoading } = userQueryResult();
 
 	const handleSearch = (
 		selectedKeys: string[],
@@ -89,7 +99,7 @@ const ManagementClass: React.FC = () => {
 				setTimeout(() => searchInput.current?.select(), 100);
 			}
 		},
-		sorter: (a, b) => a.name.length - b.name.length,
+		sorter: (a, b) => a.fullName.length - b.fullName.length,
 		render: (text) =>
 			searchedColumn === dataIndex ? (
 				<Highlighter
@@ -105,20 +115,19 @@ const ManagementClass: React.FC = () => {
 
 	const data = listData?.map((item) => ({
 		key: item.id,
-		name: item.name,
-		creatorName: item.creatorName,
-		isActivated: item.isActivated ? "Active" : "Inactive",
-		numberOfStudents: item.numberOfStudents,
-		numberOfTeachers: item.numberOfTeachers,
+		fullName: item.fullName,
+		role: item.role,
+		status: item.status,
+		lockoutEnd: item.lockoutEnd,
 	}));
 
 	const columns: ColumnsType<DataType> = [
 		{
-			title: "Name",
-			dataIndex: "name",
-			key: "name",
+			title: "Full Name",
+			dataIndex: "fullName",
+			key: "fullName",
 			width: "25%",
-			...getColumnSearchProps("name"),
+			...getColumnSearchProps("fullName"),
 			render: (text, record) => {
 				return (
 					<div
@@ -128,82 +137,154 @@ const ManagementClass: React.FC = () => {
 							setClassId(record.key as unknown as string);
 						}}
 					>
-						{record.name}
+						{record.fullName}
 					</div>
 				);
 			},
 		},
+
 		{
-			title: "Creator Name",
-			dataIndex: "creatorName",
-			key: "creatorName",
-			width: "20%",
-			...getColumnSearchProps("creatorName"),
-		},
-		{
-			title: "Activate",
-			dataIndex: "isActivated",
-			key: "isActivated",
+			title: "Role",
+			dataIndex: "role",
+			key: "role",
 			width: "15%",
-			onFilter: (value, record) => record.isActivated === value,
+			onFilter: (value, record) => record.role === value,
 			filters: [
 				{
-					text: "Active",
-					value: "Active",
+					text: "Teacher",
+					value: "Teacher",
 				},
 				{
-					text: "Inactive",
-					value: "Inactive",
+					text: "Student",
+					value: "Student",
+				},
+				{
+					text: "Admin",
+					value: "Admin",
 				},
 			],
 			filterSearch: true,
 			render: (text, record) => {
 				return (
 					<div>
-						{record.isActivated === "Active" ? (
-							<div className="text-green-600 justify-center rounded-md">
-								{record.isActivated}
-							</div>
+						{record.role === "Admin" ? (
+							<Tag color="cyan">{record.role}</Tag>
+						) : record.role === "Teacher" ? (
+							<Tag color="orange">{record.role}</Tag>
 						) : (
-							<div className="text-red-600 justify-center rounded-md">
-								{record.isActivated}
-							</div>
+							<Tag color="green">{record.role}</Tag>
 						)}
 					</div>
 				);
 			},
 		},
 		{
-			title: "Number Of Students",
-			dataIndex: "numberOfStudents",
-			key: "numberOfStudents",
-			width: "20%",
+			title: "Status",
+			dataIndex: "status",
+			key: "status",
+			width: "15%",
+			onFilter: (value, record) => record.status === value,
+			filters: [
+				{
+					text: "Locked",
+					value: "Locked",
+				},
+				{
+					text: "Active",
+					value: "Active",
+				},
+				{
+					text: "Banned",
+					value: "Banned",
+				},
+			],
+			filterSearch: true,
+			render: (text, record) => {
+				return (
+					<div>
+						{record.status === "Locked" ? (
+							<Space>
+								<Tag color="red">{record.status}</Tag>
+								<div className="text-red-500">
+									Unlocked on the day-{" "}
+									{moment(record.lockoutEnd).format("DD/MM/YYYY")}
+								</div>
+							</Space>
+						) : record.status === "Banned" ? (
+							<Tag color="orange">{record.status}</Tag>
+						) : (
+							<Tag color="green">{record.status}</Tag>
+						)}
+					</div>
+				);
+			},
 		},
 		{
-			title: "Number Of Teachers",
-			dataIndex: "numberOfTeachers",
-			key: "numberOfTeachers",
-			width: "20%",
+			title: "",
+			key: "action",
+			width: "1%",
+			render: (text, record) => {
+				return (
+					<>
+						{/* <LockOutlined className="justify-center hover:cursor-pointer" /> */}
+						<Dropdown menu={{ items }} placement="topRight">
+							<MoreOutlined />
+						</Dropdown>
+					</>
+				);
+			},
 		},
 	];
 
 	if (isLoading) return <div>loading...</div>;
+	const items: MenuProps["items"] = [
+		{
+			key: "1",
+			label: (
+				<a
+					onClick={() => {
+						setIsModalVisible(true);
+					}}
+				>
+					<LockOutlined  className="pr-3" />
+					Lock 
+				</a>
+			),
+		},
+
+		{
+			key: "2",
+			label: (
+				<>
+					<a>
+						<LockOutlined className="pr-3" />
+						Ban
+					</a>
+				</>
+			),
+		},
+	];
 
 	return (
 		<div className="p-6">
-			<Table bordered title={() => <div>Class Table</div>} columns={columns} dataSource={data} />
+			<Table
+				bordered
+				title={() => <div>User Table</div>}
+				columns={columns}
+				dataSource={data}
+			/>
 			{isModalVisible && (
-				<EditClass
+				<AdminEditUser
 					openModal={isModalVisible}
-					handleCloseModalEditClass={() => {
+					handleCancel={() => {
 						setIsModalVisible(false);
-						setClassId(""); 
+						// setClassId("");
 					}}
-					classId={classId}
+					// userId={classId}
 				/>
 			)}
 		</div>
 	);
 };
 
-export default ManagementClass;
+export default ManagementUser;

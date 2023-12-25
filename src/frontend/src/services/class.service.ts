@@ -1,5 +1,5 @@
 import axios from "../api/AxiosClient";
-import { ClassListQuery } from "../api/store/admin/interface";
+import { ClassListQuery, userListQuery } from "../api/store/admin/interface";
 
 import {
 	RequestStatus,
@@ -146,9 +146,14 @@ const classService = {
 	},
 	async toggleActivateClass(classId: string) {
 		if (!classId || classId === "") throw new Error("classId is required");
-		const response = await axios.put(`/api/course/${classId}/activate`);
+		const response = await axios.post(`/api/course/${classId}/activate`);
 		return response.data;
-	}
+	},
+	async userQueryResult(): Promise<Array<userListQuery>> {
+		const response = await axios.get("/api/user/search");
+
+		return response.data.items;
+	},
 };
 export default classService;
 // function generateArray(count:number) {
