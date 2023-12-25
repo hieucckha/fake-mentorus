@@ -1,4 +1,5 @@
 using SomeSandwich.FakeMentorus.Domain.Request;
+using SomeSandwich.FakeMentorus.UseCases.Comment.Common;
 
 namespace SomeSandwich.FakeMentorus.UseCases.Request.Common;
 
@@ -61,4 +62,10 @@ public class RequestDto
     /// The date when the request was updated.
     /// </summary>
     public DateTime UpdatedAt { get; set; }
+
+    /// <summary>
+    /// Comments.
+    /// </summary>
+    public virtual ICollection<CommentDto> Comments { get; set; } = null!;
+
 }

@@ -13,7 +13,8 @@ namespace SomeSandwich.FakeMentorus.UseCases.Grade.GetAllGradeByCourseId;
 /// <summary>
 /// Handler for <see cref="GetAllGradeByCourseIdCommand"/>.
 /// </summary>
-internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGradeByCourseIdCommand, GetAllGradeByCourseIdResult>
+internal class
+    GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGradeByCourseIdCommand, GetAllGradeByCourseIdResult>
 {
     private readonly ILogger<GetAllGradeByCourseIdCommandHandler> logger;
     private readonly IAppDbContext appDbContext;
@@ -25,7 +26,8 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
     /// <param name="logger"></param>
     /// <param name="appDbContext"></param>
     /// <param name="mapper"></param>
-    public GetAllGradeByCourseIdCommandHandler(ILogger<GetAllGradeByCourseIdCommandHandler> logger, IAppDbContext appDbContext, IMapper mapper)
+    public GetAllGradeByCourseIdCommandHandler(ILogger<GetAllGradeByCourseIdCommandHandler> logger,
+        IAppDbContext appDbContext, IMapper mapper)
     {
         this.logger = logger;
         this.appDbContext = appDbContext;
@@ -33,7 +35,8 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
     }
 
     /// <inheritdoc />
-    public async Task<GetAllGradeByCourseIdResult> Handle(GetAllGradeByCourseIdCommand command, CancellationToken cancellationToken)
+    public async Task<GetAllGradeByCourseIdResult> Handle(GetAllGradeByCourseIdCommand command,
+        CancellationToken cancellationToken)
     {
         // List all user
         var studentUsers = await appDbContext.Users
@@ -64,7 +67,12 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .Where(e => !studentIds.Contains(e.StudentId))
             .ToListAsync(cancellationToken);
 
-        var studentId2 = studentWithoutUserid.Where(e => !studentIds.Contains(e.StudentId)).Select(e => e.StudentId).ToList();
+        var listStudentNames = await appDbContext.StudentInfos
+            .Where(e => e.CourseId == command.CourseId)
+            .ToDictionaryAsync(e => e.StudentId, e => e.Name, cancellationToken);
+
+        var studentId2 = studentWithoutUserid.Where(e => !studentIds.Contains(e.StudentId)).Select(e => e.StudentId)
+            .ToList();
 
         // All grade
         var gradeComposites = await appDbContext.GradeCompositions
@@ -79,6 +87,7 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
         {
             gradeTable.Add(studentId, new List<GradeCellDto>(gradeComposites.Count));
         }
+
         foreach (var studentId in studentId2)
         {
             gradeTable.Add(studentId, new List<GradeCellDto>(gradeComposites.Count));
@@ -96,13 +105,11 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
 
             foreach (var (key, value) in gradeTable.Where(pair => pair.Value.Count != index + 1))
             {
-                value.Insert(index, new GradeCellDto
-                {
-                    Id = null,
-                    GradeCompositionId = gradeComposition.Id,
-                    GradeValue = null,
-                    IsRequested = false
-                });
+                value.Insert(index,
+                    new GradeCellDto
+                    {
+                        Id = null, GradeCompositionId = gradeComposition.Id, GradeValue = null, IsRequested = false
+                    });
             }
 
             index++;
@@ -113,11 +120,12 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .Select(pair =>
             {
                 var student = userWithStudentId.First(e => e.StudentId == pair.Key);
+                var studentName = listStudentNames.GetValueOrDefault(pair.Key);
 
                 return new GradeCell
                 {
                     StudentId = pair.Key,
-                    StudentName = student.FullName,
+                    StudentName = studentName ?? student.FullName,
                     UserId = student.Id,
                     GradeDto = pair.Value
                 };
@@ -128,7 +136,8 @@ internal class GetAllGradeByCourseIdCommandHandler : IRequestHandler<GetAllGrade
             .Select(pair => new GradeCell
             {
                 StudentId = pair.Key,
-                StudentName = studentWithoutUserid.First(e => e.StudentId == pair.Key).Name,
+                StudentName =
+                    studentWithoutUserid.First(e => e.StudentId == pair.Key).Name,
                 UserId = null,
                 GradeDto = pair.Value
             }).ToList();

@@ -64,9 +64,12 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
         var course =
             await dbContext.Courses
                 .Include(c => c.Creator)
-                .Include(c => c.GradeCompositions.Where(e => e.IsDeleted == false).OrderBy(e => e.Order))
+                .Include(c => c.GradeCompositions
+                    .Where(e => e.IsDeleted == false)
+                    .OrderBy(e => e.Order))
                 .ThenInclude(gc => gc.Grades)
                 .ThenInclude(g => g.Request)
+                .ThenInclude(r => r.Comments)
                 .Include(c => c.StudentInfos)
                 .ThenInclude(si => si.Student)
                 .ThenInclude(s => s.User)
@@ -87,6 +90,13 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
             .Select(g => g.Request)
             .Where(r => r != null)
             .ToList();
+
+        var listStudent = course.StudentInfos.Select(e => new
+        {
+            e.StudentId, UserId = e.Student.User?.Id ?? null, e.Name
+        }).ToList();
+
+
         result.Requests = requests.Select(e =>
         {
             return mapper.Map<Domain.Request.Request, RequestDto>(e, opt =>
@@ -99,11 +109,37 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
                 });
             });
         }).ToList();
-
-        var listStudent = course.StudentInfos.Select(e => new
+        foreach (var requestDto in result.Requests)
         {
-            e.StudentId, UserId = e.Student.User?.Id ?? null, e.Name
-        }).ToList();
+            foreach (var cmt in requestDto.Comments)
+            {
+                if (cmt.IsTeacher.Equals(true))
+                {
+                    cmt.Name = result.Teachers.FirstOrDefault(t => t.Id == cmt.UserId)?.FullName ?? "";
+                }
+                else
+                {
+                    var std = course.StudentInfos.FirstOrDefault(s =>
+                        s.Student != null && s.Student.User != null && s.Student.User.Id == cmt.UserId);
+                    var stdName = std?.Name;
+                    var usrName = result.Students.FirstOrDefault(t => t.Id == cmt.UserId)?.FullName;
+
+                    if (stdName != null)
+                    {
+                        cmt.Name = stdName;
+                    }
+                    else if (usrName != null)
+                    {
+                        cmt.Name = usrName;
+                    }
+                    else
+                    {
+                        cmt.Name = "";
+                    }
+                }
+            }
+        }
+
 
         foreach (var resultRequest in result.Requests)
         {
