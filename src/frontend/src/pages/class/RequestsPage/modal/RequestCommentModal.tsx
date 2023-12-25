@@ -62,7 +62,6 @@ function RequestCommentModal({
 			}
 		);
 	};
-	console.log(myId);
 
 	return (
 		<Modal
