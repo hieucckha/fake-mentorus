@@ -1,6 +1,6 @@
 import { type FC, useState, useEffect } from "react";
 import CardClass from "../component/card/CardClass";
-import classQuery from "../api/store/class/queries";
+import { useGetAllClassesQuery } from "../api/store/class/queries";
 import useAuth from "../hooks/auth";
 import { ClassQuery } from "../api/store/class/interface";
 import CreateClass from "../modal/CreateClass";
@@ -15,7 +15,7 @@ const Dashboard: FC = (): JSX.Element => {
 	const [isOpenModalCreateClass, setIsOpenModalCreateClass] = useState(false);
 	const [isOpenModalJoinClass, setIsOpenModalJoinClass] = useState(false);
 
-	const { data, isLoading } = classQuery(user?.id ?? -1);
+	const { data, isLoading } = useGetAllClassesQuery(user?.id);
 
 	const handleCloseModalCreateClass = (): void => {
 		setIsOpenModalCreateClass(false);
@@ -111,16 +111,17 @@ const Dashboard: FC = (): JSX.Element => {
 						</div>
 					) : (
 						<div className="flex flex-wrap gap-16">
-							{data?.map((item: ClassQuery) => (
-								item.isActivated && (
-								<CardClass
-									key={item.id}
-									id={item.id} // Assuming there's an ID property in your ClassDto
-									name={item.name}
-									description={item.description}
-								/>
-								)
-							))}
+							{data?.map(
+								(item: ClassQuery) =>
+									item.isActivated && (
+										<CardClass
+											key={item.id}
+											id={item.id} // Assuming there's an ID property in your ClassDto
+											name={item.name}
+											description={item.description}
+										/>
+									)
+							)}
 						</div>
 					)}
 				</section>

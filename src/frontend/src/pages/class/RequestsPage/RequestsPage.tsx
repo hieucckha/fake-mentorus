@@ -16,7 +16,7 @@ export default function RequestsPage() {
 	} = useClassDetail();
 
 	return (
-		<div className="w-full">
+		<div className="w-full p-6">
 			{isError && (
 				<div className="w-full h-full flex justify-center items-center">
 					<UnexpectedError error={error} />
@@ -29,7 +29,7 @@ export default function RequestsPage() {
 			)}
 			{isSuccess && classDetail.requests.length === 0 && <Empty />}
 			{isSuccess && (
-				<div className="flex flex-col w-full gap-y-5 p-5">
+				<div className="flex flex-col w-full gap-y-5">
 					{classDetail.requests.map((item) => (
 						<RequestCard
 							key={item.id}

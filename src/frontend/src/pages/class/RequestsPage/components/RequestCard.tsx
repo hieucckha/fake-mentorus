@@ -91,7 +91,7 @@ function RequestCard({
 					handleOpenCommentModal();
 				}}
 			>
-				<div className="grid grid-cols-4">
+				<div className="grid grid-cols-4 gap-x-2">
 					{/* ACTIONS */}
 					{isTeacherView && status === RequestStatus.Pending && (
 						<div className="absolute right-10">
@@ -173,7 +173,7 @@ function RequestCard({
 						</span>
 					</div>
 				</div>
-				<div className="grid grid-cols-4">
+				<div className="grid grid-cols-4  gap-x-2">
 					<div className="col-span-2">
 						<strong>Current Grade: </strong>
 						{currentGrade}
@@ -183,7 +183,7 @@ function RequestCard({
 						{expectedGrade}
 					</div>
 				</div>
-				<div className="grid grid-cols-4">
+				<div className="grid grid-cols-4 gap-x-2">
 					<div className="col-span-2">
 						<strong>Reason: </strong>
 						{reason}

@@ -312,8 +312,8 @@ const GradeStructure: React.FC = () => {
 		},
 		{
 			title: "",
-			width:"15%",
-			align:"center",
+			width: "15%",
+			align: "center",
 			dataIndex: "operation",
 			render: (_: any, record: gradeCompositions) => {
 				const editable = isEditing(record);
@@ -350,8 +350,7 @@ const GradeStructure: React.FC = () => {
 								<DeleteOutlined className="text-xl" />
 							</a>
 						</Popconfirm>
-						{
-							record && record.isFinal == false ?
+						{record && record.isFinal == false ? (
 							<Popconfirm
 								title="Sure to confirm?"
 								onConfirm={() => handleConfirm(record.id)}
@@ -361,7 +360,8 @@ const GradeStructure: React.FC = () => {
 									<CheckCircleOutlined className="text-xl" />
 								</a>
 							</Popconfirm>
-							: <Popconfirm
+						) : (
+							<Popconfirm
 								title="Sure no confirm?"
 								onConfirm={() => handleConfirm(record.id)}
 								okButtonProps={{ className: "bg-blue-500" }}
@@ -370,8 +370,7 @@ const GradeStructure: React.FC = () => {
 									<CheckCircleOutlined className="text-xl" />
 								</a>
 							</Popconfirm>
-
-						}
+						)}
 					</Space>
 				);
 			},
@@ -397,8 +396,8 @@ const GradeStructure: React.FC = () => {
 	});
 
 	return (
-		<div className="w-full">
-			<div className="row grid justify-items-end pl-5 pr-5">
+		<div className="w-full p-6">
+			<div className="row grid justify-items-end">
 				<Button
 					onClick={handleAdd}
 					ghost

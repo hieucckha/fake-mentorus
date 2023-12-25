@@ -122,7 +122,7 @@ const Grade: FC = () => {
 
 	return (
 		<>
-			<div className="w-11/12 py-4">
+			<div className="w-full p-6">
 				<Table
 					bordered
 					columns={gradeColumn}
