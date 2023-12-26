@@ -1,14 +1,15 @@
-using MediatR;
-using Microsoft.AspNetCore.Http;
 using SomeSandwich.FakeMentorus.Domain.Users;
 
-namespace SomeSandwich.FakeMentorus.UseCases.Users.UpdateUser;
+namespace SomeSandwich.FakeMentorus.Web.Requests;
 
 /// <summary>
-/// Command to update user.
+/// Request to update user.
 /// </summary>
-public class UpdateUserCommand : IRequest
+public class UpdateUserRequest
 {
+    // /// <inheritdoc cref="User.Email" />
+    // public string? Email { get; set; }
+
     /// <inheritdoc cref="User.FirstName" />
     public string? FirstName { get; set; }
 

@@ -1,14 +1,18 @@
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using SomeSandwich.FakeMentorus.Domain.Users;
 
-namespace SomeSandwich.FakeMentorus.UseCases.Users.UpdateUser;
+namespace SomeSandwich.FakeMentorus.UseCases.Users.UpdateUserById;
 
 /// <summary>
-/// Command to update user.
+/// Command to update specific user.
 /// </summary>
-public class UpdateUserCommand : IRequest
+public class UpdateUserByIdCommand : IRequest
 {
+    /// <summary>
+    /// User id.
+    /// </summary>
+    public int UserId { get; set; }
+
     /// <inheritdoc cref="User.FirstName" />
     public string? FirstName { get; set; }
 
@@ -19,9 +23,4 @@ public class UpdateUserCommand : IRequest
     /// Student id.
     /// </summary>
     public string? StudentId { get; set; }
-
-    /// <summary>
-    /// Avatar file.
-    /// </summary>
-    public IFormFile? AvatarFile { get; set; }
 }
