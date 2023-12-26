@@ -60,7 +60,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="id">Id of user.</param>
     /// <param name="cancellationToken">Cancellation token to cancel the request.</param>
-    [HttpPut("{id:int}/lock")]
+    [HttpPut("{id:int}/ban")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     public async Task LockUser([FromRoute] int id, CancellationToken cancellationToken)
@@ -73,7 +73,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="id">Id of user.</param>
     /// <param name="cancellationToken">Cancellation token to cancel the request.</param>
-    [HttpPut("{id:int}/unlock")]
+    [HttpPut("{id:int}/unban")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     public async Task UnlockUser([FromRoute] int id, CancellationToken cancellationToken)
