@@ -31,6 +31,11 @@ public class UserDto
     public string LastName { get; set; } = string.Empty;
 
     /// <summary>
+    /// Student school identifier.
+    /// </summary>
+    public string? StudentId { get; set; }
+
+    /// <summary>
     /// Is user locked.
     /// </summary>
     public UserStatus Status { get; set; } = UserStatus.Active;
