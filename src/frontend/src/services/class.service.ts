@@ -177,7 +177,11 @@ const classService = {
 	async unlockUser(userId: Number) {
 		const response = await axios.put(`/api/user/${userId}/unban`);
 		return response.data;
-	}
+	},
+	async editUser( body: { firstName: string; lastName: string, studentId: string, email: string }) {
+		const response = await axios.put(`/api/user`, body);
+		return response.data;
+	},
 };
 export default classService;
 // function generateArray(count:number) {

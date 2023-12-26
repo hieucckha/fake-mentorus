@@ -35,6 +35,10 @@ interface DataType {
 	role: string;
 	status: string;
 	lockoutEnd: string;
+	firstName: string;
+	lastName: string;
+	studentId: string;
+	email: string;
 }
 
 type DataIndex = keyof DataType;
@@ -48,6 +52,16 @@ const ManagementUser: React.FC = () => {
 	const { data: listData, isLoading } = userQueryResult();
 	const mutation = lockUserMutation();
 	const mutationUnBan =unlockUserMutation();
+	const [formData, setFormData] = useState({
+		key: 0,
+		fullName: "",
+		role: "",
+		lockoutEnd: "",
+		firstName: "",
+		lastName: "",
+		studentId: "",
+		email: "",
+	});
 
 	const handleSearch = (
 		selectedKeys: string[],
@@ -125,6 +139,10 @@ const ManagementUser: React.FC = () => {
 	const data = listData?.map((item) => ({
 		key: item.id,
 		fullName: item.fullName,
+		email: item.email,
+		lastName: item.lastName,
+		firstName: item.firstName,
+		studentId: item.studentId,
 		role: item.role,
 		status: item.status,
 		lockoutEnd: item.lockoutEnd,
@@ -143,7 +161,16 @@ const ManagementUser: React.FC = () => {
 						className="text-blue-600 hover:cursor-pointer justify-center rounded-md"
 						onClick={() => {
 							setIsModalVisible(true);
-							setClassId(record.key as unknown as string);
+							setFormData({
+								key: record.key,
+								fullName: record.fullName,
+								role: record.role,
+								firstName: record.firstName,
+								lastName: record.lastName,
+								studentId: record.studentId,
+								email: record.email,
+								lockoutEnd: record.lockoutEnd,
+							});
 						}}
 					>
 						{record.fullName}
@@ -306,11 +333,12 @@ const ManagementUser: React.FC = () => {
 			{isModalVisible && (
 				<AdminEditUser
 					openModal={isModalVisible}
+
 					handleCancel={() => {
 						setIsModalVisible(false);
 						// setClassId("");
 					}}
-					// userId={classId}
+					data={formData}
 				/>
 			)}
 		</div>

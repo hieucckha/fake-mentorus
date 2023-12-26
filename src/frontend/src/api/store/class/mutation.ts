@@ -85,3 +85,13 @@ export const unlockUserMutation = () => {
 		},
 	});
 }
+export const EditUserMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (userInterface:{firstName:string,lastName:string,studentId:string,email:string}) => classService.editUser(userInterface),
+		retry: false,
+		onSuccess() {
+			queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+		},
+	});
+}
