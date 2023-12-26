@@ -12,7 +12,7 @@ export const  classQueryWithoutParams = (): UseQueryResult<ClassListQuery[]> => 
 };
 export const userQueryResult =(): UseQueryResult<userListQuery[]> => {
 	const queryData = useQuery({
-		queryKey: ["admin-classes"],
+		queryKey: ["admin-users"],
 		queryFn: () => classService.userQueryResult(),
 	});
 	return queryData;

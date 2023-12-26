@@ -124,7 +124,8 @@ const NavBarLogin: FC = () => {
 								</svg>
 							</button>
 						) : (
-							<button
+							user?.role === "Student" && (
+								<button
 								type="button"
 								className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
 								aria-expanded="false"
@@ -140,7 +141,7 @@ const NavBarLogin: FC = () => {
 								>
 									<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
 								</svg>
-							</button>
+							</button>)
 						)}
 						<Dropdown
 							trigger={["click"]}

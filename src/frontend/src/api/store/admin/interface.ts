@@ -16,4 +16,8 @@ export interface userListQuery {
     role: string;
     status: string;
     lockoutEnd:string;
+    email:string;
+    firstName:string;
+    lastName:string;
+    studentId:string;
 }
