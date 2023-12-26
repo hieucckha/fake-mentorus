@@ -37,16 +37,25 @@ public class MappingStudentIdCommandHandle : IRequestHandler<MappingStudentIdCom
             throw new NotFoundException("User not found");
         }
 
+        var role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
+        if (role is not "Student")
+        {
+            throw new DomainException("User is not student");
+        }
+
         if (command.StudentId != null &&
-            await dbContext.Users.AnyAsync(e => e.StudentId == command.StudentId, cancellationToken))
+            await dbContext.Users.AnyAsync(e => e.StudentId == command.StudentId,
+                cancellationToken))
         {
             throw new ConflictException("Student id already exists");
         }
 
         if (command.StudentId != null &&
-            !await dbContext.Students.AnyAsync(e => e.StudentId == command.StudentId, cancellationToken))
+            !await dbContext.Students.AnyAsync(e => e.StudentId == command.StudentId,
+                cancellationToken))
         {
-            await dbContext.Students.AddAsync(new Student() { StudentId = command.StudentId }, cancellationToken);
+            await dbContext.Students.AddAsync(new Student() { StudentId = command.StudentId },
+                cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
         }
 
