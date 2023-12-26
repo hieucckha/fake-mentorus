@@ -20,7 +20,8 @@ internal class ImportStudentGradeCommandHandler : IRequestHandler<ImportStudentG
     /// </summary>
     /// <param name="logger">Logger instance.</param>
     /// <param name="appDbContext">Database context instance.</param>
-    public ImportStudentGradeCommandHandler(ILogger<ImportStudentGradeCommandHandler> logger, IAppDbContext appDbContext)
+    public ImportStudentGradeCommandHandler(ILogger<ImportStudentGradeCommandHandler> logger,
+        IAppDbContext appDbContext)
     {
         this.logger = logger;
         this.appDbContext = appDbContext;
@@ -43,8 +44,9 @@ internal class ImportStudentGradeCommandHandler : IRequestHandler<ImportStudentG
             throw new DomainException("The file is empty or not have any grade composition.");
         }
 
+        // Student Id | Grade Composition 1 | Grade Composition 2 | Grade Composition 3 | ...
         var gradeComposites = new List<Domain.Grade.GradeComposition>();
-        var gradeIndex = new List<bool>() { false };
+        var gradeIndex = new List<int>();
 
         var index = 0;
         foreach (var cell in headerRow.Cells)
@@ -54,19 +56,61 @@ internal class ImportStudentGradeCommandHandler : IRequestHandler<ImportStudentG
                 index++;
                 continue;
             }
+
             var gradeComposition = await appDbContext.GradeCompositions
                 .FirstOrDefaultAsync(e => e.Name == cell.StringCellValue, cancellationToken);
 
             if (gradeComposition is null)
             {
                 index++;
-                gradeIndex.Add(false);
                 continue;
             }
 
             gradeComposites.Add(gradeComposition);
-            gradeIndex.Add(true);
+            gradeIndex.Add(index);
             index++;
         }
+
+        var row = gradeSheet.GetRow(index);
+        while (row is not null)
+        {
+            var studentId = row.GetCell(0).StringCellValue;
+            if (studentId is not null)
+            {
+                for (var i = 0; i < gradeIndex.Count; ++i)
+                {
+                    var column = gradeIndex[i];
+
+                    var gradeValue = row.GetCell(column).NumericCellValue;
+
+                    var grade = await appDbContext.Grades
+                        .Where(e => e.StudentId == studentId)
+                        .FirstOrDefaultAsync(e => e.GradeCompositionId == gradeComposites[i].Id,
+                            cancellationToken);
+
+                    if (grade is null)
+                    {
+                        await appDbContext.Grades.AddAsync(
+                            new Domain.Grade.Grade
+                            {
+                                GradeCompositionId = gradeComposites[i].Id,
+                                StudentId = studentId,
+                                GradeValue = (float)gradeValue,
+                            }, cancellationToken);
+                    }
+                    else
+                    {
+                        grade.GradeValue = (float)gradeValue;
+                        grade.UpdatedAt = DateTime.Now;
+                    }
+                }
+            }
+
+
+            index++;
+            row = gradeSheet.GetRow(index);
+        }
+
+        await appDbContext.SaveChangesAsync(cancellationToken);
     }
 }

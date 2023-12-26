@@ -123,7 +123,6 @@ public class GetCourseByIdQueryHandle : IRequestHandler<GetCourseByIdQuery, Cour
                         s.Student != null && s.Student.User != null && s.Student.User.Id == cmt.UserId);
                     var stdName = std?.Name;
                     var usrName = result.Students.FirstOrDefault(t => t.Id == cmt.UserId)?.FullName;
-
                     if (stdName != null)
                     {
                         cmt.Name = stdName;
