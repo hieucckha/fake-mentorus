@@ -9,18 +9,25 @@ import {
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import type { InputRef, MenuProps } from "antd";
-import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import {
+	Button,
+	Dropdown,
+	Input,
+	Menu,
+	Space,
+	Table,
+	Tag,
+	message,
+} from "antd";
 import type { ColumnType, ColumnsType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import {
 	classQueryWithoutParams,
 	userQueryResult,
 } from "../../api/store/admin/queries";
-import { Link } from "react-router-dom";
-import EditClass from "../../modal/EditClassModal";
-import EditUser from "../../modal/EditUser";
 import AdminEditUser from "../../modal/admin/AdminEditUser";
 import moment from "moment";
+import { lockUserMutation, unlockUserMutation } from "../../api/store/class/mutation";
 
 interface DataType {
 	key: number;
@@ -28,6 +35,10 @@ interface DataType {
 	role: string;
 	status: string;
 	lockoutEnd: string;
+	firstName: string;
+	lastName: string;
+	studentId: string;
+	email: string;
 }
 
 type DataIndex = keyof DataType;
@@ -39,6 +50,18 @@ const ManagementUser: React.FC = () => {
 	const [classId, setClassId] = useState("");
 	const searchInput = useRef<InputRef>(null);
 	const { data: listData, isLoading } = userQueryResult();
+	const mutation = lockUserMutation();
+	const mutationUnBan =unlockUserMutation();
+	const [formData, setFormData] = useState({
+		key: 0,
+		fullName: "",
+		role: "",
+		lockoutEnd: "",
+		firstName: "",
+		lastName: "",
+		studentId: "",
+		email: "",
+	});
 
 	const handleSearch = (
 		selectedKeys: string[],
@@ -116,6 +139,10 @@ const ManagementUser: React.FC = () => {
 	const data = listData?.map((item) => ({
 		key: item.id,
 		fullName: item.fullName,
+		email: item.email,
+		lastName: item.lastName,
+		firstName: item.firstName,
+		studentId: item.studentId,
 		role: item.role,
 		status: item.status,
 		lockoutEnd: item.lockoutEnd,
@@ -134,7 +161,16 @@ const ManagementUser: React.FC = () => {
 						className="text-blue-600 hover:cursor-pointer justify-center rounded-md"
 						onClick={() => {
 							setIsModalVisible(true);
-							setClassId(record.key as unknown as string);
+							setFormData({
+								key: record.key,
+								fullName: record.fullName,
+								role: record.role,
+								firstName: record.firstName,
+								lastName: record.lastName,
+								studentId: record.studentId,
+								email: record.email,
+								lockoutEnd: record.lockoutEnd,
+							});
 						}}
 					>
 						{record.fullName}
@@ -225,45 +261,66 @@ const ManagementUser: React.FC = () => {
 			width: "1%",
 			render: (text, record) => {
 				return (
-					<>
-						{/* <LockOutlined className="justify-center hover:cursor-pointer" /> */}
-						<Dropdown menu={{ items }} placement="topRight">
-							<MoreOutlined />
+					<div className="flex justify-center">
+						<Dropdown
+							overlay={
+								<Menu>
+									{record.status === "Active" ? (
+										<Menu.Item
+											key="1"
+											icon={<LockOutlined />}
+											onClick={() => {
+												mutation.mutate(record.key, {
+													onSuccess() {
+														message.success("Ban successfully");
+													},
+													onError(error: any) {
+														console.error(error);
+														
+														message.error(error.response.data.title);
+													},
+												});
+											}}
+										>
+											Ban
+										</Menu.Item>
+									) : (
+										<Menu.Item
+											key="2"
+											icon={<UnlockOutlined />}
+											onClick={() => {
+												mutationUnBan.mutate(record.key, {
+													onSuccess() {
+														message.success("Unban successfully");
+													},
+													onError(error: any) {
+														console.error(error);
+														
+														message.error(error.response.data.title);
+													},
+												});
+											}}
+										>
+											Unban
+										</Menu.Item>
+									)}
+								</Menu>
+							}
+							trigger={["click"]}
+						>
+							<Button
+								type="link"
+								icon={<MoreOutlined />}
+								onClick={(e) => e.preventDefault()}
+							/>
 						</Dropdown>
-					</>
+					</div>
 				);
 			},
 		},
 	];
 
 	if (isLoading) return <div>loading...</div>;
-	const items: MenuProps["items"] = [
-		{
-			key: "1",
-			label: (
-				<a
-					onClick={() => {
-						setIsModalVisible(true);
-					}}
-				>
-					<LockOutlined  className="pr-3" />
-					Lock 
-				</a>
-			),
-		},
-
-		{
-			key: "2",
-			label: (
-				<>
-					<a>
-						<LockOutlined className="pr-3" />
-						Ban
-					</a>
-				</>
-			),
-		},
-	];
 
 	return (
 		<div className="p-6">
@@ -276,11 +333,12 @@ const ManagementUser: React.FC = () => {
 			{isModalVisible && (
 				<AdminEditUser
 					openModal={isModalVisible}
+
 					handleCancel={() => {
 						setIsModalVisible(false);
 						// setClassId("");
 					}}
-					// userId={classId}
+					data={formData}
 				/>
 			)}
 		</div>
