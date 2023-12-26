@@ -16,6 +16,21 @@ public class UserDto
     required public string FullName { get; set; }
 
     /// <summary>
+    /// Email.
+    /// </summary>
+    public string Email { get; set; } = string.Empty;
+
+    /// <summary>
+    /// First name.
+    /// </summary>
+    public string FirstName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Last name.
+    /// </summary>
+    public string LastName { get; set; } = string.Empty;
+
+    /// <summary>
     /// Is user locked.
     /// </summary>
     public UserStatus Status { get; set; } = UserStatus.Active;
