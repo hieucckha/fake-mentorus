@@ -9,7 +9,9 @@ using SomeSandwich.FakeMentorus.UseCases.Users.LockoutUser.LockUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.LockoutUser.UnlockUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.MappingStudentId;
 using SomeSandwich.FakeMentorus.UseCases.Users.SearchUser;
+using SomeSandwich.FakeMentorus.UseCases.Users.UpdateEmail;
 using SomeSandwich.FakeMentorus.UseCases.Users.UpdateUser;
+using SomeSandwich.FakeMentorus.UseCases.Users.UpdateUserById;
 using SomeSandwich.FakeMentorus.Web.Requests;
 
 namespace SomeSandwich.FakeMentorus.Web.Controllers;
@@ -46,13 +48,37 @@ public class UserController : ControllerBase
     /// <summary>
     /// Update user information.
     /// </summary>
-    /// <param name="command">Update user command.</param>
+    /// <param name="request"></param>
     /// <param name="cancellationToken">Cancellation token to cancel the request.</param>
     [HttpPut]
     [Authorize]
-    public async Task Update(UpdateUserCommand command, CancellationToken cancellationToken)
+    public async Task Update(UpdateUserRequest request, CancellationToken cancellationToken)
     {
-        await mediator.Send(command, cancellationToken);
+        await mediator.Send(new UpdateUserCommand()
+        {
+            StudentId = request.StudentId,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+        }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Update user information for specific user.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    [HttpPut("{id:int}")]
+    [Authorize]
+    public async Task UpdateUser([FromRoute] int id, UpdateUserRequest request, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new UpdateUserByIdCommand()
+        {
+            StudentId = request.StudentId,
+            UserId = id,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+        }, cancellationToken);
     }
 
     /// <summary>
@@ -121,9 +147,7 @@ public class UserController : ControllerBase
     public async Task ImportStudentIdFromTemplate([FromForm] ImportStudentIdTemplateRequest request,
         CancellationToken cancellationToken)
     {
-        await mediator.Send(new ImportStudentIdTemplateCommand
-        {
-            FileContent = request.File.OpenReadStream()
-        }, cancellationToken);
+        await mediator.Send(new ImportStudentIdTemplateCommand { FileContent = request.File.OpenReadStream() },
+            cancellationToken);
     }
 }

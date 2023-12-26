@@ -76,7 +76,7 @@ const EditUser: FC<EditUserProps> = ({
 			firstName: formData.firstName,
 			lastName: formData.lastName,
 			studentId: formData.studentId,
-			email: formData.email,
+			// email: formData.email,
 		};
 		updateProfile.mutate(data, {
 			onSuccess() {
@@ -85,10 +85,6 @@ const EditUser: FC<EditUserProps> = ({
 			},
 			onError(error: any) {
 				console.error(error);
-				// Toast({
-				// 	title: "Fail",
-				// 	duration: 500,
-				// });
 				message.error(error.response.data.title);
 			},
 		});
@@ -117,8 +113,9 @@ const EditUser: FC<EditUserProps> = ({
 								type="email"
 								placeholder="example@gnail.com"
 								value={formData.email}
-								required
-								onChange={handleChange}
+								// required
+								// onChange={handleChange}
+								disabled
 							/>
 						</div>
 						<div>

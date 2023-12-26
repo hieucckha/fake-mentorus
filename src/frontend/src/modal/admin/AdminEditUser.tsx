@@ -1,41 +1,23 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Modal, Radio, Space, message } from "antd";
-import EditUser from "../EditUser";
-import { EditUserMutation } from "../../api/store/class/mutation";
+import { Button, Form, Input, Modal, Radio } from "antd";
 
 interface ModalProps {
 	handleCancel: () => void;
 	openModal: boolean;
-	data?: any;
 }
 type LayoutType = Parameters<typeof Form>[0]["layout"];
-const AdminEditUser: React.FC<ModalProps> = ({
-	handleCancel,
-	openModal,
-	data,
-}) => {
+const AdminEditUser: React.FC<ModalProps> = ({ handleCancel, openModal }) => {
 	const [form] = Form.useForm();
 	const [formLayout, setFormLayout] = useState<LayoutType>("horizontal");
 
 	const onFormLayoutChange = ({ layout }: { layout: LayoutType }) => {
 		setFormLayout(layout);
 	};
-	const mutation = EditUserMutation();
+
 	const formItemLayout =
 		formLayout === "horizontal"
 			? { labelCol: { span: 4 }, wrapperCol: { span: 14 } }
 			: null;
-	const handleSubmit = (values: any) => {
-		mutation.mutate(values, {
-			onSuccess: () => {
-				message.success("Edit user successfully");
-				handleCancel();
-			},
-			onError: (error) => {
-				message.error(error.message);
-			},
-		});
-	}
 
 	return (
 		<>
@@ -45,7 +27,7 @@ const AdminEditUser: React.FC<ModalProps> = ({
 				onOk={() => {
 					console.log(form.getFieldsValue());
 					form.validateFields().then(() => form.submit());
-					// handleCancel();
+					handleCancel();
 				}}
 				onCancel={handleCancel}
 			>
@@ -53,74 +35,29 @@ const AdminEditUser: React.FC<ModalProps> = ({
 					{...formItemLayout}
 					layout={formLayout}
 					form={form}
-					initialValues={data}
+					initialValues={{ layout: formLayout }}
 					onValuesChange={onFormLayoutChange}
 					style={{ maxWidth: formLayout === "inline" ? "none" : 600 }}
-					onFinish={(values) => handleSubmit(values)}
-					
+					onFinish={(values) => console.log(values)}
 				>
-					<Form.Item
-						label="Email"
-						name="email"
-						rules={[
-							{
-								required: true,
-							},
-						]}
-					>
+					<Form.Item label="First Name" name="firstName">
 						<Input
-							required
-							className="w-full rounded text-sm border-gray-200 font-si"
-							defaultValue={data.firstName}
-							value={data.email}
-							placeholder="aa@gmail.com"
-						/>
-					</Form.Item>
-					<Form.Item
-						label="First Name"
-						name="firstName"
-						rules={[
-							{
-								required: true,
-							},
-						]}
-					>
-						<Input
-							required
-							value={data.firstName}
-							className="w-full rounded text-sm border-gray-200 font-si"
-							defaultValue={data.firstName}
+							className="w-full rounded text-sm border-gray-200 font-si "
 							placeholder="van A"
 						/>
 					</Form.Item>
-					<Form.Item
-						label="Last Name"
-						name="lastName"
-						rules={[
-							{
-								required: true,
-							},
-						]}
-					>
+					<Form.Item label="Last Name" name="lastName">
 						<Input
-							required
-							value={data.lastName}
 							className="rounded text-sm border-gray-200"
-							defaultValue={data.lastName}
 							placeholder="Nguyen"
 						/>
 					</Form.Item>
-					{data.role === "Student" ? (
-						<Form.Item label="Student ID" name="studentId">
-							<Input
-							value={data.studentId}
-								className="rounded text-sm border-gray-200"
-								defaultValue={data.studentId ?? ""}
-								placeholder="13465443"
-							/>
-						</Form.Item>
-					) : null}
-				
+					<Form.Item label="Student ID" name="studentId">
+						<Input
+							className="rounded text-sm border-gray-200"
+							placeholder="13465443"
+						/>
+					</Form.Item>
 				</Form>
 			</Modal>
 		</>
