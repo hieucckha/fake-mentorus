@@ -19,7 +19,8 @@ internal class LockUserCommandHandler : IRequestHandler<LockUserCommand>
     /// </summary>
     /// <param name="logger">Logger instance.</param>
     /// <param name="userManager">User manager instance.</param>
-    public LockUserCommandHandler(ILogger<LockUserCommandHandler> logger, UserManager<User> userManager)
+    public LockUserCommandHandler(ILogger<LockUserCommandHandler> logger,
+        UserManager<User> userManager)
     {
         this.logger = logger;
         this.userManager = userManager;
@@ -41,6 +42,7 @@ internal class LockUserCommandHandler : IRequestHandler<LockUserCommand>
         }
 
         await userManager.SetLockoutEnabledAsync(user, true);
+        await userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
 
         logger.LogInformation("User with id {UserId} is lock.", command.UserId);
     }

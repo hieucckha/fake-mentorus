@@ -19,7 +19,8 @@ internal class UnlockUserCommandHandler : IRequestHandler<UnlockUserCommand>
     /// </summary>
     /// <param name="logger"></param>
     /// <param name="userManager"></param>
-    public UnlockUserCommandHandler(ILogger<UnlockUserCommandHandler> logger, UserManager<User> userManager)
+    public UnlockUserCommandHandler(ILogger<UnlockUserCommandHandler> logger,
+        UserManager<User> userManager)
     {
         this.logger = logger;
         this.userManager = userManager;
@@ -37,10 +38,12 @@ internal class UnlockUserCommandHandler : IRequestHandler<UnlockUserCommand>
 
         if (user.LockoutEnabled == false)
         {
-            throw new DomainException($"User with id {command.UserId} is not lock. Can not unlock a user not lock.");
+            throw new DomainException(
+                $"User with id {command.UserId} is not lock. Can not unlock a user not lock.");
         }
 
         await userManager.SetLockoutEnabledAsync(user, false);
+        await userManager.SetLockoutEndDateAsync(user, null);
 
         logger.LogInformation("User with id {UserId} is unlock.", command.UserId);
     }
