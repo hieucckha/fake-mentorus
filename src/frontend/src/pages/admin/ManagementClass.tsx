@@ -2,7 +2,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import React, { useRef, useState, useEffect } from "react";
 import Highlighter from "react-highlight-words";
 import type { InputRef } from "antd";
-import { Button, Input, Space, Table } from "antd";
+import { Button, Input, Space, Spin, Table } from "antd";
 import type { ColumnType, ColumnsType } from "antd/es/table";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import { classQueryWithoutParams } from "../../api/store/admin/queries";
@@ -27,8 +27,6 @@ const ManagementClass: React.FC = () => {
 	const [classId, setClassId] = useState("");
 	const searchInput = useRef<InputRef>(null);
 	const { data: listData, isLoading } = classQueryWithoutParams();
-	console.log(listData);
-	console.log("43432");
 
 	const handleSearch = (
 		selectedKeys: string[],
@@ -187,7 +185,11 @@ const ManagementClass: React.FC = () => {
 		},
 	];
 
-	if (isLoading) return <div>loading...</div>;
+	if (isLoading) return  (
+				<div className="w-full h-full flex justify-center items-center">
+					<Spin />
+				</div>
+			);
 
 	return (
 		<div className="p-6">

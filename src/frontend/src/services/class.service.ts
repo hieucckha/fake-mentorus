@@ -170,6 +170,14 @@ const classService = {
 
 		return response.data.items;
 	},
+	async lockUser(userId: Number) {
+		const response = await axios.put(`/api/user/${userId}/ban`);
+		return response.data;
+	},
+	async unlockUser(userId: Number) {
+		const response = await axios.put(`/api/user/${userId}/unban`);
+		return response.data;
+	}
 };
 export default classService;
 // function generateArray(count:number) {

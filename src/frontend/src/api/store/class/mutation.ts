@@ -65,3 +65,23 @@ export const useEditClassMutation = (classId?: string) => {
 		},
 	});
 };
+export const lockUserMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (id: number) => classService.lockUser(id),
+		retry: false,
+		onSuccess() {
+			queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+		},
+	});
+}
+export const unlockUserMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (id: number) => classService.unlockUser(id),
+		retry: false,
+		onSuccess() {
+			queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+		},
+	});
+}
