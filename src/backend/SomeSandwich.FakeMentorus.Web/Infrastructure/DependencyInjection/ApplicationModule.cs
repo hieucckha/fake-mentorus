@@ -1,5 +1,6 @@
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 using SomeSandwich.FakeMentorus.Infrastructure.Implements;
+using SomeSandwich.FakeMentorus.Web.Hubs;
 
 namespace SomeSandwich.FakeMentorus.Web.Infrastructure.DependencyInjection;
 
@@ -16,5 +17,6 @@ internal static class ApplicationModule
     public static void Register(IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<IFacebookClient, FacebookClient>();
+        services.AddTransient<INotificationService, NotificationHub>();
     }
 }
