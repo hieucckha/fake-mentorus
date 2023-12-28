@@ -1,13 +1,22 @@
-import type { FC } from "react";
+import { useEffect, type FC } from "react";
 
 import NavBarLogin from "../partials/NavBarLogin";
 import Sidebar from "../partials/Sidebar";
 import { Outlet } from "react-router-dom";
+import connection from "../utils/Notification";
 
 /**
  * Home page.
  */
+
 const AppLayout: FC = () => {
+	useEffect(() => {
+		connection.start();
+
+		return () => {
+			connection.stop();
+		};
+	}, []);
 	return (
 		// <div className="flex flex-col h-screen">
 		<div className="bg-white">
@@ -17,10 +26,9 @@ const AppLayout: FC = () => {
 					<Sidebar />
 				</div>
 				<div className="grow h-full ...">
-					<Outlet/>
+					<Outlet />
 				</div>
 			</div>
-			
 		</div>
 	);
 };
