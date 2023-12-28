@@ -1,5 +1,6 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using SomeSandwich.FakeMentorus.Web.Commands;
+using SomeSandwich.FakeMentorus.Web.Hubs;
 
 namespace SomeSandwich.FakeMentorus.Web;
 
@@ -22,6 +23,7 @@ internal sealed class Program
         var startup = new Startup(builder.Configuration);
         startup.ConfigureServices(builder.Services, builder.Environment);
         app = builder.Build();
+        app.MapHub<NotificationHub>("notification");
         startup.Configure(app, app.Environment);
 
         // Command line processing.

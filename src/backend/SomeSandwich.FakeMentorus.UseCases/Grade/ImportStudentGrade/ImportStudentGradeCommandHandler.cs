@@ -48,12 +48,12 @@ internal class ImportStudentGradeCommandHandler : IRequestHandler<ImportStudentG
         var gradeComposites = new List<Domain.Grade.GradeComposition>();
         var gradeIndex = new List<int>();
 
-        var index = 0;
+        var headerIndex = 0;
         foreach (var cell in headerRow.Cells)
         {
-            if (index == 0)
+            if (headerIndex == 0)
             {
-                index++;
+                headerIndex++;
                 continue;
             }
 
@@ -62,16 +62,17 @@ internal class ImportStudentGradeCommandHandler : IRequestHandler<ImportStudentG
 
             if (gradeComposition is null)
             {
-                index++;
+                headerIndex++;
                 continue;
             }
 
             gradeComposites.Add(gradeComposition);
-            gradeIndex.Add(index);
-            index++;
+            gradeIndex.Add(headerIndex);
+            headerIndex++;
         }
 
-        var row = gradeSheet.GetRow(index);
+        var rowIndex = 1;
+        var row = gradeSheet.GetRow(rowIndex);
         while (row is not null)
         {
             var studentId = row.GetCell(0).StringCellValue;
@@ -81,7 +82,13 @@ internal class ImportStudentGradeCommandHandler : IRequestHandler<ImportStudentG
                 {
                     var column = gradeIndex[i];
 
-                    var gradeValue = row.GetCell(column).NumericCellValue;
+                    var cell = row.GetCell(column);
+                    if (cell is null)
+                    {
+                        continue;
+                    }
+
+                    var gradeValue = cell.NumericCellValue;
 
                     var grade = await appDbContext.Grades
                         .Where(e => e.StudentId == studentId)
@@ -101,14 +108,14 @@ internal class ImportStudentGradeCommandHandler : IRequestHandler<ImportStudentG
                     else
                     {
                         grade.GradeValue = (float)gradeValue;
-                        grade.UpdatedAt = DateTime.Now;
+                        grade.UpdatedAt = DateTime.UtcNow;
                     }
                 }
             }
 
 
-            index++;
-            row = gradeSheet.GetRow(index);
+            rowIndex++;
+            row = gradeSheet.GetRow(rowIndex);
         }
 
         await appDbContext.SaveChangesAsync(cancellationToken);

@@ -85,7 +85,7 @@ export interface resetPasswordConfirmDto {
 }
 
 export interface editUserDto{
-	email: string;
+	// email: string;
 	firstName: string;
 	lastName: string;
 	studentId: string;

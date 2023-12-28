@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 using SomeSandwich.FakeMentorus.Infrastructure.DataAccess;
+using SomeSandwich.FakeMentorus.Web.Hubs;
 using SomeSandwich.FakeMentorus.Web.Infrastructure.DependencyInjection;
 using SomeSandwich.FakeMentorus.Web.Infrastructure.Middlewares;
 using SomeSandwich.FakeMentorus.Web.Infrastructure.Settings;
@@ -101,13 +102,15 @@ public class Startup
         services.AddLogging(new LoggingOptionsSetup(configuration, environment).Setup);
 
         // Application settings.
-        //services.Configure<AppSettings>(options => configuration.GetSection("Application").Bind(options));
         services.AddSingleton<IAppSettings, AppSettings>(_ =>
         {
             var appSettings = new AppSettings();
             configuration.GetSection("Application").Bind(appSettings);
             return appSettings;
         });
+
+        services.AddSignalR();
+
 
         // HTTP client.
         services.AddHttpClient();
@@ -146,10 +149,7 @@ public class Startup
 
         // CORS.
         app.UseCors(CorsOptionsSetup.CorsPolicyName);
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.All
-        });
+        app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>

@@ -1,11 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SomeSandwich.FakeMentorus.UseCases.Grade.Common;
 using SomeSandwich.FakeMentorus.UseCases.Grade.CreateGrade;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentGradeTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentListTemplate;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GetAllGradeByCourseId;
+using SomeSandwich.FakeMentorus.UseCases.Grade.GetAllGradeByCourseIdExport;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GetGradeByStudentId;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GetGradeByUserId;
 using SomeSandwich.FakeMentorus.UseCases.Grade.ImportStudentGrade;
@@ -24,27 +26,32 @@ namespace SomeSandwich.FakeMentorus.Web.Controllers;
 public class GradeController
 {
     private readonly IMediator mediator;
+    private readonly IHubContext hubContext;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="mediator">Mediator instance.</param>
-    public GradeController(IMediator mediator)
+    /// <param name="hubContext"></param>
+    public GradeController(IMediator mediator, IHubContext hubContext)
     {
         this.mediator = mediator;
+        this.hubContext = hubContext;
     }
 
     /// <summary>
     /// Generate student list template for import student to course.
     /// </summary>
-    /// <param name="command">Generate student list template command.</param>
+    /// <param name="command">Generate student list template query.</param>
     /// <param name="cancellationToken">Token to cancel the request.</param>
     /// <returns></returns>
     [HttpGet("student/tempalte")]
-    public async Task<ActionResult> GenerateStudentListTemplate([FromQuery] GenerateStudentListTemplateCommand command,
+    public async Task<ActionResult> GenerateStudentListTemplate(
+        [FromQuery] GenerateStudentListTemplateCommand command,
         CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
+        await hubContext.Clients.All.SendAsync("someting", "message", cancellationToken);
 
         result.FileContent.Position = 0;
 
@@ -58,7 +65,8 @@ public class GradeController
     /// <param name="request">Request that hold the sheet of student list.</param>
     /// <param name="cancellationToken">Token to cancel the request.</param>
     [HttpPost("student/template/{id:int}/import")]
-    public async Task ImportStudentList([FromRoute] int id, [FromForm] ImportStudentListRequest request,
+    public async Task ImportStudentList([FromRoute] int id,
+        [FromForm] ImportStudentListRequest request,
         CancellationToken cancellationToken)
     {
         var command = new ImportStudentListCommand { CourseId = id, FileContent = request.File.OpenReadStream() };
@@ -73,7 +81,8 @@ public class GradeController
     /// <param name="cancellationToken">Token to cancel the request.</param>
     [HttpGet("template")]
     public async Task<ActionResult> GenerateStudentGradeTemplate(
-        [FromQuery] GenerateStudentGradeTemplateCommand command, CancellationToken cancellationToken)
+        [FromQuery] GenerateStudentGradeTemplateCommand command,
+        CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
         result.FileContent.Position = 0;
@@ -88,7 +97,8 @@ public class GradeController
     /// <param name="request">Request that hold the sheet of student grade.</param>
     /// <param name="cancellationToken">Token to cancel the request.</param>
     [HttpPost("template/{id:int}/import")]
-    public async Task ImportStudentGrade([FromRoute] int id, [FromForm] ImportStudentGradeRequest request,
+    public async Task ImportStudentGrade([FromRoute] int id,
+        [FromForm] ImportStudentGradeRequest request,
         CancellationToken cancellationToken)
     {
         var command = new ImportStudentGradeCommand { CourseId = id, FileContent = request.File.OpenReadStream() };
@@ -97,10 +107,10 @@ public class GradeController
     }
 
     /// <summary>
-    ///
+    /// Get all grade by course id.
     /// </summary>
     /// <param name="command"></param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="cancellationToken">Token to cancel the request.</param>
     /// <returns></returns>
     [HttpGet("all")]
     public async Task<ActionResult<GetAllGradeByCourseIdResult>> GetAllGradeByCourseId(
@@ -108,6 +118,25 @@ public class GradeController
         CancellationToken cancellationToken)
     {
         return await mediator.Send(command, cancellationToken);
+    }
+
+    /// <summary>
+    /// Get all grade by course id and export to excel file.
+    /// </summary>
+    /// <param name="query"></param>
+    /// <param name="cancellationToken">Token to cancel the request.</param>
+    /// <returns></returns>
+    [HttpGet("all/export")]
+    public async Task<ActionResult> GetAllGradeByCourseIdExport(
+        [FromQuery] GetAllGradeByCourseIdExportQuery query,
+        CancellationToken cancellationToken)
+    {
+        await mediator.Send(query, cancellationToken);
+
+        var result = await mediator.Send(query, cancellationToken);
+        result.FileContent.Position = 0;
+
+        return new FileStreamResult(result.FileContent, result.Mimetype) { FileDownloadName = result.FileName };
     }
 
     /// <summary>
@@ -121,11 +150,12 @@ public class GradeController
     // public async Task<ActionResult<GetGradeByStudentIdDto>> GetAllGradeByStudentId([FromRoute] int courseId,
     //     [FromRoute] string studentId, CancellationToken cancellationToken)
     // {
-    //     var command = new GetGradeByStudentIdQuery() { CourseId = courseId, StudentId = studentId };
-    //     return await mediator.Send(command, cancellationToken);
+    //     var query = new GetGradeByStudentIdQuery() { CourseId = courseId, StudentId = studentId };
+    //     return await mediator.Send(query, cancellationToken);
     // }
     [HttpGet("course/{courseId:int}/student/{studentId:int}")]
-    public async Task<ActionResult<GetGradeByUserIdResult>> GetAllGradeByStudentId([FromRoute] int courseId,
+    public async Task<ActionResult<GetGradeByUserIdResult>> GetAllGradeByStudentId(
+        [FromRoute] int courseId,
         [FromRoute] string studentId, CancellationToken cancellationToken)
     {
         var command = new GetGradeByUserIdQuery() { CourseId = courseId, StudentId = studentId };
@@ -139,7 +169,8 @@ public class GradeController
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPost("")]
-    public async Task<GradeDto> AddGrade([FromBody] CreateGradeCommand command, CancellationToken cancellationToken)
+    public async Task<GradeDto> AddGrade([FromBody] CreateGradeCommand command,
+        CancellationToken cancellationToken)
     {
         return await mediator.Send(command, cancellationToken);
     }
