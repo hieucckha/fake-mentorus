@@ -20,6 +20,11 @@ internal class SwaggerGenOptionsSetup
     {
         var fileVersionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
 
+        options.AddSignalRSwaggerGen(opt =>
+        {
+            opt.UseHubXmlCommentsSummaryAsTagDescription = true;
+            opt.UseHubXmlCommentsSummaryAsTag = true;
+        });
         options.SwaggerDoc("v1", new OpenApiInfo
         {
             Version = fileVersionInfo.ProductVersion,

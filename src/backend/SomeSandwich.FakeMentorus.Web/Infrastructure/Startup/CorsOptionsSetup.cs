@@ -35,6 +35,7 @@ internal class CorsOptionsSetup
                 // if (isDevelopment)
                 // {
                 builder.AllowAnyOrigin();
+                builder.SetIsOriginAllowed((_) => true);
                 // }
                 // else
                 // {

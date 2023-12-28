@@ -111,7 +111,6 @@ public class Startup
 
         services.AddSignalR();
 
-
         // HTTP client.
         services.AddHttpClient();
 
