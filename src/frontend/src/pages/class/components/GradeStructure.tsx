@@ -404,7 +404,7 @@ const GradeStructure: React.FC = () => {
 					type="primary"
 					style={{ marginBottom: 16 }}
 				>
-					Add a row
+					Add a grade structure
 				</Button>
 			</div>
 			<DndContext

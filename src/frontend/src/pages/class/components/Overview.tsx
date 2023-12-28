@@ -1,6 +1,6 @@
 import { FC } from "react";
 import moment from "moment";
-import { App, Badge, Spin } from "antd";
+import { App, Badge, Spin, Tooltip } from "antd";
 import useClassDetail from "../../../hooks/useClassDetail";
 import { BellOutlined, BellTwoTone } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
@@ -40,22 +40,31 @@ const Overview: FC = () => {
 								<p className="mb-2 font-bold pt-2  tracking-tight text-gray-900 dark:text-white pb-4">
 									Class code:{" "}
 								</p>
-								<svg
-									onClick={copyCode}
-									className="cursor-pointer"
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="#000000"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								>
-									<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-									<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-								</svg>
+								<Tooltip placement="bottom" title="Copy class code" arrow>
+									<svg
+										onClick={copyCode}
+										className="cursor-pointer"
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="#000000"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									>
+										<rect
+											x="9"
+											y="9"
+											width="13"
+											height="13"
+											rx="2"
+											ry="2"
+										></rect>
+										<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+									</svg>
+								</Tooltip>
 							</div>
 							<p className="font-normal flex-end  text-gray-700 dark:text-gray-400 block">
 								{data?.inviteCode}
@@ -64,22 +73,24 @@ const Overview: FC = () => {
 								<p className="mb-2 font-bold pt-2  tracking-tight text-gray-900 dark:text-white pb-4">
 									Invite:{" "}
 								</p>
-								<svg
-									onClick={copylink}
-									xmlns="http://www.w3.org/2000/svg"
-									className="cursor-pointer hover:to-blue-600"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="#000000"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								>
-									<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-									<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-								</svg>
+								<Tooltip placement="bottom" title="Copy link invite" arrow>
+									<svg
+										onClick={copylink}
+										xmlns="http://www.w3.org/2000/svg"
+										className="cursor-pointer hover:to-blue-600"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="#000000"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									>
+										<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+										<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+									</svg>
+								</Tooltip>
 							</div>
 						</div>
 					</a>
