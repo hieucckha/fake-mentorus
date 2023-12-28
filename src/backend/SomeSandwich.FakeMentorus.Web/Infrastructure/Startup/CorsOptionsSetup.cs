@@ -35,6 +35,7 @@ internal class CorsOptionsSetup
             {
                 var newFrontendOrigins = new List<string>() { frontendOrigins };
                 newFrontendOrigins.Add("https://midterm.somesandwich.rocks");
+                newFrontendOrigins.Add("http://localhost:3006");
                 if (isDevelopment)
                 {
                     builder.AllowAnyOrigin();
