@@ -45,8 +45,8 @@ public class Startup
         // CORS.
         string[]? frontendOrigin = null;
         // TODO: uncomment if you need to specify additional FrontendOrigins for CORS (if you have an Angular/React/etc project).
-        // frontendOrigin = Saritasa.Tools.Common.Utils.StringUtils.NullSafe(configuration["AppSettings:FrontendOrigin"])
-        //        .Split(';', StringSplitOptions.RemoveEmptyEntries);
+        frontendOrigin = Saritasa.Tools.Common.Utils.StringUtils.NullSafe(configuration["AppSettings:FrontendOrigin"])
+            .Split(';', StringSplitOptions.RemoveEmptyEntries);
         services.AddCors(new CorsOptionsSetup(
             environment.IsDevelopment(),
             frontendOrigin

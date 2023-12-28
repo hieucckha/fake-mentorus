@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Saritasa.Tools.Common.Extensions;
 
 namespace SomeSandwich.FakeMentorus.Web.Infrastructure.Startup;
 
@@ -32,16 +33,16 @@ internal class CorsOptionsSetup
         options.AddPolicy(CorsPolicyName,
             builder =>
             {
-                // if (isDevelopment)
-                // {
-                builder.AllowAnyOrigin();
-                builder.SetIsOriginAllowed((_) => true);
-                // }
-                // else
-                // {
-                //    builder.WithOrigins(frontendOrigins.ToArray())
-                //        .AllowCredentials();
-                // }
+                frontendOrigins.Add(new List<string>() { "https://midterm.somesandwich.rocks" });
+                if (isDevelopment)
+                {
+                    builder.AllowAnyOrigin();
+                }
+                else
+                {
+                    builder.WithOrigins(frontendOrigins.ToArray())
+                        .AllowCredentials();
+                }
 
                 builder
                     .AllowAnyHeader()
