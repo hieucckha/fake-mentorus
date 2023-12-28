@@ -1,3 +1,5 @@
+import { UserProfileDto } from "../auth/interface";
+
 export interface ClassDto {
 	name: string;
 	description: string;
@@ -117,4 +119,8 @@ export interface EditGradeDto {
 	gradeCompositionId: number;
 	studentId: string;
 	gradeValue: number;
+}
+
+export interface EditUserDto extends Partial<Pick<UserProfileDto, "firstName" | "lastName" | "studentId" | "email">> {
+	id: number;
 }

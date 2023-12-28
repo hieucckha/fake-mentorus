@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import classService from "../../../services/class.service";
-import type { ClassDto, ClassQuery } from "./interface";
+import type { ClassDto, ClassQuery, EditUserDto } from "./interface";
 import { useParams } from "react-router-dom";
 
 export const useCreateClassMutation = () => {
@@ -85,10 +85,13 @@ export const unlockUserMutation = () => {
 		},
 	});
 }
+
+
+
 export const EditUserMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (userInterface:{firstName:string,lastName:string,studentId:string,email:string}) => classService.editUser(userInterface),
+		mutationFn: ({id , ...rest}: EditUserDto) => classService.editUser(id, rest),
 		retry: false,
 		onSuccess() {
 			queryClient.invalidateQueries({ queryKey: ["admin-users"] });

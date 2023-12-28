@@ -1,5 +1,6 @@
 import axios from "../api/AxiosClient";
 import { ClassListQuery, userListQuery } from "../api/store/admin/interface";
+import { editUserDto } from "../api/store/auth/interface";
 
 import {
 	RequestStatus,
@@ -9,6 +10,7 @@ import {
 	type EditGradeDto,
 	type gradeCompositions,
 	type newGradeCompositions,
+	EditUserDto,
 } from "../api/store/class/interface";
 
 const classService = {
@@ -178,9 +180,15 @@ const classService = {
 		const response = await axios.put(`/api/user/${userId}/unban`);
 		return response.data;
 	},
-	async editUser( body: { firstName: string; lastName: string, studentId: string, email: string }) {
-		const response = await axios.put(`/api/user`, body);
+	async editUser(id:number, body: Omit<EditUserDto, "id">) {
+		const response = await axios.put(`/api/user/${id}`, body);
 		return response.data;
+	},
+	async downloadStudentGrade(classId: string) {
+		return axios.get(`/api/grade/all/export`, {
+			params: { CourseId: classId },
+			responseType: "blob",
+		});
 	},
 };
 export default classService;

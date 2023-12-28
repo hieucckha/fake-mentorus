@@ -7,7 +7,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { FacebookProvider } from "react-facebook";
 import { App as AntdApp} from 'antd';
-
 const queryClient = new QueryClient();
 
 /**
