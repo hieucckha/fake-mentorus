@@ -33,14 +33,15 @@ internal class CorsOptionsSetup
         options.AddPolicy(CorsPolicyName,
             builder =>
             {
-                frontendOrigins.Add(new List<string>() { "https://midterm.somesandwich.rocks" });
+                var newFrontendOrigins = new List<string>() { frontendOrigins };
+                newFrontendOrigins.Add("https://midterm.somesandwich.rocks");
                 if (isDevelopment)
                 {
                     builder.AllowAnyOrigin();
                 }
                 else
                 {
-                    builder.WithOrigins(frontendOrigins.ToArray())
+                    builder.WithOrigins(newFrontendOrigins.ToArray())
                         .AllowCredentials();
                 }
 
