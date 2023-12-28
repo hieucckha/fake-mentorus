@@ -15,6 +15,8 @@ public class ToggleIsFinishedCommandHandle : IRequestHandler<ToggleIsFinishedCom
     private readonly IAppDbContext dbContext;
     private readonly ILoggedUserAccessor loggedUserAccessor;
     private readonly UserManager<User> userManager;
+    private readonly INotificationService notificationService;
+
 
     /// <summary>
     /// Constructor.
@@ -22,12 +24,14 @@ public class ToggleIsFinishedCommandHandle : IRequestHandler<ToggleIsFinishedCom
     /// <param name="dbContext"></param>
     /// <param name="loggedUserAccessor"></param>
     /// <param name="userManager"></param>
+    /// <param name="notificationService"></param>
     public ToggleIsFinishedCommandHandle(IAppDbContext dbContext, ILoggedUserAccessor loggedUserAccessor,
-        UserManager<User> userManager)
+        UserManager<User> userManager, INotificationService notificationService)
     {
         this.dbContext = dbContext;
         this.loggedUserAccessor = loggedUserAccessor;
         this.userManager = userManager;
+        this.notificationService = notificationService;
     }
 
     /// <inheritdoc />
@@ -48,7 +52,7 @@ public class ToggleIsFinishedCommandHandle : IRequestHandler<ToggleIsFinishedCom
         var check = await dbContext.CourseTeachers
             .Include(e => e.Course)
             .ThenInclude(c => c.GradeCompositions)
-            .Where(e=>e.Course.GradeCompositions.Any(x=>x.Id == request.Id))
+            .Where(e => e.Course.GradeCompositions.Any(x => x.Id == request.Id))
             .AnyAsync(e => e.TeacherId == user.Id, cancellationToken);
         if (!check)
         {
@@ -66,5 +70,25 @@ public class ToggleIsFinishedCommandHandle : IRequestHandler<ToggleIsFinishedCom
         gradeComposition.UpdatedAt = DateTime.UtcNow;
 
         await dbContext.SaveChangesAsync(cancellationToken);
+
+        if (gradeComposition.IsFinal.Equals(true))
+        {
+            var course = await dbContext.Courses
+                .Include(e => e.Students)
+                .ThenInclude(e => e.Student)
+                .FirstOrDefaultAsync(e => e.Id == gradeComposition.CourseId, cancellationToken);
+
+            if (course == null)
+            {
+                throw new NotFoundException($"Course with id {gradeComposition.CourseId} not found.");
+            }
+
+            foreach (var st in course.Students)
+            {
+                await notificationService.SendNotification(st.Student.Email!,
+                    $"Grade composition {gradeComposition.Name} of course {gradeComposition.Course.Name} is final, you can see your grade.",
+                    cancellationToken);
+            }
+        }
     }
 }
