@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SomeSandwich.FakeMentorus.UseCases.Grade.Common;
 using SomeSandwich.FakeMentorus.UseCases.Grade.CreateGrade;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentGradeTemplate;
@@ -25,14 +26,17 @@ namespace SomeSandwich.FakeMentorus.Web.Controllers;
 public class GradeController
 {
     private readonly IMediator mediator;
+    private readonly IHubContext hubContext;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="mediator">Mediator instance.</param>
-    public GradeController(IMediator mediator)
+    /// <param name="hubContext"></param>
+    public GradeController(IMediator mediator, IHubContext hubContext)
     {
         this.mediator = mediator;
+        this.hubContext = hubContext;
     }
 
     /// <summary>
@@ -47,13 +51,11 @@ public class GradeController
         CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
+        await hubContext.Clients.All.SendAsync("someting", "message", cancellationToken);
 
         result.FileContent.Position = 0;
 
-        return new FileStreamResult(result.FileContent, result.Mimetype)
-        {
-            FileDownloadName = result.FileName
-        };
+        return new FileStreamResult(result.FileContent, result.Mimetype) { FileDownloadName = result.FileName };
     }
 
     /// <summary>
@@ -67,10 +69,7 @@ public class GradeController
         [FromForm] ImportStudentListRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new ImportStudentListCommand
-        {
-            CourseId = id, FileContent = request.File.OpenReadStream()
-        };
+        var command = new ImportStudentListCommand { CourseId = id, FileContent = request.File.OpenReadStream() };
 
         await mediator.Send(command, cancellationToken);
     }
@@ -88,10 +87,7 @@ public class GradeController
         var result = await mediator.Send(command, cancellationToken);
         result.FileContent.Position = 0;
 
-        return new FileStreamResult(result.FileContent, result.Mimetype)
-        {
-            FileDownloadName = result.FileName
-        };
+        return new FileStreamResult(result.FileContent, result.Mimetype) { FileDownloadName = result.FileName };
     }
 
     /// <summary>
@@ -105,10 +101,7 @@ public class GradeController
         [FromForm] ImportStudentGradeRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new ImportStudentGradeCommand
-        {
-            CourseId = id, FileContent = request.File.OpenReadStream()
-        };
+        var command = new ImportStudentGradeCommand { CourseId = id, FileContent = request.File.OpenReadStream() };
 
         await mediator.Send(command, cancellationToken);
     }
@@ -143,10 +136,7 @@ public class GradeController
         var result = await mediator.Send(query, cancellationToken);
         result.FileContent.Position = 0;
 
-        return new FileStreamResult(result.FileContent, result.Mimetype)
-        {
-            FileDownloadName = result.FileName
-        };
+        return new FileStreamResult(result.FileContent, result.Mimetype) { FileDownloadName = result.FileName };
     }
 
     /// <summary>

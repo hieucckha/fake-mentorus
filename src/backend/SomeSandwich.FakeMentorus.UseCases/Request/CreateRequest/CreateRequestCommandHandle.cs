@@ -18,6 +18,7 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
     private readonly ILoggedUserAccessor loggedUserAccessor;
     private readonly UserManager<User> userManager;
     private readonly IMapper mapper;
+    private readonly INotificationService notificationService;
 
     /// <summary>
     /// Constructor for <see cref="CreateRequestCommandHandle"/>.
@@ -26,13 +27,15 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
     /// <param name="loggedUserAccessor"></param>
     /// <param name="userManager"></param>
     /// <param name="mapper"></param>
+    /// <param name="notificationService"></param>
     public CreateRequestCommandHandle(IAppDbContext dbContext, ILoggedUserAccessor loggedUserAccessor,
-        UserManager<User> userManager, IMapper mapper)
+        UserManager<User> userManager, IMapper mapper, INotificationService notificationService)
     {
         this.dbContext = dbContext;
         this.loggedUserAccessor = loggedUserAccessor;
         this.userManager = userManager;
         this.mapper = mapper;
+        this.notificationService = notificationService;
     }
 
     /// <inheritdoc />
@@ -65,7 +68,6 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
             throw new NotFoundException("Grade not found");
         }
 
-
         if (grade.IsRequested == true)
         {
             throw new DomainException("You already have request for this grade");
@@ -94,6 +96,8 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
             .Include(c => c.StudentInfos)
             .ThenInclude(e => e.Student)
             .ThenInclude(s => s.User)
+            .Include(e => e.Teachers)
+            .ThenInclude(e => e.Teacher)
             .Include(c => c.GradeCompositions)
             .ThenInclude(gc => gc.Grades)
             .Where(c => c.GradeCompositions.Any(gc =>
@@ -107,6 +111,12 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
         }
         else
         {
+            foreach (var courseTeacher in course.Teachers)
+            {
+                await notificationService.SendNotification(courseTeacher.Teacher.Email!,
+                    $"A new grade request from course {course.Name}", cancellationToken);
+            }
+
             result.StudentName = course.StudentInfos
                 .Where(si => si.StudentId == user.StudentId)
                 .Select(si => si.Name)
