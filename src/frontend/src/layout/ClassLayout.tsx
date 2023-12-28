@@ -69,6 +69,25 @@ const ClassLayout: React.FC = (): JSX.Element => {
 	const handleCloseEditModal = () => {
 		setIsOpenClassSetting(false);
 	};
+	const handleDownloadStudentGrade = () => {
+		if (!id) return;
+
+		classService
+			.downloadStudentGrade(id)
+			.then((res) => {
+				const url = window.URL.createObjectURL(new Blob([res.data]));
+				const link = document.createElement("a");
+				link.href = url;
+				link.setAttribute("download", "students_list_grade.xlsx");
+				document.body.appendChild(link);
+				link.click();
+				link.remove();
+				message.success("Download student grade successfully");
+			})
+			.catch(() => {
+				message.error("Download student grade failed");
+			});
+	}
 
 	const handleDownloadStudentTemplate = () => {
 		if (!id) return;
@@ -202,6 +221,15 @@ const ClassLayout: React.FC = (): JSX.Element => {
 					label: (
 						<a onClick={handleDownloadStudentTemplate}>
 							Download student list template
+						</a>
+					),
+					icon: <DownloadOutlined />,
+				},
+				{
+					key: "4",
+					label: (
+						<a onClick={handleDownloadStudentGrade}>
+							Download student grade
 						</a>
 					),
 					icon: <DownloadOutlined />,

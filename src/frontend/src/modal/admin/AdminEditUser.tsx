@@ -26,7 +26,8 @@ const AdminEditUser: React.FC<ModalProps> = ({
 			? { labelCol: { span: 4 }, wrapperCol: { span: 14 } }
 			: null;
 	const handleSubmit = (values: any) => {
-		mutation.mutate(values, {
+		console.log(values);
+		mutation.mutate({id :data?.key , ...values}, {
 			onSuccess: () => {
 				message.success("Edit user successfully");
 				handleCancel();
@@ -59,23 +60,7 @@ const AdminEditUser: React.FC<ModalProps> = ({
 					onFinish={(values) => handleSubmit(values)}
 					
 				>
-					<Form.Item
-						label="Email"
-						name="email"
-						rules={[
-							{
-								required: true,
-							},
-						]}
-					>
-						<Input
-							required
-							className="w-full rounded text-sm border-gray-200 font-si"
-							defaultValue={data.firstName}
-							value={data.email}
-							placeholder="aa@gmail.com"
-						/>
-					</Form.Item>
+					
 					<Form.Item
 						label="First Name"
 						name="firstName"
