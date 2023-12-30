@@ -153,7 +153,7 @@ const NavBarLogin: FC = () => {
 								trigger={["click"]}
 								menu={{ items: [] }}
 								dropdownRender={(menu) => (
-									<div className="z-50 my-4 text-base bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
+									<div className="z-50 my-4 text-base bg-white divide-y divide-gray-100 rounded  dark:bg-gray-700 dark:divide-gray-600 shadow-lg shadow-gray-500-100">
 										<div className="px-4 py-3" role="none">
 											<p
 												className="text-sm text-gray-900 dark:text-white"
@@ -180,11 +180,11 @@ const NavBarLogin: FC = () => {
 													</button>
 												</li>
 											)}
-											<li className=" hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
+											<li className=" hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white ">
 												{/* <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a> */}
 												<button
 													onClick={handleOpenModalEditUser}
-													className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+													className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white  "
 													role="menuitem"
 												>
 													Settings

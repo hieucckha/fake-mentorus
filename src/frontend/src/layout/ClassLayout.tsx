@@ -251,13 +251,15 @@ const ClassLayout: React.FC = (): JSX.Element => {
 					menu={{ items }}
 					placement="bottomRight"
 				>
-					<Button
-						className="flex justify-center items-center"
-						type="text"
-						shape="circle"
-					>
-						<MoreOutlined />
-					</Button>
+					<Tooltip placement="bottom" title="Import" arrow>
+						<Button
+							className="flex justify-center items-center"
+							type="text"
+							shape="circle"
+						>
+							<MoreOutlined />
+						</Button>
+					</Tooltip>
 				</Dropdown>
 			);
 		}
