@@ -9,7 +9,7 @@ import CreateClass from "../modal/CreateClass";
 import JoinClass from "../modal/JoinClass";
 import { QueryClient } from "@tanstack/react-query";
 import { UserRole } from "../api/store/auth/interface";
-import { Avatar, Badge, Button, Divider, Dropdown, List, Tooltip  } from "antd";
+import { Avatar, Badge, Button, Divider, Dropdown, List, Tooltip } from "antd";
 import { BellOutlined, NotificationOutlined } from "@ant-design/icons";
 import notificationService from "../services/notification.service";
 import { NotificationContext } from "../context/NotificationContext";
@@ -27,8 +27,7 @@ const NavBarLogin: FC = () => {
 		email: "",
 	});
 	const navigate = useNavigate();
-const {notifications, setNotifications} = useContext(NotificationContext);
-
+	const { notifications, setNotifications } = useContext(NotificationContext);
 
 	const handleSignOut = async () => {
 		const token = localStorageService.getItem("auth");
@@ -77,10 +76,6 @@ const {notifications, setNotifications} = useContext(NotificationContext);
 			email: user?.email ?? "",
 		});
 	}, [user]);
-
-	
-
-	
 
 	return (
 		<nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -174,23 +169,26 @@ const {notifications, setNotifications} = useContext(NotificationContext);
 							</Tooltip>
 						) : (
 							user?.role === "Student" && (
-								<button
-								type="button"
-								className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
-								aria-expanded="false"
-								onClick={handleOpenModalJoinClass}
-							>
-								<span className="sr-only">Join class</span>
-								<svg
-									focusable="false"
-									width={24}
-									height={24}
-									viewBox="0 0 24 24"
-									className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"
-								>
-									<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
-								</svg>
-							</button>)
+								<Tooltip placement="bottom" title="Join class" arrow>
+									<button
+										type="button"
+										className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+										aria-expanded="false"
+										onClick={handleOpenModalJoinClass}
+									>
+										<span className="sr-only">Join class</span>
+										<svg
+											focusable="false"
+											width={24}
+											height={24}
+											viewBox="0 0 24 24"
+											className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"
+										>
+											<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
+										</svg>
+									</button>
+								</Tooltip>
+							)
 						)}
 						<Tooltip placement="bottom" title="Account" arrow>
 							<Dropdown
