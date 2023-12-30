@@ -1,9 +1,12 @@
+using System.Security.Cryptography;
+using System.Text.Json;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Saritasa.Tools.Domain.Exceptions;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
+using SomeSandwich.FakeMentorus.UseCases.Common;
 
 namespace SomeSandwich.FakeMentorus.UseCases.GradeComposition.ToggleIsFinished;
 
@@ -86,8 +89,12 @@ public class ToggleIsFinishedCommandHandle : IRequestHandler<ToggleIsFinishedCom
             foreach (var st in course.Students)
             {
                 await notificationService.SendNotification(st.Student.Email!,
-                    $"Grade composition {gradeComposition.Name} of course {gradeComposition.Course.Name} is final, you can see your grade.",
-                    cancellationToken);
+                    JsonSerializer.Serialize(new NotificationDto
+                    {
+                        Title = $"Grade composition name {gradeComposition.Name} in course {course.Name} is final",
+                        Description =
+                            $"Grade composition {gradeComposition.Name} of course {gradeComposition.Course.Name} is final, you can see your grade.",
+                    }), cancellationToken);
             }
         }
     }
