@@ -10,6 +10,7 @@ import {
 	App,
 	Space,
 	Spin,
+	Tooltip,
 } from "antd";
 import type { DragEndEvent } from "@dnd-kit/core";
 import {
@@ -292,9 +293,15 @@ const GradeStructure: React.FC = () => {
 		mutationDeleteGradeColumn.mutate(gradeId);
 		message.success("Delete Grade Composition successfully");
 	};
+
 	const handleConfirm = async (gradeId: number) => {
 		mutationApproveGradeColumn.mutate(gradeId);
-		message.success("Delete Grade Composition successfully");
+		const index = gradeCompositions.findIndex((item) => item.id === gradeId);
+		if (gradeCompositions[index].isFinal == false) {
+			message.success("Set Grade Composition final successfully");
+		} else {
+			message.success("Set Grade Composition not final successfully");
+		}
 	};
 
 	const columns = [
@@ -339,16 +346,20 @@ const GradeStructure: React.FC = () => {
 							disabled={editingKey !== 0}
 							onClick={() => edit(record)}
 						>
-							<EditOutlined className="text-xl" />
+							<Tooltip placement="bottom" title="Edit" arrow>
+								<EditOutlined className="text-xl" />
+							</Tooltip>
 						</Typography.Link>
 						<Popconfirm
 							title="Sure to delete?"
 							onConfirm={() => handleDelete(record.id)}
 							okButtonProps={{ className: "bg-blue-500" }}
 						>
-							<a className="text-red-500 hover:text-red-600">
-								<DeleteOutlined className="text-xl" />
-							</a>
+							<Tooltip placement="bottom" title="Delete grade struct" arrow>
+								<a className="text-red-500 hover:text-red-600">
+									<DeleteOutlined className="text-xl" />
+								</a>
+							</Tooltip>
 						</Popconfirm>
 						{record && record.isFinal == false ? (
 							<Popconfirm
@@ -356,9 +367,11 @@ const GradeStructure: React.FC = () => {
 								onConfirm={() => handleConfirm(record.id)}
 								okButtonProps={{ className: "bg-blue-500" }}
 							>
-								<a className="text-green-500 hover:text-green-600">
-									<CheckCircleOutlined className="text-xl" />
-								</a>
+								<Tooltip placement="bottom" title="Mark as final" arrow>
+									<a className="text-green-500 hover:text-green-600">
+										<CheckCircleOutlined className="text-xl" />
+									</a>
+								</Tooltip>
 							</Popconfirm>
 						) : (
 							<Popconfirm
@@ -366,9 +379,11 @@ const GradeStructure: React.FC = () => {
 								onConfirm={() => handleConfirm(record.id)}
 								okButtonProps={{ className: "bg-blue-500" }}
 							>
-								<a className="text-red-500 hover:text-red-600">
-									<CheckCircleOutlined className="text-xl" />
-								</a>
+								<Tooltip placement="bottom" title="Mark as not final" arrow>
+									<a className="text-red-500 hover:text-red-600">
+										<CheckCircleOutlined className="text-xl" />
+									</a>
+								</Tooltip>
 							</Popconfirm>
 						)}
 					</Space>
@@ -404,7 +419,7 @@ const GradeStructure: React.FC = () => {
 					type="primary"
 					style={{ marginBottom: 16 }}
 				>
-					Add a row
+					Add a grade structure
 				</Button>
 			</div>
 			<DndContext

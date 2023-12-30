@@ -8,7 +8,15 @@ import {
 	TeamOutlined,
 	UploadOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, MenuProps, Tabs, TabsProps, message } from "antd";
+import {
+	Button,
+	Dropdown,
+	MenuProps,
+	Tabs,
+	TabsProps,
+	Tooltip,
+	message,
+} from "antd";
 import React, { useState } from "react";
 import { useLocation, useParams, Outlet, useNavigate } from "react-router-dom";
 import classService from "../services/class.service";
@@ -87,7 +95,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
 			.catch(() => {
 				message.error("Download student grade failed");
 			});
-	}
+	};
 
 	const handleDownloadStudentTemplate = () => {
 		if (!id) return;
@@ -172,16 +180,18 @@ const ClassLayout: React.FC = (): JSX.Element => {
 
 		if (location.pathname === overviewUrl) {
 			return (
-				<Button
-					className="flex justify-center items-center"
-					type="text"
-					shape="circle"
-					onClick={() => {
-						setIsOpenClassSetting(true);
-					}}
-				>
-					<SettingOutlined />
-				</Button>
+				<Tooltip placement="bottom" title="Setting" arrow>
+					<Button
+						className="flex justify-center items-center"
+						type="text"
+						shape="circle"
+						onClick={() => {
+							setIsOpenClassSetting(true);
+						}}
+					>
+						<SettingOutlined />
+					</Button>
+				</Tooltip>
 			);
 		}
 
@@ -228,9 +238,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
 				{
 					key: "4",
 					label: (
-						<a onClick={handleDownloadStudentGrade}>
-							Download student grade
-						</a>
+						<a onClick={handleDownloadStudentGrade}>Download student grade</a>
 					),
 					icon: <DownloadOutlined />,
 				},
@@ -243,13 +251,15 @@ const ClassLayout: React.FC = (): JSX.Element => {
 					menu={{ items }}
 					placement="bottomRight"
 				>
-					<Button
-						className="flex justify-center items-center"
-						type="text"
-						shape="circle"
-					>
-						<MoreOutlined />
-					</Button>
+					<Tooltip placement="bottom" title="Import" arrow>
+						<Button
+							className="flex justify-center items-center"
+							type="text"
+							shape="circle"
+						>
+							<MoreOutlined />
+						</Button>
+					</Tooltip>
 				</Dropdown>
 			);
 		}
