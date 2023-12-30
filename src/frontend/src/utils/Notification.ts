@@ -9,12 +9,4 @@ const connection = new signalR.HubConnectionBuilder()
 	})
 	.build();
 
-connection.on("ReceiveNotification", (user, message) => {
-    const userEmail = localStorageService.getItem("user");
-    console.log("Received notification",userEmail, user, message);
-	if (userEmail === user) {
-		notificationService.addNotification(message);
-	}
-});
-
 export default connection;
