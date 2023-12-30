@@ -6,7 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { FacebookProvider } from "react-facebook";
-import { App as AntdApp} from 'antd';
+import { App as AntdApp } from "antd";
+import { NotificationProvider } from "./context/NotificationContext";
 const queryClient = new QueryClient();
 
 /**
@@ -23,13 +24,15 @@ export const App: FC = () => {
 		});
 	});
 
-
 	return (
 		<GoogleOAuthProvider clientId="856018113300-i5i4padrol9e1nocd5ibvm2k1uuh70rm.apps.googleusercontent.com">
 			<FacebookProvider appId="326344773641983">
 				<QueryClientProvider client={queryClient}>
 					<AntdApp>
-						<Outlet />
+						<NotificationProvider>
+							<Outlet />
+						</NotificationProvider>
+
 						<ReactQueryDevtools initialIsOpen={false} />
 					</AntdApp>
 				</QueryClientProvider>

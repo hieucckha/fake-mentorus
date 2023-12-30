@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { useState, type FC, useEffect, useMemo } from "react";
+import { useState, type FC, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import localStorageService from "../services/localStorage.service";
@@ -9,7 +9,10 @@ import CreateClass from "../modal/CreateClass";
 import JoinClass from "../modal/JoinClass";
 import { QueryClient } from "@tanstack/react-query";
 import { UserRole } from "../api/store/auth/interface";
-import { Dropdown, Tooltip } from "antd";
+import { Avatar, Badge, Button, Divider, Dropdown, List, Tooltip } from "antd";
+import { BellOutlined, NotificationOutlined } from "@ant-design/icons";
+import notificationService from "../services/notification.service";
+import { NotificationContext } from "../context/NotificationContext";
 
 /**
  * Navigation bar.
@@ -24,12 +27,16 @@ const NavBarLogin: FC = () => {
 		email: "",
 	});
 	const navigate = useNavigate();
+	const { notifications, setNotifications } = useContext(NotificationContext);
+
 	const handleSignOut = async () => {
 		const token = localStorageService.getItem("auth");
 		await queryClient.clear();
 		await queryClient.removeQueries();
 		if (token !== null) {
 			localStorageService.removeItem("auth");
+			notificationService.clear();
+			setNotifications([]);
 		}
 		navigate(user.role === UserRole.Admin ? "/admin/sign-in" : "/", {
 			replace: true,
@@ -69,6 +76,7 @@ const NavBarLogin: FC = () => {
 			email: user?.email ?? "",
 		});
 	}, [user]);
+
 	return (
 		<nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
 			<div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -105,6 +113,40 @@ const NavBarLogin: FC = () => {
 						</Link>
 					</div>
 					<div className="flex items-center gap-x-2">
+						<Dropdown
+							dropdownRender={(menu) => (
+								<div className="bg-slate-50 w-[400px] border border-solid rounded-xl drop-shadow-lg p-4">
+									<div className="text-center">Notifications</div>
+									<Divider className="my-2" />
+									<List
+										pagination={{ pageSize: 5, hideOnSinglePage: true }}
+										dataSource={notifications}
+										renderItem={(item: any, index) => (
+											<List.Item className="hover:bg-white">
+												<List.Item.Meta
+													avatar={
+														<Avatar
+															src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+														/>
+													}
+													title={<a href="https://ant.design">{item.Title}</a>}
+													description={item.Description}
+												/>
+											</List.Item>
+										)}
+									></List>
+								</div>
+							)}
+						>
+							<Badge count={notifications.length}>
+								<Button
+									type="text"
+									shape="circle"
+									icon={<BellOutlined />}
+									size="large"
+								/>
+							</Badge>
+						</Dropdown>
 						{user?.role === "Teacher" ? (
 							<Tooltip placement="bottom" title="Add class" arrow>
 								<button

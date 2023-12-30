@@ -8,7 +8,6 @@ const JoinClassEmail: FC = () => {
 	const { token } = useParams();
 
 	const fetch = (): void => {
-		console.log(`token### ${token}`);
 		if (token === undefined) {
 			return;
 		}
@@ -39,7 +38,6 @@ const JoinClassEmail: FC = () => {
 						}[];
 					}>
 				) => {
-					console.log(`err###${JSON.stringify(err.response?.data.title)}}`);
 					navigate("/home", {
 						state: {
 							showToast: true,

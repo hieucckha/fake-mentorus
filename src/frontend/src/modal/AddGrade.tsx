@@ -61,22 +61,7 @@ const AddGrade: FC<AddGradeProps> = ({
                                     message: "You must select student ID to edit grade"
                                 }
                             ]}>
-								{/* <Select
-									className="w-full"
-									showSearch
-									placeholder="Select a studentId"
-									optionFilterProp="children"
-									onChange={(value) => {
-										console.log(value);
-									}}
-									filterOption={filterOption}
-									options={listDataDetail?.students?.map((student) => {
-										return {
-											label: student.studentId.toString(),
-											value: student.studentId.toString(),
-										};
-									})}
-								/> */}
+							
 
                                 <Input
 									className="w-full"

@@ -8,7 +8,6 @@ const JoinClassCode: FC = () => {
 	const { code } = useParams();
 
 	const fetch = (): void => {
-		console.log(`token### ${code}`);
 		if (code === undefined) {
 			return;
 		}
@@ -39,7 +38,6 @@ const JoinClassCode: FC = () => {
 						}[];
 					}>
 				) => {
-					console.log(`err###${JSON.stringify(err.response?.data.title)}}`);
 					navigate("/home", {
 						state: {
 							showToast: true,
