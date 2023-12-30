@@ -9,7 +9,7 @@ import CreateClass from "../modal/CreateClass";
 import JoinClass from "../modal/JoinClass";
 import { QueryClient } from "@tanstack/react-query";
 import { UserRole } from "../api/store/auth/interface";
-import { Avatar, Badge, Button, Divider, Dropdown, List } from "antd";
+import { Avatar, Badge, Button, Divider, Dropdown, List, Tooltip  } from "antd";
 import { BellOutlined, NotificationOutlined } from "@ant-design/icons";
 import notificationService from "../services/notification.service";
 import { NotificationContext } from "../context/NotificationContext";
@@ -118,45 +118,6 @@ const {notifications, setNotifications} = useContext(NotificationContext);
 						</Link>
 					</div>
 					<div className="flex items-center gap-x-2">
-						{user?.role === "Teacher" ? (
-							<button
-								type="button"
-								className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
-								aria-expanded="false"
-								onClick={handleOpenModalCreateClass}
-							>
-								<span className="sr-only">Create class</span>
-								<svg
-									focusable="false"
-									width={24}
-									height={24}
-									viewBox="0 0 24 24"
-									className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"
-								>
-									<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
-								</svg>
-							</button>
-						) : (
-							user?.role === "Student" && (
-								<button
-									type="button"
-									className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
-									aria-expanded="false"
-									onClick={handleOpenModalJoinClass}
-								>
-									<span className="sr-only">Join class</span>
-									<svg
-										focusable="false"
-										width={24}
-										height={24}
-										viewBox="0 0 24 24"
-										className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"
-									>
-										<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
-									</svg>
-								</button>
-							)
-						)}
 						<Dropdown
 							dropdownRender={(menu) => (
 								<div className="bg-slate-50 w-[400px] border border-solid rounded-xl drop-shadow-lg p-4">
@@ -191,75 +152,116 @@ const {notifications, setNotifications} = useContext(NotificationContext);
 								/>
 							</Badge>
 						</Dropdown>
-
-						<Dropdown
-							trigger={["click"]}
-							menu={{ items: [] }}
-							dropdownRender={(menu) => (
-								<div className="z-50 my-4 text-base bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
-									<div className="px-4 py-3" role="none">
-										<p
-											className="text-sm text-gray-900 dark:text-white"
-											role="none"
-										>
-											{profile.name}
-										</p>
-										<p
-											className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-											role="none"
-										>
-											{profile.email}
-										</p>
-									</div>
-									<ul className="py-1" role="none">
-										{user.role !== UserRole.Admin && (
-											<li>
+						{user?.role === "Teacher" ? (
+							<Tooltip placement="bottom" title="Add class" arrow>
+								<button
+									type="button"
+									className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+									aria-expanded="false"
+									onClick={handleOpenModalCreateClass}
+								>
+									<span className="sr-only">Create class</span>
+									<svg
+										focusable="false"
+										width={24}
+										height={24}
+										viewBox="0 0 24 24"
+										className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"
+									>
+										<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
+									</svg>
+								</button>
+							</Tooltip>
+						) : (
+							user?.role === "Student" && (
+								<button
+								type="button"
+								className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+								aria-expanded="false"
+								onClick={handleOpenModalJoinClass}
+							>
+								<span className="sr-only">Join class</span>
+								<svg
+									focusable="false"
+									width={24}
+									height={24}
+									viewBox="0 0 24 24"
+									className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"
+								>
+									<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
+								</svg>
+							</button>)
+						)}
+						<Tooltip placement="bottom" title="Account" arrow>
+							<Dropdown
+								trigger={["click"]}
+								menu={{ items: [] }}
+								dropdownRender={(menu) => (
+									<div className="z-50 my-4 text-base bg-white divide-y divide-gray-100 rounded  dark:bg-gray-700 dark:divide-gray-600 shadow-lg shadow-gray-500-100">
+										<div className="px-4 py-3" role="none">
+											<p
+												className="text-sm text-gray-900 dark:text-white"
+												role="none"
+											>
+												{profile.name}
+											</p>
+											<p
+												className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
+												role="none"
+											>
+												{profile.email}
+											</p>
+										</div>
+										<ul className="py-1" role="none">
+											{user.role !== UserRole.Admin && (
+												<li>
+													<button
+														onClick={() => navigate("/home")}
+														className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+														role="menuitem"
+													>
+														Dashboard
+													</button>
+												</li>
+											)}
+											<li className=" hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white ">
+												{/* <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a> */}
 												<button
-													onClick={() => navigate("/home")}
-													className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+													onClick={handleOpenModalEditUser}
+													className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white  "
 													role="menuitem"
 												>
-													Dashboard
+													Settings
 												</button>
 											</li>
-										)}
-										<li className=" hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
-											{/* <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a> */}
-											<button
-												onClick={handleOpenModalEditUser}
-												className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-												role="menuitem"
-											>
-												Settings
-											</button>
-										</li>
-										<li>
-											<button
-												className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-												role="menuitem"
-												onClick={handleSignOut}
-											>
-												Sign out
-											</button>
-										</li>
-									</ul>
-								</div>
-							)}
-						>
-							<button
-								type="button"
-								className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-								aria-expanded="false"
-								data-dropdown-toggle="dropdown-user"
+											<li>
+												<button
+													className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+													role="menuitem"
+													onClick={handleSignOut}
+												>
+													Sign out
+												</button>
+											</li>
+										</ul>
+									</div>
+								)}
 							>
-								<span className="sr-only">Open user menu</span>
-								<img
-									className="w-8 h-8 rounded-full"
-									src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-									alt="user photo"
-								/>
-							</button>
-						</Dropdown>
+								<button
+									type="button"
+									className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+									aria-expanded="false"
+									data-dropdown-toggle="dropdown-user"
+								>
+									<span className="sr-only">Open user menu</span>
+									<img
+										className="w-8 h-8 rounded-full"
+										src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+										alt="user photo"
+									/>
+								</button>
+							</Dropdown>
+						</Tooltip>
 						{/* <div className="flex items-center ms-3">
 							<div>
 								<button

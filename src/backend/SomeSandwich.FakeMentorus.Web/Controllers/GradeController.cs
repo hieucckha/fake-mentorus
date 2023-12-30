@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using SomeSandwich.FakeMentorus.UseCases.Grade.Common;
 using SomeSandwich.FakeMentorus.UseCases.Grade.CreateGrade;
 using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentGradeTemplate;
@@ -26,17 +25,14 @@ namespace SomeSandwich.FakeMentorus.Web.Controllers;
 public class GradeController
 {
     private readonly IMediator mediator;
-    private readonly IHubContext hubContext;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="mediator">Mediator instance.</param>
-    /// <param name="hubContext"></param>
-    public GradeController(IMediator mediator, IHubContext hubContext)
+    public GradeController(IMediator mediator)
     {
         this.mediator = mediator;
-        this.hubContext = hubContext;
     }
 
     /// <summary>
@@ -51,7 +47,6 @@ public class GradeController
         CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
-        await hubContext.Clients.All.SendAsync("someting", "message", cancellationToken);
 
         result.FileContent.Position = 0;
 

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -5,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Saritasa.Tools.Domain.Exceptions;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
+using SomeSandwich.FakeMentorus.UseCases.Common;
 using SomeSandwich.FakeMentorus.UseCases.Request.Common;
 
 namespace SomeSandwich.FakeMentorus.UseCases.Request.CreateRequest;
@@ -111,16 +113,20 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
         }
         else
         {
-            foreach (var courseTeacher in course.Teachers)
-            {
-                await notificationService.SendNotification(courseTeacher.Teacher.Email!,
-                    $"A new grade request from course {course.Name}", cancellationToken);
-            }
-
             result.StudentName = course.StudentInfos
                 .Where(si => si.StudentId == user.StudentId)
                 .Select(si => si.Name)
                 .FirstOrDefault() ?? "";
+
+            foreach (var courseTeacher in course.Teachers)
+            {
+                await notificationService.SendNotification(courseTeacher.Teacher.Email!,
+                    JsonSerializer.Serialize(new NotificationDto
+                    {
+                        Title = $"A new grade request is create in course {course.Name}",
+                        Description = $"Student {result.StudentName} create new request"
+                    }), cancellationToken);
+            }
         }
 
         return result;
