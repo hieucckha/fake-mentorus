@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@ using SomeSandwich.FakeMentorus.Domain.Request;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
 using SomeSandwich.FakeMentorus.UseCases.Comment.Common;
+using SomeSandwich.FakeMentorus.UseCases.Common;
 
 namespace SomeSandwich.FakeMentorus.UseCases.Comment.CreateComment;
 
@@ -80,7 +82,12 @@ public class CreateCommentCommandHandle : IRequestHandler<CreateCommentCommand, 
 
             foreach (var teacher in course!.Teachers)
             {
-                await notificationService.SendNotification(teacher.Teacher.Email, "Student has comment on request",
+                await notificationService.SendNotification(teacher.Teacher.Email!,
+                    JsonSerializer.Serialize(new NotificationDto
+                    {
+                        Title = $"A new grade comment on course {course.Name}",
+                        Description = "Student has comment on request"
+                    }),
                     cancellationToken);
             }
         }
@@ -97,7 +104,12 @@ public class CreateCommentCommandHandle : IRequestHandler<CreateCommentCommand, 
 
             foreach (var student in students)
             {
-                await notificationService.SendNotification(student.Email, "Teach has been reply on review",
+                await notificationService.SendNotification(student.Email!,
+                    JsonSerializer.Serialize(new NotificationDto
+                    {
+                        Title = "A new grade comment on your request",
+                        Description = "Teach has been reply on review"
+                    }),
                     cancellationToken);
             }
         }
