@@ -28,7 +28,6 @@ const AdminEditUser: React.FC<ModalProps> = ({
 			? { labelCol: { span: 4 }, wrapperCol: { span: 14 } }
 			: null;
 	const handleSubmit = (values: any) => {
-		console.log(values);
 		mutation.mutate({id :data?.key , ...values}, {
 			onSuccess: () => {
 				message.success("Edit user successfully");
@@ -46,7 +45,6 @@ const AdminEditUser: React.FC<ModalProps> = ({
 				title="Edit User"
 				open={openModal}
 				onOk={() => {
-					console.log(form.getFieldsValue());
 					form.validateFields().then(() => form.submit());
 					// handleCancel();
 				}}
