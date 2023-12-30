@@ -9,7 +9,9 @@ import CreateClass from "../modal/CreateClass";
 import JoinClass from "../modal/JoinClass";
 import { QueryClient } from "@tanstack/react-query";
 import { UserRole } from "../api/store/auth/interface";
-import { Dropdown } from "antd";
+import { Avatar, Badge, Button, Divider, Dropdown, List } from "antd";
+import { BellOutlined, NotificationOutlined } from "@ant-design/icons";
+import notificationService from "../services/notification.service";
 
 /**
  * Navigation bar.
@@ -126,23 +128,58 @@ const NavBarLogin: FC = () => {
 						) : (
 							user?.role === "Student" && (
 								<button
-								type="button"
-								className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
-								aria-expanded="false"
-								onClick={handleOpenModalJoinClass}
-							>
-								<span className="sr-only">Join class</span>
-								<svg
-									focusable="false"
-									width={24}
-									height={24}
-									viewBox="0 0 24 24"
-									className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"
+									type="button"
+									className="flex text-sm  rounded-full focus:bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+									aria-expanded="false"
+									onClick={handleOpenModalJoinClass}
 								>
-									<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
-								</svg>
-							</button>)
+									<span className="sr-only">Join class</span>
+									<svg
+										focusable="false"
+										width={24}
+										height={24}
+										viewBox="0 0 24 24"
+										className="hover:ring-gray-200 dark:hover:ring-gray-300 w-8 h-8"
+									>
+										<path d="M20 13h-7v7h-2v-7H4v-2h7V4h2v7h7v2z" />
+									</svg>
+								</button>
+							)
 						)}
+						<Dropdown
+							dropdownRender={(menu) => (
+								<div className="bg-slate-50 w-[400px] border border-solid rounded-xl drop-shadow-lg p-4">
+									<List
+										// pagination={{ position, align }}
+										dataSource={notificationService.getNotifications()}
+										renderItem={(item, index) => (
+										<List.Item className="hover:bg-white">
+											<List.Item.Meta
+											avatar={
+												<Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />
+											}
+											title={<a href="https://ant.design">{item}</a>}
+											description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+											/>
+										</List.Item>
+										)}
+									>
+										
+									</List>
+								</div>
+								
+							)}
+						>
+							<Badge count={5}>
+							<Button
+								type="text"
+								shape="circle"
+								icon={<BellOutlined />}
+								size="large"
+							/>
+						</Badge>
+						</Dropdown>
+						
 						<Dropdown
 							trigger={["click"]}
 							menu={{ items: [] }}

@@ -10,11 +10,18 @@ import connection from "../utils/Notification";
  */
 
 const AppLayout: FC = () => {
-	useEffect(() => {
-		connection.start();
+		console.log("connection started", connection);
 
+	useEffect(() => {
+		if (connection.state === "Disconnected") {
+			connection.start();
+		}
+		
 		return () => {
-			connection.stop();
+			console.log("connection stopped", connection.state);
+			if( connection.state === "Connected") {
+				connection.stop();
+			}
 		};
 	}, []);
 	return (
