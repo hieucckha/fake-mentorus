@@ -123,8 +123,10 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
                 await notificationService.SendNotification(courseTeacher.Teacher.Email!,
                     JsonSerializer.Serialize(new NotificationDto
                     {
-                        Title = $"A new grade request is create in course {course.Name}",
-                        Description = $"Student {result.StudentName} create new request"
+                        Title = $"New grade request",
+                        Description = $"Student {result.StudentName} create new request in course {course.Name}",
+                        ClassId = course.Id,
+                        Type = NotificationType.CreateRequest
                     }), cancellationToken);
             }
         }

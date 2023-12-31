@@ -70,23 +70,25 @@ public class CreateCommentCommandHandle : IRequestHandler<CreateCommentCommand, 
             RequestId = command.RequestId, UserId = user.Id, Comment = command.Comment, IsTeacher = role is "Teacher",
         };
 
+        var course = await appDbContext.Courses
+            .AsNoTracking()
+            .Include(e => e.Teachers)
+            .ThenInclude(e => e.Teacher)
+            .Where(e => e.GradeCompositions.Any(gc => gc.Id == request.Grade.GradeCompositionId))
+            .FirstOrDefaultAsync(cancellationToken);
+
         await appDbContext.SaveChangesAsync(cancellationToken);
         if (role is "Student")
         {
-            var course = await appDbContext.Courses
-                .AsNoTracking()
-                .Include(e => e.Teachers)
-                .ThenInclude(e => e.Teacher)
-                .Where(e => e.GradeCompositions.Any(gc => gc.Id == request.Grade.GradeCompositionId))
-                .FirstOrDefaultAsync(cancellationToken);
-
             foreach (var teacher in course!.Teachers)
             {
                 await notificationService.SendNotification(teacher.Teacher.Email!,
                     JsonSerializer.Serialize(new NotificationDto
                     {
-                        Title = $"A new grade comment on course {course.Name}",
-                        Description = "Student has comment on request"
+                        Title = "New Comment",
+                        Description = $"Student has comment on request on grade request in course {course.Name}",
+                        Type = NotificationType.CreateComment,
+                        ClassId = course.Id
                     }),
                     cancellationToken);
             }
@@ -107,8 +109,10 @@ public class CreateCommentCommandHandle : IRequestHandler<CreateCommentCommand, 
                 await notificationService.SendNotification(student.Email!,
                     JsonSerializer.Serialize(new NotificationDto
                     {
-                        Title = "A new grade comment on your request",
-                        Description = "Teach has been reply on review"
+                        Title = "New Comment",
+                        Description = $"Teacher has comment on your request in course {course!.Name}",
+                        Type = NotificationType.CreateComment,
+                        ClassId = course.Id
                     }),
                     cancellationToken);
             }
