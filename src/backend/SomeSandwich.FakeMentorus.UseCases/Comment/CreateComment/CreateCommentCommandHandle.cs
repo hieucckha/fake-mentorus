@@ -69,6 +69,7 @@ public class CreateCommentCommandHandle : IRequestHandler<CreateCommentCommand, 
         {
             RequestId = command.RequestId, UserId = user.Id, Comment = command.Comment, IsTeacher = role is "Teacher",
         };
+        await appDbContext.CommentRequests.AddAsync(comment, cancellationToken);
 
         var course = await appDbContext.Courses
             .AsNoTracking()
