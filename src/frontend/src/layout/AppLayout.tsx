@@ -19,6 +19,7 @@ const AppLayout: FC = () => {
 		connection.on("ReceiveNotification", (user, message) => {
 			const userEmail = localStorageService.getItem("user");
 			if (userEmail === user) {
+				console.log("Received notification: ", message);
 				const parsedMessage = JSON.parse(message);
 				notificationService.addNotification(parsedMessage as any);
 				setNotifications(notificationService.getNotifications());

@@ -13,6 +13,7 @@ import { Avatar, Badge, Button, Divider, Dropdown, List, Tooltip } from "antd";
 import { BellOutlined, NotificationOutlined } from "@ant-design/icons";
 import notificationService from "../services/notification.service";
 import { NotificationContext } from "../context/NotificationContext";
+import moment from "moment";
 
 /**
  * Navigation bar.
@@ -121,19 +122,42 @@ const NavBarLogin: FC = () => {
 									<List
 										pagination={{ pageSize: 5, hideOnSinglePage: true }}
 										dataSource={notifications}
-										renderItem={(item: any, index) => (
-											<List.Item className="hover:bg-white">
-												<List.Item.Meta
-													avatar={
-														<Avatar
-															src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
-														/>
-													}
-													title={<a href="https://ant.design">{item.Title}</a>}
-													description={item.Description}
-												/>
-											</List.Item>
-										)}
+										renderItem={(item: any, index) => {
+											
+											//conditions type of notification
+											let renderContent = null;
+											if(item.Type === 0){
+												const link = `/class/${item.ClassId}/grade`;
+												renderContent = <List.Item className="hover:bg-white">
+													<List.Item.Meta
+														avatar={
+															<Avatar
+																src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+															/>
+														}
+														title={<a href={link}>{item.Title}</a>}
+														description={moment(item.Time).format("DD/MM/YYYY")}
+													/>
+													{item.Description}
+												</List.Item>
+											}
+											return renderContent;
+
+
+											// <List.Item className="hover:bg-white">
+											// 	<List.Item.Meta
+											// 		avatar={
+											// 			<Avatar
+											// 				src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+											// 			/>
+											// 		}
+											// 		title={<a href="https://ant.design">{item.Title}</a>}
+											// 		description={moment(item.Time).format("DD/MM/YYYY")}
+
+											// 	/>
+											// 	{item.Description}
+											// </List.Item>
+											}}
 									></List>
 								</div>
 							)}
