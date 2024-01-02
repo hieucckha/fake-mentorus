@@ -30,7 +30,9 @@ public class RejectRequestCommandHandler : IRequestHandler<RejectRequestCommand>
     /// <inheritdoc />
     public async Task Handle(RejectRequestCommand command, CancellationToken cancellationToken)
     {
-        var request = await dbContext.Requests.FirstOrDefaultAsync(x => x.Id == command.RequestId, cancellationToken);
+        var request = await dbContext.Requests
+            .Include(e => e.Student)
+            .FirstOrDefaultAsync(x => x.Id == command.RequestId, cancellationToken);
         if (request == null)
         {
             throw new NotFoundException("Request not found");
