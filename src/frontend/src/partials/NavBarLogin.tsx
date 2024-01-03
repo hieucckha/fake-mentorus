@@ -141,6 +141,67 @@ const NavBarLogin: FC = () => {
 													{item.Description}
 												</List.Item>
 											}
+											else if(item.Type === 1){
+												const link = `/class/${item.ClassId}/request`;
+												renderContent = <List.Item className="hover:bg-white">
+													<List.Item.Meta
+														avatar={
+															<Avatar
+																src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+															/>
+														}
+														title={<a href={link}>{item.Title}</a>}
+														description={moment(item.Time).format("DD/MM/YYYY")}
+													/>
+													{item.Description}
+												</List.Item>
+											}
+											else if(item.Type === 2){
+												const link = `/class/${item.ClassId}/requests`;
+												renderContent = <List.Item className="hover:bg-white">
+													<List.Item.Meta
+														avatar={
+															<Avatar
+																src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+															/>
+														}
+														title={<a href={link}>{item.Title}</a>}
+														description={moment(item.Time).format("DD/MM/YYYY")}
+													/>
+													{item.Description}
+												</List.Item>
+											}
+											else if(item.Type === 3){
+												const link = `/class/${item.ClassId}/grade`;
+												renderContent = <List.Item className="hover:bg-white">
+													<List.Item.Meta
+														avatar={
+															<Avatar
+																src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+															/>
+														}
+														title={<a href={link}>{item.Title}</a>}
+														description={moment(item.Time).format("DD/MM/YYYY")}
+													/>
+													{item.Description}
+												</List.Item>
+											}
+											else if (item.Type === 4){
+												const link = `/class/${item.ClassId}/grade`;
+												renderContent = <List.Item className="hover:bg-white">
+													<List.Item.Meta
+														avatar={
+															<Avatar
+																src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+															/>
+														}
+														title={<a href={link}>{item.Title}</a>}
+														description={moment(item.Time).format("DD/MM/YYYY")}
+													/>
+													{item.Description}
+												</List.Item>
+											}
+
 											return renderContent;
 
 
