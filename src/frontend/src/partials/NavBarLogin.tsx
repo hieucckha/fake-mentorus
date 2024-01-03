@@ -62,6 +62,10 @@ const NavBarLogin: FC = () => {
 	const handleOpenModalJoinClass = (): void => {
 		setIsOpenModalJoinClass(true);
 	};
+	const clearAll = () => {
+		notificationService.clear();
+		setNotifications([]);
+	}
 	const { data: user } = useAuth();
 
 	useEffect(() => {
@@ -142,7 +146,7 @@ const NavBarLogin: FC = () => {
 												</List.Item>
 											}
 											else if(item.Type === 1){
-												const link = `/class/${item.ClassId}/request`;
+												const link = `/class/${item.ClassId}/requests#${item.RequestId}`;
 												renderContent = <List.Item className="hover:bg-white">
 													<List.Item.Meta
 														avatar={
@@ -157,7 +161,7 @@ const NavBarLogin: FC = () => {
 												</List.Item>
 											}
 											else if(item.Type === 2){
-												const link = `/class/${item.ClassId}/requests`;
+												const link = `/class/${item.ClassId}/requests#${item.RequestId}`;
 												renderContent = <List.Item className="hover:bg-white">
 													<List.Item.Meta
 														avatar={
@@ -220,6 +224,7 @@ const NavBarLogin: FC = () => {
 											// </List.Item>
 											}}
 									></List>
+									<div className="text-center hover:cursor-pointer" onClick={clearAll}>Clear all</div>
 								</div>
 							)}
 						>
