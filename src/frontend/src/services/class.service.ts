@@ -192,24 +192,6 @@ const classService = {
 	},
 };
 export default classService;
-// function generateArray(count:number) {
-//     const result = [];
-
-//     for (let i = 1; i <= count; i++) {
-//         result.push({
-//             id: i,
-//             name: `Edward ${i}`,
-//             gradeScale: Math.ceil(100 - Math.random() * 30),
-//             description: `London Park no. ${i}`,
-//             courseId: 0,
-//             order: i,
-//             createdAt: "stringnumber",
-//             updatedAt: "stringnumber",
-//         });
-//     }
-
-//     return result;
-// }
 
 // Function to generate an array of data
 function genArrayData(count) {
