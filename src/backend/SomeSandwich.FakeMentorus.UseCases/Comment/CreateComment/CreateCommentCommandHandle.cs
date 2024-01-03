@@ -89,7 +89,8 @@ public class CreateCommentCommandHandle : IRequestHandler<CreateCommentCommand, 
                         Title = "New Comment",
                         Description = $"Student has comment on request on grade request in course {course.Name}",
                         Type = NotificationType.CreateComment,
-                        ClassId = course.Id
+                        ClassId = course.Id,
+                        RequestId = request.Id
                     }),
                     cancellationToken);
             }
@@ -113,7 +114,8 @@ public class CreateCommentCommandHandle : IRequestHandler<CreateCommentCommand, 
                         Title = "New Comment",
                         Description = $"Teacher has comment on your request in course {course!.Name}",
                         Type = NotificationType.CreateComment,
-                        ClassId = course.Id
+                        ClassId = course.Id,
+                        RequestId = request.Id
                     }),
                     cancellationToken);
             }

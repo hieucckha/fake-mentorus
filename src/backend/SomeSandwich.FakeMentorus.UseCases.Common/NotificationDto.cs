@@ -26,6 +26,11 @@ public class NotificationDto
     public int? ClassId { get; set; }
 
     /// <summary>
+    /// Id of the request.
+    /// </summary>
+    public int? RequestId { get; set; }
+
+    /// <summary>
     /// The timestamp when the notification was created.
     /// </summary>
     public DateTime Time { get; set; } = DateTime.Now;

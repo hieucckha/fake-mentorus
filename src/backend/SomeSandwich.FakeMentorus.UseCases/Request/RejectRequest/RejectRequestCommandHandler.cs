@@ -61,6 +61,7 @@ public class RejectRequestCommandHandler : IRequestHandler<RejectRequestCommand>
                 Title = "Rejected Request",
                 Description = $"Teacher rejected your request in course {course!.Name}",
                 ClassId = course!.Id,
+                RequestId = request.Id,
                 Type = NotificationType.RejectRequest
             }), cancellationToken);
     }

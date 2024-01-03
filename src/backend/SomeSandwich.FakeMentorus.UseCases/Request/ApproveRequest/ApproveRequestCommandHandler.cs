@@ -66,6 +66,7 @@ public class ApproveRequestCommandHandler : IRequestHandler<ApproveRequestComman
                 Title = "Approved Request",
                 Description = $"Teacher approved your request in course {course.Name}",
                 ClassId = course!.Id,
+                RequestId = request.Id,
                 Type = NotificationType.ApproveRequest
             }), cancellationToken);
     }

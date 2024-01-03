@@ -126,6 +126,7 @@ public class CreateRequestCommandHandle : IRequestHandler<CreateRequestCommand, 
                         Title = $"New grade request",
                         Description = $"Student {result.StudentName} create new request in course {course.Name}",
                         ClassId = course.Id,
+                        RequestId = requestEntity.Id,
                         Type = NotificationType.CreateRequest
                     }), cancellationToken);
             }
