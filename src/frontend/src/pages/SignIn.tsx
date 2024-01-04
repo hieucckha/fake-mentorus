@@ -26,7 +26,9 @@ interface SignInProps {
 /**
  * Sign-in page.
  */
-const SignIn: FC<SignInProps> = ({ afterLoginUrl= "/home" }: SignInProps): JSX.Element => {
+const SignIn: FC<SignInProps> = ({
+	afterLoginUrl = "/home",
+}: SignInProps): JSX.Element => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [email, setEmail] = useState("");
@@ -163,6 +165,7 @@ const SignIn: FC<SignInProps> = ({ afterLoginUrl= "/home" }: SignInProps): JSX.E
 												<Link
 													to="/reset-password"
 													className="text-sm font-medium text-blue-600 hover:underline"
+													tabIndex={-1}
 												>
 													Reset password
 												</Link>

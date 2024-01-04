@@ -1,12 +1,9 @@
-using System.Security.Cryptography;
-using System.Text.Json;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Saritasa.Tools.Domain.Exceptions;
 using SomeSandwich.FakeMentorus.Domain.Users;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
-using SomeSandwich.FakeMentorus.UseCases.Common;
 
 namespace SomeSandwich.FakeMentorus.UseCases.GradeComposition.ToggleIsFinished;
 
@@ -74,27 +71,24 @@ public class ToggleIsFinishedCommandHandle : IRequestHandler<ToggleIsFinishedCom
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        var course = await dbContext.Courses
-            .Include(e => e.Students)
-            .ThenInclude(e => e.Student)
-            .FirstOrDefaultAsync(e => e.Id == gradeComposition.CourseId, cancellationToken);
-
-        if (course == null)
+        if (gradeComposition.IsFinal == true)
         {
-            throw new NotFoundException($"Course with id {gradeComposition.CourseId} not found.");
-        }
+            var course = await dbContext.Courses
+                .Include(e => e.Students)
+                .ThenInclude(e => e.Student)
+                .FirstOrDefaultAsync(e => e.Id == gradeComposition.CourseId, cancellationToken);
 
-        foreach (var st in course.Students)
-        {
-            await notificationService.SendNotification(st.Student.Email!,
-                JsonSerializer.Serialize(new NotificationDto
-                {
-                    Title = "Grade composition is final",
-                    Description =
-                        $"Grade composition {gradeComposition.Name} of course {gradeComposition.Course.Name} is final, you can see your grade.",
-                    ClassId = course.Id,
-                    Type = NotificationType.FinalizedGradeComposition
-                }), cancellationToken);
+            if (course == null)
+            {
+                throw new NotFoundException($"Course with id {gradeComposition.CourseId} not found.");
+            }
+
+            foreach (var st in course.Students)
+            {
+                await notificationService.SendNotification(st.Student.Email!,
+                    $"Grade composition {gradeComposition.Name} of course {gradeComposition.Course.Name} is final, you can see your grade.",
+                    cancellationToken);
+            }
         }
     }
 }

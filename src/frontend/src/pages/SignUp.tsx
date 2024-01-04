@@ -265,7 +265,7 @@ const SignUp: FC = (): JSX.Element => {
 									</div>
 								</form>
 								<div className="text-gray-600 text-center mt-6">
-									Already have an account?
+									Already have an account? {}
 									<Link
 										to="/sign-in"
 										className="text-blue-600 hover:underline transition duration-150 ease-in-out"
