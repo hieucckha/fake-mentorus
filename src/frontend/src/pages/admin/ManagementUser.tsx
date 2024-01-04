@@ -1,5 +1,6 @@
 import {
-	GroupOutlined,
+	ArrowUpOutlined,
+	ImportOutlined,
 	LockOutlined,
 	MoreOutlined,
 	SearchOutlined,
@@ -12,9 +13,11 @@ import type { InputRef, MenuProps } from "antd";
 import {
 	Button,
 	Dropdown,
+	FloatButton,
 	Input,
 	Menu,
 	Space,
+	Switch,
 	Table,
 	Tag,
 	message,
@@ -27,7 +30,12 @@ import {
 } from "../../api/store/admin/queries";
 import AdminEditUser from "../../modal/admin/AdminEditUser";
 import moment from "moment";
-import { lockUserMutation, unlockUserMutation } from "../../api/store/class/mutation";
+import {
+	lockUserMutation,
+	unlockUserMutation,
+} from "../../api/store/class/mutation";
+import UploadModal from "../../modal/UploadModal";
+import UploadStudentModal from "../../modal/UploadStudentModel";
 
 interface DataType {
 	key: number;
@@ -51,7 +59,7 @@ const ManagementUser: React.FC = () => {
 	const searchInput = useRef<InputRef>(null);
 	const { data: listData, isLoading } = userQueryResult();
 	const mutation = lockUserMutation();
-	const mutationUnBan =unlockUserMutation();
+	const mutationUnBan = unlockUserMutation();
 	const [formData, setFormData] = useState({
 		key: 0,
 		fullName: "",
@@ -276,7 +284,7 @@ const ManagementUser: React.FC = () => {
 													},
 													onError(error: any) {
 														console.error(error);
-														
+
 														message.error(error.response.data.title);
 													},
 												});
@@ -295,7 +303,7 @@ const ManagementUser: React.FC = () => {
 													},
 													onError(error: any) {
 														console.error(error);
-														
+
 														message.error(error.response.data.title);
 													},
 												});
@@ -320,25 +328,47 @@ const ManagementUser: React.FC = () => {
 		},
 	];
 
+	const [isOpenImportStudent, setIsImportStudent] = useState(false);
+	const onChange = (checked: boolean) => {
+		setIsImportStudent(checked);
+	};
+	const handleCloseModal = () => {
+		setIsImportStudent(false);
+	};
 	if (isLoading) return <div>loading...</div>;
 
 	return (
 		<div className="p-6">
+			<FloatButton.Group
+				trigger="hover"
+				style={{ right: 24 }}
+				icon={<ArrowUpOutlined />}
+			>
+				<FloatButton icon={<ImportOutlined />} onClick={() => onChange(true)} />
+			</FloatButton.Group>
+
 			<Table
 				bordered
 				title={() => <div>User Table</div>}
 				columns={columns}
 				dataSource={data}
 			/>
+
 			{isModalVisible && (
 				<AdminEditUser
 					openModal={isModalVisible}
-
 					handleCancel={() => {
 						setIsModalVisible(false);
 						// setClassId("");
 					}}
 					data={formData}
+				/>
+			)}
+
+			{isOpenImportStudent && (
+				<UploadStudentModal
+					openModal={isOpenImportStudent}
+					handleCloseModalUpload={handleCloseModal}
 				/>
 			)}
 		</div>
