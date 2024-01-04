@@ -268,7 +268,7 @@ const ClassLayout: React.FC = (): JSX.Element => {
 	};
 
 	return (
-		<div className="w-full h-full mt-14 content-center">
+		<div className="w-full h-full mt-16  content-center">
 			<Tabs
 				className="w-full h-full"
 				items={tabItems}
