@@ -143,7 +143,7 @@ const classService = {
 	},
 
 	async downloadTemplateImportStudent(classId: string) {
-		return axios.get(`/api/grade/student/template`, {
+		return axios.get(`/api/grade/student/tempalte`, {
 			params: { CourseId: classId },
 			responseType: "blob",
 		});

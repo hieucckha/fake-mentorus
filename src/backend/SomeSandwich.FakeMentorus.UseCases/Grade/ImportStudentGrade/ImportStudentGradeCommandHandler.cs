@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Saritasa.Tools.Domain.Exceptions;
 using SomeSandwich.FakeMentorus.Infrastructure.Abstractions.Interfaces;
@@ -88,7 +89,11 @@ internal class ImportStudentGradeCommandHandler : IRequestHandler<ImportStudentG
                         continue;
                     }
 
-                    var gradeValue = cell.NumericCellValue;
+                    var gradeValue = cell.CellType == CellType.Numeric
+                        ? cell.NumericCellValue
+                        : double.TryParse(cell.StringCellValue, out var gradeValueParse)
+                            ? gradeValueParse
+                            : 0;
 
                     var grade = await appDbContext.Grades
                         .Where(e => e.StudentId == studentId)

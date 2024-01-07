@@ -6,7 +6,10 @@ import { Outlet } from "react-router-dom";
 import connection from "../utils/Notification";
 import notificationService from "../services/notification.service";
 import localStorageService from "../services/localStorage.service";
-import { NotificationContext, NotificationProvider } from "../context/NotificationContext";
+import {
+	NotificationContext,
+	NotificationProvider,
+} from "../context/NotificationContext";
 
 /**
  * Home page.
@@ -17,9 +20,10 @@ const AppLayout: FC = () => {
 
 	useEffect(() => {
 		connection.on("ReceiveNotification", (user, message) => {
+			console.log(`All::${user}::Received notification::${message}`);
 			const userEmail = localStorageService.getItem("user");
 			if (userEmail === user) {
-				console.log("Received notification: ", message);
+				console.log(`${user}::Received notification::${message}`);
 				const parsedMessage = JSON.parse(message);
 				notificationService.addNotification(parsedMessage as any);
 				setNotifications(notificationService.getNotifications());

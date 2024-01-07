@@ -51,13 +51,16 @@ internal class ImportStudentListCommandHandler : IRequestHandler<ImportStudentLi
         var studentId = string.Empty;
 
         var studentIdCell = row.GetCell(0);
-        studentId = studentIdCell.CellType == CellType.Numeric ? studentIdCell.NumericCellValue.ToString(CultureInfo.CurrentCulture) : studentIdCell.StringCellValue;
+        studentId = studentIdCell.CellType == CellType.Numeric
+            ? studentIdCell.NumericCellValue.ToString(CultureInfo.CurrentCulture)
+            : studentIdCell.StringCellValue;
         var studentNameCell = row.GetCell(1);
         var studentName = studentNameCell.StringCellValue;
 
         while (!string.IsNullOrEmpty(studentId) && !string.IsNullOrEmpty(studentName))
         {
-            var student = await appDbContext.Students.FirstOrDefaultAsync(e => e.StudentId == studentId, cancellationToken);
+            var student =
+                await appDbContext.Students.FirstOrDefaultAsync(e => e.StudentId == studentId, cancellationToken);
             if (student is null)
             {
                 student = new Student { StudentId = studentId };
@@ -72,10 +75,15 @@ internal class ImportStudentListCommandHandler : IRequestHandler<ImportStudentLi
 
             if (studentInfo is null)
             {
-                studentInfo = new StudentInfo { StudentId = studentId, Student = student, Name = studentName, CourseId = command.CourseId };
+                studentInfo = new StudentInfo
+                {
+                    StudentId = studentId, Student = student, Name = studentName, CourseId = command.CourseId
+                };
                 await appDbContext.StudentInfos.AddAsync(studentInfo, cancellationToken);
 
-                logger.LogInformation("Create student information in course id {courseId} with id {studentId}, name {studentName}", command.CourseId, studentId, studentName);
+                logger.LogInformation(
+                    "Create student information in course id {courseId} with id {studentId}, name {studentName}",
+                    command.CourseId, studentId, studentName);
             }
 
             rowIndex++;
@@ -85,9 +93,11 @@ internal class ImportStudentListCommandHandler : IRequestHandler<ImportStudentLi
             {
                 break;
             }
+
             studentIdCell = row.GetCell(0);
-            studentNameCell = row.GetCell(1);
-            studentId = studentIdCell.CellType == CellType.Numeric ? studentIdCell.NumericCellValue.ToString(CultureInfo.CurrentCulture) : studentIdCell.StringCellValue;
+            studentId = studentIdCell.CellType == CellType.Numeric
+                ? studentIdCell.NumericCellValue.ToString(CultureInfo.CurrentCulture)
+                : studentIdCell.StringCellValue;
             studentNameCell = row.GetCell(1);
             studentName = studentNameCell.StringCellValue;
         }
