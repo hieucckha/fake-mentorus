@@ -79,7 +79,20 @@ public class ImportAllStudentListCommandHandler : IRequestHandler<ImportAllStude
                 break;
             }
 
+            emailCell = row.GetCell(0);
+            if (emailCell is null)
+            {
+                continue;
+            }
+
             email = emailCell.StringCellValue;
+
+            studentIdCell = row.GetCell(1);
+            if (studentIdCell is null)
+            {
+                continue;
+            }
+
             studentId = studentIdCell.CellType == CellType.Numeric
                 ? studentIdCell.NumericCellValue.ToString(CultureInfo.CurrentCulture)
                 : studentIdCell.StringCellValue;
@@ -99,7 +112,20 @@ public class ImportAllStudentListCommandHandler : IRequestHandler<ImportAllStude
                 continue;
             }
 
-            student.StudentId = pair.Value;
+            if (student.StudentId == pair.Value)
+            {
+                continue;
+            }
+
+            var studentIdEntity =
+                await appDbContext.Students.FirstOrDefaultAsync(e => e.StudentId == pair.Value, cancellationToken);
+
+            if (studentIdEntity is null)
+            {
+                studentIdEntity = new Student { StudentId = pair.Value, };
+            }
+
+            student.Student = studentIdEntity;
         }
 
         await appDbContext.SaveChangesAsync(cancellationToken);

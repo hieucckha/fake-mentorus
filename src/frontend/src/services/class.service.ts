@@ -143,7 +143,7 @@ const classService = {
 	},
 
 	async downloadTemplateImportStudent(classId: string) {
-		return axios.get(`/api/grade/student/tempalte`, {
+		return axios.get(`/api/grade/student/template`, {
 			params: { CourseId: classId },
 			responseType: "blob",
 		});
@@ -165,6 +165,21 @@ const classService = {
 	async toggleActivateClass(classId: string) {
 		if (!classId || classId === "") throw new Error("classId is required");
 		const response = await axios.post(`/api/course/${classId}/activate`);
+		return response.data;
+	},
+	async downloadTemplateImportAllStudent() {
+		return axios.get(`/api/user/student/template`, {
+			responseType: "blob",
+		});
+	},
+	async uploadAllStudentId(file: File) {
+		const formData = new FormData();
+		formData.append("file", file);
+		const response = await axios.post(
+			`/api/user/student`,
+			formData,
+			{ headers: { "Content-Type": "multipart/form-data" } }
+		);
 		return response.data;
 	},
 	async userQueryResult(): Promise<Array<userListQuery>> {

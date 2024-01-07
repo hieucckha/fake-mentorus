@@ -2,6 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Saritasa.Tools.Common.Pagination;
+using SomeSandwich.FakeMentorus.UseCases.Grade.GenerateStudentListAllTemplate;
+using SomeSandwich.FakeMentorus.UseCases.Grade.ImportAllStudentList;
 using SomeSandwich.FakeMentorus.UseCases.Users.Common.Dtos;
 using SomeSandwich.FakeMentorus.UseCases.Users.CreateUser;
 using SomeSandwich.FakeMentorus.UseCases.Users.ImportStudentIdTemplate;
@@ -54,12 +56,11 @@ public class UserController : ControllerBase
     [Authorize]
     public async Task Update(UpdateUserRequest request, CancellationToken cancellationToken)
     {
-        await mediator.Send(new UpdateUserCommand()
-        {
-            StudentId = request.StudentId,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-        }, cancellationToken);
+        await mediator.Send(
+            new UpdateUserCommand()
+            {
+                StudentId = request.StudentId, FirstName = request.FirstName, LastName = request.LastName,
+            }, cancellationToken);
     }
 
     /// <summary>
@@ -74,10 +75,7 @@ public class UserController : ControllerBase
     {
         await mediator.Send(new UpdateUserByIdCommand()
         {
-            StudentId = request.StudentId,
-            UserId = id,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
+            StudentId = request.StudentId, UserId = id, FirstName = request.FirstName, LastName = request.LastName,
         }, cancellationToken);
     }
 
@@ -139,6 +137,21 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
+    /// Get template for import all student list.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("student/template")]
+    public async Task<IActionResult> GetAllStudentIdTemplate(CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GenerateStudentListAllTemplateCommand(), cancellationToken);
+        result.FileContent.Position = 0;
+
+        return new FileStreamResult(result.FileContent, result.Mimetype) { FileDownloadName = result.FileName };
+    }
+
+    /// <summary>
     /// Import student id map with email by template.
     /// </summary>
     /// <param name="request"></param>
@@ -147,7 +160,7 @@ public class UserController : ControllerBase
     public async Task ImportStudentIdFromTemplate([FromForm] ImportStudentIdTemplateRequest request,
         CancellationToken cancellationToken)
     {
-        await mediator.Send(new ImportStudentIdTemplateCommand { FileContent = request.File.OpenReadStream() },
+        await mediator.Send(new ImportAllStudentListCommand { FileContent = request.File.OpenReadStream() },
             cancellationToken);
     }
 }

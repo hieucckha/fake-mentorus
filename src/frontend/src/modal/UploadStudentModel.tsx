@@ -23,7 +23,7 @@ const UploadStudentModal: FC<UploadStudentModalProps> = ({
 	};
 	const handleUpload = () => {
 		classService
-			.uploadGradeFile(id ?? "", file)
+			.uploadAllStudentId(file)
 			.then(() => {
 				notification.success({
 					message: "Success",
@@ -48,7 +48,7 @@ const UploadStudentModal: FC<UploadStudentModalProps> = ({
 	};
 	const handleDownloadTemplate = async () => {
 		classService
-			.downloadTemplateImportStudent(id ?? "")
+			.downloadTemplateImportAllStudent()
 			.then((res) => {
 				fileDownload(res.data, "template.xlsx");
 			})
